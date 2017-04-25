@@ -13,14 +13,14 @@ TestCase subclass: #IdiomTest
 	poolDictionaries: ''
 	category: 'Idiom-Exercise'!
 
-!IdiomTest methodsFor: 'testing' stamp: 'kf 4/20/2017 21:00:54'!
+!IdiomTest methodsFor: 'testing' stamp: 'kf 4/24/2017 21:17:05'!
 test01AddingCustomerShouldNotTakeMoreThan50Milliseconds
 
 	| customerBook  |
 	
 	customerBook := CustomerBook  new.
 	
-	self assertTestTime: [ customerBook addCustomerNamed: 'John Lennon'.] time: 50.! !
+	self assert: [ customerBook addCustomerNamed: 'John Lennon'.] shoulBeEndOn: 50.! !
 
 !IdiomTest methodsFor: 'testing' stamp: 'kf 4/20/2017 20:59:38'!
 test02RemovingCustomerShouldNotTakeMoreThan100Milliseconds
@@ -35,19 +35,19 @@ test02RemovingCustomerShouldNotTakeMoreThan100Milliseconds
 	
 ! !
 
-!IdiomTest methodsFor: 'testing' stamp: 'kf 4/20/2017 21:36:02'!
+!IdiomTest methodsFor: 'testing' stamp: 'kf 4/24/2017 20:59:37'!
 test03CanNotAddACustomerWithEmptyName 
 
 	| customerBook |
 			
 	customerBook := CustomerBook new.
 		
-	self assertEntity:[ customerBook addCustomerNamed: ''.] on: Error do: 
+	self assert:[ customerBook addCustomerNamed: ''.] on: Error do: 
 	[:anError | 
 			self assert: anError messageText = CustomerBook customerCanNotBeEmptyErrorMessage.
 			self assert: customerBook isEmpty ]! !
 
-!IdiomTest methodsFor: 'testing' stamp: 'HernanWilkinson 5/16/2012 16:50'!
+!IdiomTest methodsFor: 'testing' stamp: 'kf 4/24/2017 21:02:42'!
 test04CanNotRemoveAndInvalidCustomer
 	
 	| customerBook johnLennon |
@@ -56,13 +56,24 @@ test04CanNotRemoveAndInvalidCustomer
 	johnLennon := 'John Lennon'.
 	customerBook addCustomerNamed: johnLennon.
 	
-	[ customerBook removeCustomerNamed: 'Paul McCartney'.
-	self fail ]
+	self assert: [ customerBook removeCustomerNamed: 'Paul McCartney'.]
 		on: NotFound 
 		do: [ :anError | 
 			self assert: customerBook numberOfCustomers = 1.
 			self assert: (customerBook includesCustomerNamed: johnLennon) ]
 ! !
+
+
+!IdiomTest methodsFor: 'as yet unclassified' stamp: 'kf 4/24/2017 21:02:07'!
+assert: aBlockClosure on: error do: aBlockClosureCheck
+
+	[ aBlockClosure value. self fail ]
+		on: error
+		do: [ :anError | aBlockClosureCheck value:anError.]! !
+
+!IdiomTest methodsFor: 'as yet unclassified' stamp: 'kf 4/24/2017 21:16:02'!
+assert: aClosure shoulBeEndOn: aTime 
+	 self assert: aClosure timeToRun < aTime! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
