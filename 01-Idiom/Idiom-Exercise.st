@@ -13,16 +13,16 @@ TestCase subclass: #IdiomTest
 	poolDictionaries: ''
 	category: 'Idiom-Exercise'!
 
-!IdiomTest methodsFor: 'testing' stamp: 'kf 4/24/2017 21:17:05'!
+!IdiomTest methodsFor: 'testing' stamp: 'a 4/25/2017 01:57:48'!
 test01AddingCustomerShouldNotTakeMoreThan50Milliseconds
 
 	| customerBook  |
 	
 	customerBook := CustomerBook  new.
 	
-	self assert: [ customerBook addCustomerNamed: 'John Lennon'.] shoulBeEndOn: 50.! !
+	self assert: [ customerBook addCustomerNamed: 'John Lennon'.] shouldBeEndOn: 50.! !
 
-!IdiomTest methodsFor: 'testing' stamp: 'kf 4/20/2017 20:59:38'!
+!IdiomTest methodsFor: 'testing' stamp: 'a 4/25/2017 01:57:39'!
 test02RemovingCustomerShouldNotTakeMoreThan100Milliseconds
 
 	| customerBook paulMcCartney |
@@ -31,7 +31,7 @@ test02RemovingCustomerShouldNotTakeMoreThan100Milliseconds
 	paulMcCartney := 'Paul McCartney'.
 	customerBook addCustomerNamed: paulMcCartney.
 
-	self assertTestTime: [customerBook removeCustomerNamed: paulMcCartney.] time: 100.
+	self assert: [customerBook removeCustomerNamed: paulMcCartney.] shouldBeEndOn: 100.
 	
 ! !
 
@@ -71,8 +71,8 @@ assert: aBlockClosure on: error do: aBlockClosureCheck
 		on: error
 		do: [ :anError | aBlockClosureCheck value:anError.]! !
 
-!IdiomTest methodsFor: 'as yet unclassified' stamp: 'kf 4/24/2017 21:16:02'!
-assert: aClosure shoulBeEndOn: aTime 
+!IdiomTest methodsFor: 'as yet unclassified' stamp: 'a 4/25/2017 01:57:18'!
+assert: aClosure shouldBeEndOn: aTime 
 	 self assert: aClosure timeToRun < aTime! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
