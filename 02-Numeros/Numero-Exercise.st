@@ -292,9 +292,9 @@ initalizeWith: aValue
 + anAdder 
 	^anAdder addEntero: self.! !
 
-!Entero methodsFor: 'arithmetic operations' stamp: 'RB 4/28/2017 10:40:10'!
+!Entero methodsFor: 'arithmetic operations' stamp: 'kf 5/1/2017 21:37:02'!
 / aDivisor
-	^aDivisor divideEntero: self.! !
+	^aDivisor divideEnteroBySelf: self.! !
 
 !Entero methodsFor: 'arithmetic operations' stamp: 'HernanWilkinson 5/7/2016 21:55'!
 // aDivisor 
@@ -312,12 +312,12 @@ addFraccion: aFraccion
 		newDenominator := aFraccion denominator.
 		^Fraccion with: newNumerator over: newDenominator.! !
 
-!Entero methodsFor: 'arithmetic operations' stamp: 'RB 4/28/2017 11:22:59'!
-divideEntero: anEntero
+!Entero methodsFor: 'arithmetic operations' stamp: 'kf 5/1/2017 21:36:53'!
+divideEnteroBySelf: anEntero
 		^Fraccion with: anEntero over: self! !
 
-!Entero methodsFor: 'arithmetic operations' stamp: 'RB 4/28/2017 11:31:41'!
-divideFraccion: aFraccion
+!Entero methodsFor: 'arithmetic operations' stamp: 'kf 5/1/2017 21:35:58'!
+divideFraccionBySelf: aFraccion
 		^ Fraccion with: (aFraccion numerator) over: (aFraccion denominator * self).! !
 
 !Entero methodsFor: 'arithmetic operations' stamp: 'HernanWilkinson 5/7/2016 21:00'!
@@ -396,9 +396,9 @@ hash
 + anAdder 
 	^ anAdder addFraccion: self.! !
 
-!Fraccion methodsFor: 'arithmetic operations' stamp: 'RB 4/28/2017 10:43:32'!
+!Fraccion methodsFor: 'arithmetic operations' stamp: 'kf 5/1/2017 21:36:15'!
 / aDivisor
-	^aDivisor divideFraccion: self.! !
+	^aDivisor divideFraccionBySelf: self.! !
 
 !Fraccion methodsFor: 'arithmetic operations' stamp: 'RB 4/28/2017 11:15:54'!
 addEntero: anEntero
@@ -414,12 +414,12 @@ addFraccion: aFraccion
 		newDenominator := denominator * aFraccion denominator.
 		^Fraccion with: newNumerator over: newDenominator.! !
 
-!Fraccion methodsFor: 'arithmetic operations' stamp: 'RB 4/28/2017 11:27:14'!
-divideEntero: anEntero
+!Fraccion methodsFor: 'arithmetic operations' stamp: 'kf 5/1/2017 21:37:19'!
+divideEnteroBySelf: anEntero
 		^ Fraccion with: anEntero * denominator over: numerator! !
 
-!Fraccion methodsFor: 'arithmetic operations' stamp: 'RB 4/28/2017 11:30:20'!
-divideFraccion: aFraccion
+!Fraccion methodsFor: 'arithmetic operations' stamp: 'kf 5/1/2017 21:37:44'!
+divideFraccionBySelf: aFraccion
 	^Fraccion with: (denominator * aFraccion numerator) over: (numerator * aFraccion denominator)! !
 
 !Fraccion methodsFor: 'arithmetic operations' stamp: 'RB 4/28/2017 11:01:57'!
