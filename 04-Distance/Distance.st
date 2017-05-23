@@ -59,14 +59,14 @@ test05
 	self assert: (distance1 + distance2) = distance3
 	! !
 
-!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 5/21/2017 19:41:32'!
+!DistanceTest methodsFor: 'as yet unclassified' stamp: 'RB 5/23/2017 14:38:45'!
 test06
 
 	| distance1 |
 	
 	distance1 := Centimeter new for: 10.
 	
-	self assert: distance1 centimeter = 10.
+	self assert: distance1 centimeters = 10.
 	! !
 
 !DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 5/21/2017 19:42:51'!
@@ -354,6 +354,12 @@ centimeters
 for: anInteger 
 	value :=  anInteger.! !
 
+!Distance methodsFor: 'as yet unclassified' stamp: 'RB 5/23/2017 14:37:47'!
+kilometers
+
+	self subclassResponsibility
+	! !
+
 !Distance methodsFor: 'as yet unclassified' stamp: 'kf 5/21/2017 20:31:16'!
 meters
 
@@ -368,13 +374,13 @@ Distance subclass: #Centimeter
 	poolDictionaries: ''
 	category: 'Distance'!
 
-!Centimeter methodsFor: 'as yet unclassified' stamp: 'kf 5/21/2017 19:42:18'!
-centimeter
+!Centimeter methodsFor: 'as yet unclassified' stamp: 'RB 5/23/2017 14:38:07'!
+centimeters
 	^ value.! !
 
-!Centimeter methodsFor: 'as yet unclassified' stamp: 'kf 5/22/2017 23:09:47'!
+!Centimeter methodsFor: 'as yet unclassified' stamp: 'RB 5/23/2017 14:39:19'!
 convertermethod
-	^ #centimeter! !
+	^ #centimeters! !
 
 !Centimeter methodsFor: 'as yet unclassified' stamp: 'kf 5/22/2017 10:43:58'!
 kilometers
@@ -384,7 +390,6 @@ kilometers
 meters
 	^ value / 1000! !
 
-
 
 !classDefinition: #Kilometer category: #Distance!
 Distance subclass: #Kilometer
@@ -393,8 +398,8 @@ Distance subclass: #Kilometer
 	poolDictionaries: ''
 	category: 'Distance'!
 
-!Kilometer methodsFor: 'as yet unclassified' stamp: 'kf 5/22/2017 20:18:30'!
-centimeter
+!Kilometer methodsFor: 'as yet unclassified' stamp: 'RB 5/23/2017 14:38:17'!
+centimeters
 	^ self meters * 1000! !
 
 !Kilometer methodsFor: 'as yet unclassified' stamp: 'kf 5/22/2017 23:10:08'!
@@ -417,8 +422,8 @@ Distance subclass: #Meter
 	poolDictionaries: ''
 	category: 'Distance'!
 
-!Meter methodsFor: 'as yet unclassified' stamp: 'kf 5/21/2017 19:49:18'!
-centimeter
+!Meter methodsFor: 'as yet unclassified' stamp: 'RB 5/23/2017 14:38:24'!
+centimeters
 	^ value * 1000! !
 
 !Meter methodsFor: 'as yet unclassified' stamp: 'kf 5/22/2017 23:09:21'!
