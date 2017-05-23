@@ -169,10 +169,10 @@ GameOfLife class
 cellOutOfRange
 	^ 'Cell out of range'! !
 
-!GameOfLife class methodsFor: 'as yet unclassified' stamp: 'kf 5/15/2017 19:52:15'!
+!GameOfLife class methodsFor: 'as yet unclassified' stamp: 'kf 5/16/2017 18:32:48'!
 withLiveCells: aCollectionOfAliveCells withSize: aPoint 
 
-		(aCollectionOfAliveCells allSatisfy: [:aCell |
-		(aCell x between: 0 and: aPoint x) and: [ aCell y between: 0 and: aPoint y]]) ifFalse: [ self error: self cellOutOfRange ].
+		(aCollectionOfAliveCells allSatisfy: 
+		[:aCell | aCell between: 0@0 and: aPoint]) ifFalse: [ self error: self cellOutOfRange ].
 	
 	^self new initializeWith: aCollectionOfAliveCells withSize: aPoint ! !
