@@ -295,16 +295,16 @@ Object subclass: #Distance
 	^ self class new for: value * anInteger.
 	! !
 
-!Distance methodsFor: 'as yet unclassified' stamp: 'kf 5/21/2017 20:37:54'!
+!Distance methodsFor: 'as yet unclassified' stamp: 'kf 5/22/2017 23:09:29'!
 + aDistance
 
-	self subclassResponsibility
+	^ self class new for: value + (aDistance perform: self convertermethod)
 	! !
 
-!Distance methodsFor: 'as yet unclassified' stamp: 'kf 5/21/2017 20:37:57'!
+!Distance methodsFor: 'as yet unclassified' stamp: 'kf 5/22/2017 23:10:26'!
 - aDistance
 
-	self subclassResponsibility
+	^ self class new for: value - (aDistance perform: self convertermethod)
 	! !
 
 !Distance methodsFor: 'as yet unclassified' stamp: 'kf 5/22/2017 20:58:17'!
@@ -322,10 +322,16 @@ Object subclass: #Distance
 
 	^ (self < aDistance) or: [self = aDistance].! !
 
-!Distance methodsFor: 'as yet unclassified' stamp: 'kf 5/21/2017 20:38:00'!
+!Distance methodsFor: 'as yet unclassified' stamp: 'kf 5/22/2017 23:11:14'!
 = aDistance
 
-	self subclassResponsibility
+	^  value = (aDistance perform: self convertermethod)
+	! !
+
+!Distance methodsFor: 'as yet unclassified' stamp: 'kf 5/22/2017 23:11:47'!
+> aDistance
+
+	^  value > (aDistance perform: self convertermethod)
 	! !
 
 !Distance methodsFor: 'as yet unclassified' stamp: 'kf 5/22/2017 20:15:24'!
@@ -362,26 +368,13 @@ Distance subclass: #Centimeter
 	poolDictionaries: ''
 	category: 'Distance'!
 
-!Centimeter methodsFor: 'as yet unclassified' stamp: 'kf 5/22/2017 20:57:40'!
-+ aDistance 
-	^ self class new for: value +  aDistance centimeter.! !
-
-!Centimeter methodsFor: 'as yet unclassified' stamp: 'kf 5/22/2017 20:57:48'!
-- aDistance 
-	^ self class new for: value -  aDistance centimeter.! !
-
-!Centimeter methodsFor: 'as yet unclassified' stamp: 'kf 5/22/2017 21:43:54'!
-= aDistance
-	^ self centimeter = aDistance centimeter.
-	! !
-
-!Centimeter methodsFor: 'as yet unclassified' stamp: 'kf 5/22/2017 10:47:59'!
-> aDistance
-	^ value > aDistance centimeter.! !
-
 !Centimeter methodsFor: 'as yet unclassified' stamp: 'kf 5/21/2017 19:42:18'!
 centimeter
 	^ value.! !
+
+!Centimeter methodsFor: 'as yet unclassified' stamp: 'kf 5/22/2017 23:09:47'!
+convertermethod
+	^ #centimeter! !
 
 !Centimeter methodsFor: 'as yet unclassified' stamp: 'kf 5/22/2017 10:43:58'!
 kilometers
@@ -400,27 +393,13 @@ Distance subclass: #Kilometer
 	poolDictionaries: ''
 	category: 'Distance'!
 
-!Kilometer methodsFor: 'as yet unclassified' stamp: 'kf 5/22/2017 21:42:40'!
-+ aDistance 
-	^ self class new for: value + aDistance kilometers.! !
-
-!Kilometer methodsFor: 'as yet unclassified' stamp: 'kf 5/22/2017 21:43:19'!
-- aDistance
-	^ self class new for: value - aDistance kilometers.
-! !
-
-!Kilometer methodsFor: 'as yet unclassified' stamp: 'kf 5/22/2017 10:38:17'!
-= aDistance 
-	^ value = aDistance kilometers.! !
-
-!Kilometer methodsFor: 'as yet unclassified' stamp: 'kf 5/22/2017 10:46:26'!
-> aDistance
-	^ value > aDistance kilometers. 
-	! !
-
 !Kilometer methodsFor: 'as yet unclassified' stamp: 'kf 5/22/2017 20:18:30'!
 centimeter
 	^ self meters * 1000! !
+
+!Kilometer methodsFor: 'as yet unclassified' stamp: 'kf 5/22/2017 23:10:08'!
+convertermethod
+	^ #kilometers! !
 
 !Kilometer methodsFor: 'as yet unclassified' stamp: 'kf 5/22/2017 10:38:36'!
 kilometers
@@ -438,27 +417,13 @@ Distance subclass: #Meter
 	poolDictionaries: ''
 	category: 'Distance'!
 
-!Meter methodsFor: 'as yet unclassified' stamp: 'kf 5/22/2017 20:56:30'!
-+ aDistance 
-	^ self class new for: value +  aDistance meters.! !
-
-!Meter methodsFor: 'as yet unclassified' stamp: 'kf 5/22/2017 20:56:52'!
-- aDistance 
-	^ self class new for: value -  aDistance meters.! !
-
-!Meter methodsFor: 'as yet unclassified' stamp: 'kf 5/22/2017 21:41:01'!
-= aMeter
-	^ value = aMeter meters.
-	! !
-
-!Meter methodsFor: 'as yet unclassified' stamp: 'kf 5/22/2017 10:47:12'!
-> aDistance
-	^ value > aDistance meters.
-	! !
-
 !Meter methodsFor: 'as yet unclassified' stamp: 'kf 5/21/2017 19:49:18'!
 centimeter
 	^ value * 1000! !
+
+!Meter methodsFor: 'as yet unclassified' stamp: 'kf 5/22/2017 23:09:21'!
+convertermethod 
+	^ #meters.! !
 
 !Meter methodsFor: 'as yet unclassified' stamp: 'kf 5/22/2017 10:43:47'!
 kilometers
