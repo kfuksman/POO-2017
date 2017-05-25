@@ -1,285 +1,133 @@
 !classDefinition: #DistanceTest category: #Distance!
 TestCase subclass: #DistanceTest
-	instanceVariableNames: ''
+	instanceVariableNames: 'unMetro milQuinientosCentimetros quinientosCentimetros dosMetros otroMetro cienCentimetros cincoCentimetros tresMetros unKilometro dosKilometro tresKilometro'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'Distance'!
 
-!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 5/21/2017 20:50:02'!
+!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 5/23/2017 21:38:00'!
+setUp
+		unMetro :=  Distance for: 1 in: Unit meter.
+		otroMetro :=  Distance for: 1 in:  Unit meter.
+		dosMetros :=  Distance for: 2 in: Unit meter.
+		tresMetros :=  Distance for: 3 in: Unit meter.
+		cienCentimetros := Distance for: 100 in: Unit centimeter.
+		cincoCentimetros := Distance for: 5 in: Unit centimeter.
+		unKilometro := Distance for: 1 in: Unit kilometer.
+		dosKilometro := Distance for: 2 in: Unit kilometer.
+		tresKilometro := Distance for: 3 in: Unit kilometer.! !
+
+!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 5/23/2017 20:22:19'!
 test01
-
-	| distance |
-	
-	distance := Meter new for: 1.
-	
-	self assert: distance meters = 1.
+	self assert: unMetro = unMetro
 	! !
 
-!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 5/21/2017 17:33:48'!
+!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 5/23/2017 20:22:24'!
 test02
-
-	| distance |
-	
-	distance := Meter new for: 2.
-	
-	self assert: distance meters = 2.
+	self assert: unMetro = otroMetro
 	! !
 
-!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 5/21/2017 17:33:26'!
+!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 5/23/2017 20:22:30'!
 test03
 
-	| distance1 distance2 |
-	
-	distance1 := Meter new for: 2.
-	distance2 := Meter new for: 2.
-	
-	self assert: distance1 = distance2.
+	self deny: unMetro = dosMetros
 	! !
 
-!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 5/21/2017 17:34:17'!
+!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 5/23/2017 20:36:33'!
 test04
 
-	| distance1 distance2 |
-	
-	distance1 := Meter new for: 2.
-	distance2 := Meter new for: 1.
-	
-	self deny: distance1 = distance2.
+	self assert: unMetro + unMetro = dosMetros
 	! !
 
-!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 5/21/2017 17:42:49'!
+!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 5/23/2017 21:01:25'!
+test04Resta
+
+	self assert: dosMetros - unMetro = unMetro
+	! !
+
+!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 5/23/2017 20:44:08'!
 test05
 
-	| distance1 distance2 distance3 |
-	
-	distance1 := Meter new for: 2.
-	distance2 := Meter new for: 1.
-	distance3 := Meter new for: 3.	
-	
-	self assert: (distance1 + distance2) = distance3
+	self assert: unMetro * 2 = dosMetros
 	! !
 
-!DistanceTest methodsFor: 'as yet unclassified' stamp: 'RB 5/23/2017 14:38:45'!
+!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 5/23/2017 20:44:24'!
 test06
 
-	| distance1 |
-	
-	distance1 := Centimeter new for: 10.
-	
-	self assert: distance1 centimeters = 10.
+	self assert:  2 * unMetro = dosMetros
 	! !
 
-!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 5/21/2017 19:42:51'!
+!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 5/23/2017 20:44:12'!
 test07
 
-	| distance1 distance2 |
-	
-	distance1 := Centimeter new for: 2.
-	distance2 := Centimeter new for: 2.
-	
-	self assert: distance1 = distance2.
+	self assert:  dosMetros / 2 = unMetro
 	! !
 
-!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 5/21/2017 19:47:47'!
+!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 5/23/2017 20:52:41'!
 test08
 
-	| distance1 distance2 |
-	
-	distance1 := Meter new for: 1.
-	distance2 := Centimeter new for: 1000.
-
-	self assert: distance1 = distance2
+	self assert: dosMetros > unMetro
 	! !
 
-!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 5/21/2017 20:07:19'!
+!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 5/23/2017 20:53:25'!
 test09
 
-	| distance1 distance2 distance3 |
-	
-	distance1 := Meter new for: 1.
-	distance2 := Centimeter new for: 1500.
-	distance3 := Centimeter new for: 500.
-
-	self assert:  (distance2 - distance1) = distance3
+	self deny: unMetro > dosMetros
 	! !
 
-!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 5/21/2017 20:02:21'!
+!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 5/23/2017 20:54:20'!
 test10
 
-	| distance1 distance2 distance3 |
-	
-	distance1 := Meter new for: 1.
-	distance2 := Centimeter new for: 1600.
-	distance3 := Centimeter new for: 600.
-
-	self assert:  (distance2 - distance1) = distance3
+	self assert: unMetro >= unMetro
 	! !
 
-!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 5/21/2017 20:09:51'!
+!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 5/23/2017 20:55:19'!
 test11
 
-	| distance1 distance2 distance3 |
-	
-	distance1 := Meter new for: 2.
-	distance2 := Centimeter new for: 1000.
-	distance3 := Meter new for: 1.
-
-	self assert:  (distance1 - distance2) = distance3
+	self assert:  unMetro < dosMetros
 	! !
 
-!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 5/22/2017 20:33:06'!
+!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 5/23/2017 20:55:45'!
 test12
 
-	| distance1 distance2 |
-	
-	distance1 := Centimeter new for: 2.
-	distance2 := Centimeter new for: 4.
+	self assert:  unMetro <= unMetro
+	! !
 
-	self assert:  (distance1 * 2) = distance2.	
-	self assert:  (2 * distance1) = distance2	! !
-
-!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 5/21/2017 20:40:30'!
+!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 5/23/2017 21:10:22'!
 test13
 
-	| distance1 distance2 distance3 |
-	
-	distance1 := Centimeter new for: 2.
-	distance2 := Centimeter new for: 2.
-	distance3 := Centimeter new for: 4.
-
-	self assert:  (distance1 + distance2) = distance3
+	self assert: (unMetro to: tresMetros) size = 3
 	! !
 
-!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 5/22/2017 20:25:35'!
+!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 5/23/2017 21:11:36'!
 test14
 
-	| distance1 distance2 |
-	
-	distance1 := Centimeter new for: 4.
-	distance2 := Centimeter new for: 2.
-
-	self assert:  (distance1 / 2) = distance2
+	self assert: ( unMetro to: dosMetros by: cincoCentimetros) size = 21
 	! !
 
-!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 5/22/2017 10:36:11'!
+!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 5/23/2017 21:33:09'!
 test15
 
-	| distance1 distance2 |
+	|interval collection collection2 |
+	collection := OrderedCollection new.
+	collection2 := OrderedCollection new.
+	interval :=  (unMetro to: dosMetros by: cincoCentimetros).
+	interval do: [:aDistance |  collection add: aDistance + unMetro].
+	(dosMetros to: tresMetros by: cincoCentimetros)  do: [:aDistance | collection2 add: aDistance ].
 	
-	distance1 := Kilometer new for: 4.
-	distance2 := Kilometer new for: 4.
+	self assert: collection = collection2! !
 
-	self assert:  distance1 = distance2
-	! !
-
-!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 5/22/2017 10:40:03'!
+!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 5/23/2017 21:38:47'!
 test16
 
-	| distance1 distance2 distance3 |
+	|interval collection collection2 |
+	collection := OrderedCollection new.
+	collection2 := OrderedCollection new.
+	interval :=  (unKilometro to: dosKilometro by: cincoCentimetros).
+	interval do: [:aDistance |  collection add: aDistance + unKilometro].
+	(dosKilometro to: tresKilometro by: cincoCentimetros)  do: [:aDistance | collection2 add: aDistance ].
 	
-	distance1 := Kilometer new for: 4.
-	distance2 := Meter new for: 4000.
-	distance3 := Centimeter new for: 4000000.
-
-	self assert:  distance1 = distance2.
-	self assert:  distance1 = distance3
-		! !
-
-!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 5/22/2017 10:47:34'!
-test17
-
-	| distance1 distance2 distance3 |
-	
-	distance1 := Kilometer new for: 6.
-	distance2 := Meter new for: 5000.
-	distance3 := Centimeter new for: 4000000.
-
-	self assert:  distance1 > distance2.
-	self assert:  distance1 > distance3.
-	self assert:  distance2 > distance3.
-	self deny: distance3 > distance2.		! !
-
-!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 5/22/2017 10:55:44'!
-test18
-
-	| distance1 distance2 distance3 distance4 |
-	
-	distance1 := Kilometer new for: 6.
-	distance2 := Meter new for: 5000.
-	distance3 := Centimeter new for: 4000000.
-	distance4 := Meter new for: 6000.
-	
-	self deny:  distance1 <= distance2.
-	self deny:  distance1 <= distance3.
-	self deny:  distance2 <= distance3.
-	self assert: distance3 <= distance2.		
-	self assert: distance1 <= distance4.
-! !
-
-!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 5/22/2017 20:15:08'!
-test19
-
-	| distance1 distance2 distance3 distance4 |
-	
-	distance1 := Kilometer new for: 6.
-	distance2 := Meter new for: 5000.
-	distance3 := Centimeter new for: 4000000.
-	distance4 := Meter new for: 6000.
-	
-	self assert:  distance1 >= distance2.
-	self assert:  distance1 >= distance3.
-	self assert:  distance2 >= distance3.
-	self deny: distance3 >= distance2.		
-	self assert: distance1 >= distance4.
-! !
-
-!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 5/22/2017 20:17:22'!
-test20
-
-	| distance1 distance2 distance3 |
-	
-	distance1 := Kilometer new for: 6.
-	distance2 := Meter new for: 6000.
-	distance3 := Centimeter new for: 6000000.
-	
-	self assert:  distance2 = distance1.
-	self assert:  distance3 = distance1.
-! !
-
-!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 5/22/2017 20:53:20'!
-test21
-
-	| distance1 distance2 |
-	
-	distance1 := Kilometer new for: 6.
-	distance2 := Kilometer new for: 6.
-	distance1 *2.	
-	self assert:  distance2 = distance1.
-! !
-
-!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 5/22/2017 21:42:10'!
-test22
-
-	| distance1 distance2 distance3 |
-	
-	distance1 := Kilometer new for: 2.
-	distance2 := Kilometer new for: 1.
-	distance3 := Kilometer new for: 3.	
-	
-	self assert: (distance1 + distance2) = distance3
-	! !
-
-!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 5/22/2017 21:42:52'!
-test23
-
-	| distance1 distance2 distance3 |
-	
-	distance1 := Kilometer new for: 2.
-	distance2 := Kilometer new for: 1.
-	distance3 := Kilometer new for: 1.	
-	
-	self assert: (distance1 - distance2) = distance3
-	! !
+	self assert: collection = collection2! !
 
 
 !classDefinition: #Distance category: #Distance!
@@ -289,152 +137,134 @@ Object subclass: #Distance
 	poolDictionaries: ''
 	category: 'Distance'!
 
-!Distance methodsFor: 'as yet unclassified' stamp: 'kf 5/22/2017 20:54:54'!
+!Distance methodsFor: 'as yet unclassified' stamp: 'kf 5/23/2017 20:43:31'!
 * anInteger 
+	^ self class for: value * anInteger  in: (Unit meterScale: 1)! !
 
-	^ self class new for: value * anInteger.
-	! !
+!Distance methodsFor: 'as yet unclassified' stamp: 'kf 5/23/2017 21:18:27'!
++ aDistance 
+	^ self class for: value + aDistance value in: (Unit meterScale: 1)! !
 
-!Distance methodsFor: 'as yet unclassified' stamp: 'kf 5/22/2017 23:09:29'!
-+ aDistance
+!Distance methodsFor: 'as yet unclassified' stamp: 'kf 5/23/2017 21:01:52'!
+- aDistance 
+	^ self class for: value - aDistance valueMeter in: (Unit meterScale: 1)! !
 
-	^ self class new for: value + (aDistance perform: self convertermethod)
-	! !
-
-!Distance methodsFor: 'as yet unclassified' stamp: 'kf 5/22/2017 23:10:26'!
-- aDistance
-
-	^ self class new for: value - (aDistance perform: self convertermethod)
-	! !
-
-!Distance methodsFor: 'as yet unclassified' stamp: 'kf 5/22/2017 20:58:17'!
+!Distance methodsFor: 'as yet unclassified' stamp: 'kf 5/23/2017 20:43:41'!
 / anInteger 
+	^ self class for: value / anInteger  in: (Unit meterScale: 1)! !
 
-	^ self class new for: value / anInteger.
-	! !
-
-!Distance methodsFor: 'as yet unclassified' stamp: 'kf 5/22/2017 10:57:44'!
+!Distance methodsFor: 'as yet unclassified' stamp: 'kf 5/23/2017 20:55:36'!
 < aDistance 
-	^ (self > aDistance) not! !
+	^ value < aDistance valueMeter! !
 
-!Distance methodsFor: 'as yet unclassified' stamp: 'kf 5/22/2017 10:57:05'!
+!Distance methodsFor: 'as yet unclassified' stamp: 'kf 5/23/2017 20:56:12'!
 <= aDistance 
+	^ self < aDistance or: [self = aDistance]! !
 
-	^ (self < aDistance) or: [self = aDistance].! !
-
-!Distance methodsFor: 'as yet unclassified' stamp: 'kf 5/22/2017 23:11:14'!
+!Distance methodsFor: 'as yet unclassified' stamp: 'kf 5/23/2017 20:21:01'!
 = aDistance
 
-	^  value = (aDistance perform: self convertermethod)
-	! !
+	^ value = aDistance valueMeter! !
 
-!Distance methodsFor: 'as yet unclassified' stamp: 'kf 5/22/2017 23:11:47'!
-> aDistance
+!Distance methodsFor: 'as yet unclassified' stamp: 'kf 5/23/2017 20:54:02'!
+> aDistance 
+	^ value > aDistance valueMeter! !
 
-	^  value > (aDistance perform: self convertermethod)
-	! !
-
-!Distance methodsFor: 'as yet unclassified' stamp: 'kf 5/22/2017 20:15:24'!
+!Distance methodsFor: 'as yet unclassified' stamp: 'kf 5/23/2017 20:54:54'!
 >= aDistance 
+	^ self > aDistance or: [self = aDistance]! !
 
-	^ (self > aDistance) or: [self = aDistance].! !
+!Distance methodsFor: 'as yet unclassified' stamp: 'kf 5/23/2017 21:02:28'!
+abs
+	^ value abs! !
 
-!Distance methodsFor: 'as yet unclassified' stamp: 'kf 5/22/2017 20:54:14'!
+!Distance methodsFor: 'as yet unclassified' stamp: 'kf 5/23/2017 20:42:13'!
 adaptToNumber: rcvr andSend: selector 
 
-		^ self class new for: (rcvr  perform: selector with: value).! !
+		^ self class new for: (rcvr  perform: selector with: value) in: (Unit meterScale: 1)! !
 
-!Distance methodsFor: 'as yet unclassified' stamp: 'kf 5/21/2017 20:31:22'!
-centimeters
+!Distance methodsFor: 'as yet unclassified' stamp: 'kf 5/23/2017 20:25:28'!
+for: anInteger in: anUnit 
+	value := anInteger * anUnit scale! !
 
-	self subclassResponsibility
-	! !
+!Distance methodsFor: 'as yet unclassified' stamp: 'kf 5/23/2017 21:06:39'!
+isZero
+	^ value isZero! !
 
-!Distance methodsFor: 'as yet unclassified' stamp: 'kf 5/22/2017 10:36:47'!
-for: anInteger 
-	value :=  anInteger.! !
+!Distance methodsFor: 'as yet unclassified' stamp: 'kf 5/23/2017 21:20:03'!
+rounded
+	^ value rounded! !
 
-!Distance methodsFor: 'as yet unclassified' stamp: 'RB 5/23/2017 14:37:47'!
-kilometers
+!Distance methodsFor: 'as yet unclassified' stamp: 'kf 5/23/2017 21:10:58'!
+to: aDistance 
+	^ Interval from: self to: aDistance! !
 
-	self subclassResponsibility
-	! !
+!Distance methodsFor: 'as yet unclassified' stamp: 'kf 5/23/2017 21:22:14'!
+to: aDistance by: aDistance2 
+	^ Interval from: self to: aDistance  by: aDistance2! !
 
-!Distance methodsFor: 'as yet unclassified' stamp: 'kf 5/21/2017 20:31:16'!
-meters
+!Distance methodsFor: 'as yet unclassified' stamp: 'kf 5/23/2017 21:20:17'!
+truncated
+	^ value truncated! !
 
-	self subclassResponsibility
-	! !
+!Distance methodsFor: 'as yet unclassified' stamp: 'kf 5/23/2017 21:18:37'!
+value
+	^ value ! !
 
-
-!classDefinition: #Centimeter category: #Distance!
-Distance subclass: #Centimeter
-	instanceVariableNames: ''
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'Distance'!
 
-!Centimeter methodsFor: 'as yet unclassified' stamp: 'RB 5/23/2017 14:38:07'!
-centimeters
-	^ value.! !
-
-!Centimeter methodsFor: 'as yet unclassified' stamp: 'RB 5/23/2017 14:39:19'!
-convertermethod
-	^ #centimeters! !
-
-!Centimeter methodsFor: 'as yet unclassified' stamp: 'kf 5/22/2017 10:43:58'!
-kilometers
-	^ self meters / 1000! !
-
-!Centimeter methodsFor: 'as yet unclassified' stamp: 'kf 5/21/2017 19:48:25'!
-meters
-	^ value / 1000! !
-
-
-!classDefinition: #Kilometer category: #Distance!
-Distance subclass: #Kilometer
-	instanceVariableNames: ''
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'Distance'!
-
-!Kilometer methodsFor: 'as yet unclassified' stamp: 'RB 5/23/2017 14:38:17'!
-centimeters
-	^ self meters * 1000! !
-
-!Kilometer methodsFor: 'as yet unclassified' stamp: 'kf 5/22/2017 23:10:08'!
-convertermethod
-	^ #kilometers! !
-
-!Kilometer methodsFor: 'as yet unclassified' stamp: 'kf 5/22/2017 10:38:36'!
-kilometers
-	^ value.! !
-
-!Kilometer methodsFor: 'as yet unclassified' stamp: 'kf 5/22/2017 20:18:09'!
-meters
-	^ value * 1000! !
-
-
-!classDefinition: #Meter category: #Distance!
-Distance subclass: #Meter
-	instanceVariableNames: ''
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'Distance'!
-
-!Meter methodsFor: 'as yet unclassified' stamp: 'RB 5/23/2017 14:38:24'!
-centimeters
-	^ value * 1000! !
-
-!Meter methodsFor: 'as yet unclassified' stamp: 'kf 5/22/2017 23:09:21'!
-convertermethod 
-	^ #meters.! !
-
-!Meter methodsFor: 'as yet unclassified' stamp: 'kf 5/22/2017 10:43:47'!
-kilometers
-	^ value / 1000.! !
-
-!Meter methodsFor: 'as yet unclassified' stamp: 'kf 5/21/2017 17:31:19'!
-meters
-
+!Distance methodsFor: 'accessing' stamp: 'kf 5/23/2017 20:21:23'!
+valueMeter
 	^ value! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'Distance class' category: #Distance!
+Distance class
+	instanceVariableNames: ''!
+
+!Distance class methodsFor: 'accessing' stamp: 'kf 5/23/2017 20:18:00'!
+for: anInteger in: anUnit 
+	^ self new for: anInteger in: anUnit! !
+
+
+!classDefinition: #Unit category: #Distance!
+Object subclass: #Unit
+	instanceVariableNames: 'value scale'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Distance'!
+
+!Unit methodsFor: 'accessing' stamp: 'kf 5/23/2017 20:26:49'!
+scale
+	^ scale! !
+
+!Unit methodsFor: 'accessing' stamp: 'kf 5/23/2017 20:35:02'!
+withScale: anInteger 
+	scale := anInteger! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'Unit class' category: #Distance!
+Unit class
+	instanceVariableNames: ''!
+
+
+!Unit class methodsFor: 'ic' stamp: 'kf 5/23/2017 20:50:24'!
+centimeter 
+	^ self new withScale: 1/100! !
+
+!Unit class methodsFor: 'ic' stamp: 'kf 5/23/2017 20:50:35'!
+kilometer
+	^ self new withScale: 1000! !
+
+!Unit class methodsFor: 'ic' stamp: 'kf 5/23/2017 20:50:17'!
+meter 
+	^ self new withScale: 1! !
+
+!Unit class methodsFor: 'ic' stamp: 'kf 5/23/2017 20:34:55'!
+meterScale: anInteger 
+	^ self new withScale: anInteger! !
+
+!Unit class methodsFor: 'ic' stamp: 'kf 5/23/2017 20:50:49'!
+milimeter
+	^ self new withScale: 1/1000! !
