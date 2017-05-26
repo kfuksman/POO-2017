@@ -1,13 +1,14 @@
 !classDefinition: #DistanceTest category: #'Distance-Solution'!
 TestCase subclass: #DistanceTest
-	instanceVariableNames: 'unMetro milQuinientosCentimetros quinientosCentimetros dosMetros otroMetro cienCentimetros cincoCentimetros tresMetros unKilometro dosKilometro tresKilometro minusMeter ceroMetros'
+	instanceVariableNames: 'unMetro milQuinientosCentimetros quinientosCentimetros dosMetros otroMetro cienCentimetros cincoCentimetros tresMetros unKilometro dosKilometro tresKilometro minusMeter ceroMetros minusFiveCentimeter'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'Distance-Solution'!
 
-!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 5/25/2017 20:07:57'!
+!DistanceTest methodsFor: 'as yet unclassified' stamp: 'RB 5/26/2017 13:05:52'!
 setUp
 		minusMeter  :=  Distance for: -1 in: Unit meter.
+		minusFiveCentimeter := Distance for: -5 in: Unit centimeter.
 		ceroMetros  :=  Distance for: 0 in: Unit meter.
 		unMetro :=  Distance for: 1 in: Unit meter.
 		otroMetro :=  Distance for: 1 in:  Unit meter.
@@ -19,102 +20,102 @@ setUp
 		dosKilometro := Distance for: 2 in: Unit kilometer.
 		tresKilometro := Distance for: 3 in: Unit kilometer.! !
 
-!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 5/23/2017 20:22:19'!
-test01
+!DistanceTest methodsFor: 'as yet unclassified' stamp: 'RB 5/26/2017 13:13:26'!
+test01AnInstanceIsEqualToSelf
 	self assert: unMetro = unMetro
 	! !
 
-!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 5/23/2017 20:22:24'!
-test02
+!DistanceTest methodsFor: 'as yet unclassified' stamp: 'RB 5/26/2017 13:13:01'!
+test02TwoInstancesWithSameDistanceAreEqual
 	self assert: unMetro = otroMetro
 	! !
 
-!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 5/23/2017 20:22:30'!
-test03
+!DistanceTest methodsFor: 'as yet unclassified' stamp: 'RB 5/26/2017 13:12:42'!
+test03DifferentDistancesAreNotEqual
 
 	self deny: unMetro = dosMetros
 	! !
 
-!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 5/23/2017 20:36:33'!
-test04
+!DistanceTest methodsFor: 'as yet unclassified' stamp: 'RB 5/26/2017 13:16:00'!
+test04SumOfTwoDistancesIsEqualToAnotherDistance
 
 	self assert: unMetro + unMetro = dosMetros
 	! !
 
-!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 5/23/2017 21:01:25'!
-test04Resta
+!DistanceTest methodsFor: 'as yet unclassified' stamp: 'RB 5/26/2017 13:15:53'!
+test05SubstractionOfTwoDistancesIsEqualToAnotherDistance
 
 	self assert: dosMetros - unMetro = unMetro
 	! !
 
-!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 5/25/2017 20:08:23'!
-test04RestaConNegativo
+!DistanceTest methodsFor: 'as yet unclassified' stamp: 'RB 5/26/2017 13:16:45'!
+test06SumWithNegativeDistancePerformWell
 
 	self assert: unMetro + minusMeter = ceroMetros 
 	! !
 
-!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 5/23/2017 20:44:08'!
-test05
+!DistanceTest methodsFor: 'as yet unclassified' stamp: 'RB 5/26/2017 13:20:24'!
+test07MultiplicationWithIntegerIsEqualToAnotherDistance
 
 	self assert: unMetro * 2 = dosMetros
 	! !
 
-!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 5/23/2017 20:44:24'!
-test06
+!DistanceTest methodsFor: 'as yet unclassified' stamp: 'RB 5/26/2017 13:20:55'!
+test08MultiplicationIsCommutativeWithDistance
 
 	self assert:  2 * unMetro = dosMetros
 	! !
 
-!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 5/23/2017 20:44:12'!
-test07
+!DistanceTest methodsFor: 'as yet unclassified' stamp: 'RB 5/26/2017 13:21:19'!
+test09DivisionWithIntegerIsEqualToAnotherDistance
 
 	self assert:  dosMetros / 2 = unMetro
 	! !
 
-!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 5/23/2017 20:52:41'!
-test08
+!DistanceTest methodsFor: 'as yet unclassified' stamp: 'RB 5/26/2017 13:22:59'!
+test10ADistanceCanBeBiggerThanAnotherDistance
 
 	self assert: dosMetros > unMetro
 	! !
 
-!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 5/23/2017 20:53:25'!
-test09
+!DistanceTest methodsFor: 'as yet unclassified' stamp: 'RB 5/26/2017 13:24:48'!
+test11ASmallDistanceCantBeBiggerThanABigDistance
 
 	self deny: unMetro > dosMetros
 	! !
 
-!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 5/23/2017 20:54:20'!
-test10
+!DistanceTest methodsFor: 'as yet unclassified' stamp: 'RB 5/26/2017 13:23:52'!
+test12ADistanceCanBeBiggerOrEqualThanAnotherDistance
 
 	self assert: unMetro >= unMetro
 	! !
 
-!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 5/23/2017 20:55:19'!
-test11
+!DistanceTest methodsFor: 'as yet unclassified' stamp: 'RB 5/26/2017 13:25:12'!
+test13ADistanceCanBeSmallerThanAnotherDistance
 
 	self assert:  unMetro < dosMetros
 	! !
 
-!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 5/23/2017 20:55:45'!
-test12
+!DistanceTest methodsFor: 'as yet unclassified' stamp: 'RB 5/26/2017 13:25:33'!
+test14ADistanceCanBeSmallerOrEqualThanAnotherDistance
 
 	self assert:  unMetro <= unMetro
 	! !
 
-!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 5/23/2017 21:10:22'!
-test13
+!DistanceTest methodsFor: 'as yet unclassified' stamp: 'RB 5/26/2017 13:26:39'!
+test15AnIntervalSizeInMeterIsEqualToTheDistanceBetweenHisDistances
 
 	self assert: (unMetro to: tresMetros) size = 3
 	! !
 
-!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 5/25/2017 18:18:58'!
-test14
+!DistanceTest methodsFor: 'as yet unclassified' stamp: 'RB 5/26/2017 13:27:12'!
+test16AnIntervalSizeWithAnotherStepIsEqualToTheDistanceBetweenHisDistances
 
 	self assert: ( unMetro to: dosMetros by: cincoCentimetros) size = 21
 	! !
 
-!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 5/25/2017 18:22:18'!
-test15
+!DistanceTest methodsFor: 'as yet unclassified' stamp: 'RB 5/26/2017 13:28:25'!
+test17IntervaleActsInAgreementWithHisStartAndEndDistances
 
 	|interval collection collection2 |
 	collection := OrderedCollection new.
@@ -125,8 +126,8 @@ test15
 	
 	self assert: collection = collection2! !
 
-!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 5/25/2017 20:13:52'!
-test16
+!DistanceTest methodsFor: 'as yet unclassified' stamp: 'RB 5/26/2017 13:28:56'!
+test18
 
 	| collection collection2 |
 	collection := OrderedCollection new.
@@ -136,17 +137,51 @@ test16
 	
 	self assert: collection = collection2! !
 
-!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 5/25/2017 20:20:33'!
-test17
+!DistanceTest methodsFor: 'as yet unclassified' stamp: 'RB 5/26/2017 13:29:03'!
+test19
 
 	| collection collection2 |
 	collection := OrderedCollection new.
 	collection2 := OrderedCollection new.
-	unMetro to: dosMetros.
-	unMetro to: dosMetros do: [:aDistance |  Transcript  print: aDistance valueMeter].
-	dosMetros to: tresMetros do: [:aDistance | collection2 add: aDistance ].
+	(unMetro to: dosMetros) do: [:aDistance |  collection add: (aDistance + unMetro)].
+	(dosMetros to: tresMetros) do: [:aDistance | collection2 add: aDistance ].
 	
 	self assert: collection = collection2! !
+
+!DistanceTest methodsFor: 'as yet unclassified' stamp: 'RB 5/26/2017 13:29:08'!
+test20
+
+	| collection collection2 |
+	collection := OrderedCollection new.
+	collection2 := OrderedCollection new.
+	(unMetro to: minusMeter) do: [:aDistance |  collection add: (aDistance + unMetro)].
+	(dosMetros to: ceroMetros) do: [:aDistance | collection2 add: aDistance ].
+	
+	self assert: collection = collection2! !
+
+!DistanceTest methodsFor: 'as yet unclassified' stamp: 'RB 5/26/2017 13:29:13'!
+test21
+
+	| collection collection2 |
+	collection := OrderedCollection new.
+	collection2 := OrderedCollection new.
+	(unMetro to: unMetro) do: [:aDistance |  collection add: aDistance].
+	(unMetro to: ceroMetros) do: [:aDistance | collection2 add: aDistance ].
+	
+	collection add: (ceroMetros).
+	
+	self assert: collection = collection2! !
+
+!DistanceTest methodsFor: 'as yet unclassified' stamp: 'RB 5/26/2017 13:29:18'!
+test22
+
+	| collection |
+	collection := OrderedCollection new.
+	self
+		should: [unMetro to: dosMetros by: minusFiveCentimeter do: [:aDistance |  collection add: aDistance].]
+		raise: Error - MessageNotUnderstood 
+		withExceptionDo: [ :anError |
+			self assert: anError messageText = DistanceInterval negativeStepError]! !
 
 
 !classDefinition: #Distance category: #'Distance-Solution'!
@@ -281,6 +316,10 @@ from: startDistance to: finishDistance
 !DistanceInterval class methodsFor: 'as yet unclassified' stamp: 'kf 5/25/2017 20:06:53'!
 from: startDistance to: finishDistance by: intervalDistance 
 	^ self new from: startDistance to: finishDistance by: intervalDistance! !
+
+!DistanceInterval class methodsFor: 'as yet unclassified' stamp: 'RB 5/26/2017 13:07:48'!
+negativeStepError	
+	^ 'Step value has to be positive'! !
 
 
 !classDefinition: #Unit category: #'Distance-Solution'!
