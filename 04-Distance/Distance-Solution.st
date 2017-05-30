@@ -16,22 +16,22 @@ aatest19IntervaleMethodActsInAgreementWithHisStartAndEnd
 	
 	self assert: collection = collection2! !
 
-!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 5/27/2017 16:22:56'!
+!DistanceTest methodsFor: 'as yet unclassified' stamp: 'RB 5/30/2017 00:49:04'!
 setUp
-		minusMeter  :=  Distance for: -1 in: Unit meter.
-		minusFiveCentimeter := Distance for: -5 in: Unit centimeter.
-		ceroMetros  :=  Distance for: 0 in: Unit meter.
-		unMetro :=  Distance for: 1 in: Unit meter.
-		otroMetro :=  Distance for: 1 in:  Unit meter.
-		dosMetros :=  Distance for: 2 in: Unit meter.
-		tresMetros :=  Distance for: 3 in: Unit meter.
-		cienCentimetros := Distance for: 100 in: Unit centimeter.
-		cincoCentimetros := Distance for: 5 in: Unit centimeter.
-		unKilometro := Distance for: 1 in: Unit kilometer.
-		dosKilometro := Distance for: 2 in: Unit kilometer.
-		tresKilometro := Distance for: 3 in: Unit kilometer.
-		oneCentimeter := Distance for: 1 in: Unit centimeter .
-		twoHundredCentimeters := Distance for: 200 in: Unit centimeter.! !
+		minusMeter  :=  Distance size: -1 in: Unit meter.
+		minusFiveCentimeter := Distance size: -5 in: Unit centimeter.
+		ceroMetros  :=  Distance size: 0 in: Unit meter.
+		unMetro :=  Distance size: 1 in: Unit meter.
+		otroMetro :=  Distance size: 1 in:  Unit meter.
+		dosMetros :=  Distance size: 2 in: Unit meter.
+		tresMetros :=  Distance size: 3 in: Unit meter.
+		cienCentimetros := Distance size: 100 in: Unit centimeter.
+		cincoCentimetros := Distance size: 5 in: Unit centimeter.
+		unKilometro := Distance size: 1 in: Unit kilometer.
+		dosKilometro := Distance size: 2 in: Unit kilometer.
+		tresKilometro := Distance size: 3 in: Unit kilometer.
+		oneCentimeter := Distance size: 1 in: Unit centimeter .
+		twoHundredCentimeters := Distance size: 200 in: Unit centimeter.! !
 
 !DistanceTest methodsFor: 'as yet unclassified' stamp: 'RB 5/26/2017 13:13:26'!
 test01AnInstanceIsEqualToSelf
@@ -220,25 +220,25 @@ Object subclass: #Distance
 < aDistance 
 	^ value < aDistance valueMeter! !
 
-!Distance methodsFor: 'comparing' stamp: 'kf 5/23/2017 20:56:12'!
+!Distance methodsFor: 'comparing' stamp: 'RB 5/30/2017 00:50:17'!
 <= aDistance 
-	^ self < aDistance or: [self = aDistance]! !
+	^ (self > aDistance) not! !
 
 !Distance methodsFor: 'comparing' stamp: 'kf 5/29/2017 20:47:43'!
 = aDistance
 	^ value = aDistance valueMeter! !
 
-!Distance methodsFor: 'comparing' stamp: 'kf 5/29/2017 20:48:15'!
+!Distance methodsFor: 'comparing' stamp: 'RB 5/30/2017 00:53:11'!
 > aDistance 
+	^ value > aDistance valueMeter! !
+
+!Distance methodsFor: 'comparing' stamp: 'RB 5/30/2017 00:51:09'!
+>= aDistance 
 	^ (self < aDistance) not! !
 
-!Distance methodsFor: 'comparing' stamp: 'kf 5/23/2017 20:54:54'!
->= aDistance 
-	^ self > aDistance or: [self = aDistance]! !
 
-
-!Distance methodsFor: 'initialization' stamp: 'kf 5/29/2017 20:47:04'!
-for: aNumber in: anUnit 
+!Distance methodsFor: 'initialization' stamp: 'RB 5/30/2017 00:48:09'!
+size: aNumber in: anUnit 
 	value := aNumber * anUnit scale! !
 
 
@@ -247,10 +247,10 @@ valueMeter
 	^ value! !
 
 
-!Distance methodsFor: 'converting' stamp: 'kf 5/23/2017 20:42:13'!
+!Distance methodsFor: 'converting' stamp: 'RB 5/30/2017 00:48:33'!
 adaptToNumber: rcvr andSend: selector 
 
-		^ self class new for: (rcvr  perform: selector with: value) in: (Unit meterScale: 1)! !
+		^ self class new size: (rcvr  perform: selector with: value) in: (Unit meterScale: 1)! !
 
 
 !Distance methodsFor: 'intervals' stamp: 'kf 5/25/2017 18:12:04'!
@@ -270,21 +270,21 @@ to: aDistance do: aBlockClosure
 	(self to: aDistance) do: aBlockClosure ! !
 
 
-!Distance methodsFor: 'arithmetic' stamp: 'kf 5/23/2017 20:43:31'!
+!Distance methodsFor: 'arithmetic' stamp: 'RB 5/30/2017 00:48:18'!
 * anInteger 
-	^ self class for: value * anInteger  in: (Unit meterScale: 1)! !
+	^ self class size: value * anInteger  in: (Unit meterScale: 1)! !
 
-!Distance methodsFor: 'arithmetic' stamp: 'kf 5/25/2017 18:11:29'!
+!Distance methodsFor: 'arithmetic' stamp: 'RB 5/30/2017 00:48:23'!
 + aDistance 
-	^ self class for: value + aDistance valueMeter in: (Unit meterScale: 1)! !
+	^ self class size: value + aDistance valueMeter in: (Unit meterScale: 1)! !
 
-!Distance methodsFor: 'arithmetic' stamp: 'kf 5/23/2017 21:01:52'!
+!Distance methodsFor: 'arithmetic' stamp: 'RB 5/30/2017 00:48:28'!
 - aDistance 
-	^ self class for: value - aDistance valueMeter in: (Unit meterScale: 1)! !
+	^ self class size: value - aDistance valueMeter in: (Unit meterScale: 1)! !
 
-!Distance methodsFor: 'arithmetic' stamp: 'kf 5/23/2017 20:43:41'!
+!Distance methodsFor: 'arithmetic' stamp: 'RB 5/30/2017 00:48:30'!
 / anInteger 
-	^ self class for: value / anInteger  in: (Unit meterScale: 1)! !
+	^ self class size: value / anInteger  in: (Unit meterScale: 1)! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -292,9 +292,9 @@ to: aDistance do: aBlockClosure
 Distance class
 	instanceVariableNames: ''!
 
-!Distance class methodsFor: 'instance creation' stamp: 'kf 5/23/2017 20:18:00'!
-for: anInteger in: anUnit 
-	^ self new for: anInteger in: anUnit! !
+!Distance class methodsFor: 'instance creation' stamp: 'RB 5/30/2017 00:49:18'!
+size: anInteger in: anUnit 
+	^ self new size: anInteger in: anUnit! !
 
 
 !classDefinition: #DistanceFactory category: #'Distance-Solution'!
@@ -333,14 +333,14 @@ zeroMeters
 	^ self createMeter: 0.! !
 
 
-!DistanceFactory methodsFor: 'private' stamp: 'kf 5/27/2017 16:25:12'!
+!DistanceFactory methodsFor: 'private' stamp: 'RB 5/30/2017 00:48:42'!
 createCentimeter: anInteger
-	^ Distance for: anInteger in: Unit  centimeter.
+	^ Distance size: anInteger in: Unit  centimeter.
 	! !
 
-!DistanceFactory methodsFor: 'private' stamp: 'kf 5/27/2017 16:24:07'!
+!DistanceFactory methodsFor: 'private' stamp: 'RB 5/30/2017 00:48:44'!
 createMeter: anInteger
-	^ Distance for: anInteger  in: Unit meter.
+	^ Distance size: anInteger  in: Unit meter.
 	! !
 
 
@@ -360,9 +360,9 @@ from: startDistance to: finishDistance by: intervalDistance
 	interval := Interval from: startDistance valueMeter to: finishDistance valueMeter by: intervalDistance valueMeter ! !
 
 
-!DistanceInterval methodsFor: 'accessing' stamp: 'kf 5/25/2017 20:04:56'!
+!DistanceInterval methodsFor: 'accessing' stamp: 'RB 5/30/2017 00:48:47'!
 at: position
-	^ Distance for: (interval at: position) in: (Unit meter)! !
+	^ Distance size: (interval at: position) in: (Unit meter)! !
 
 !DistanceInterval methodsFor: 'accessing' stamp: 'kf 5/25/2017 18:23:19'!
 do: aBlock
