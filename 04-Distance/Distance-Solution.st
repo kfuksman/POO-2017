@@ -127,14 +127,13 @@ test16AnIntervalSizeWithAnotherStepIsEqualToTheDistanceBetweenHisDistances
 	self assert: ( unMetro to: dosMetros by: cincoCentimetros) size = 21
 	! !
 
-!DistanceTest methodsFor: 'as yet unclassified' stamp: 'RB 5/26/2017 13:28:25'!
+!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 5/29/2017 21:50:45'!
 test17IntervaleActsInAgreementWithHisStartAndEndDistances
 
-	|interval collection collection2 |
+	| collection collection2 |
 	collection := OrderedCollection new.
 	collection2 := OrderedCollection new.
-	interval :=  (unMetro to: dosMetros by: cincoCentimetros).
-	interval do: [:aDistance |  collection add: aDistance + unMetro].
+	(unMetro to: dosMetros by: cincoCentimetros) do: [:aDistance |  collection add: aDistance + unMetro].
 	(dosMetros to: tresMetros by: cincoCentimetros)  do: [:aDistance | collection2 add: aDistance ].
 	
 	self assert: collection = collection2! !
@@ -147,6 +146,17 @@ test18IntervalesWithStepActsInAgreementWithTheirStartAndEnd
 	collection2 := OrderedCollection new.
 	unMetro to: dosMetros  by: cincoCentimetros do: [:aDistance |  collection add: (aDistance + unMetro)].
 	dosMetros to: tresMetros   by: cincoCentimetros do: [:aDistance | collection2 add: aDistance ].
+	
+	self assert: collection = collection2! !
+
+!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 5/29/2017 21:51:59'!
+test19IntervaleMethodActsInAgreementWithHisStartAndEnd
+
+	| collection collection2 |
+	collection := OrderedCollection new.
+	collection2 := OrderedCollection new.
+	(unMetro to: dosMetros) do: [:aDistance |  collection add: (aDistance + unMetro)].
+	(dosMetros to: tresMetros)  do: [:aDistance | collection2 add: aDistance ].
 	
 	self assert: collection = collection2! !
 
