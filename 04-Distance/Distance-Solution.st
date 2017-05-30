@@ -5,6 +5,17 @@ TestCase subclass: #DistanceTest
 	poolDictionaries: ''
 	category: 'Distance-Solution'!
 
+!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 5/29/2017 20:46:24'!
+aatest19IntervaleMethodActsInAgreementWithHisStartAndEnd
+
+	| collection collection2 |
+	collection := OrderedCollection new.
+	collection2 := OrderedCollection new.
+	unMetro to: dosMetros  do: [:aDistance |  collection add: (aDistance + unMetro)].
+	dosMetros to: tresMetros  do: [:aDistance | collection2 add: aDistance ].
+	
+	self assert: collection = collection2! !
+
 !DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 5/27/2017 16:22:56'!
 setUp
 		minusMeter  :=  Distance for: -1 in: Unit meter.
@@ -139,17 +150,6 @@ test18IntervalesWithStepActsInAgreementWithTheirStartAndEnd
 	
 	self assert: collection = collection2! !
 
-!DistanceTest methodsFor: 'as yet unclassified' stamp: 'RB 5/28/2017 12:52:37'!
-test19IntervaleMethodActsInAgreementWithHisStartAndEnd
-
-	| collection collection2 |
-	collection := OrderedCollection new.
-	collection2 := OrderedCollection new.
-	unMetro to: dosMetros  do: [:aDistance |  collection add: (aDistance + unMetro)].
-	dosMetros to: tresMetros  do: [:aDistance | collection2 add: aDistance ].
-	
-	self assert: collection = collection2! !
-
 !DistanceTest methodsFor: 'as yet unclassified' stamp: 'RB 5/28/2017 12:54:59'!
 test20IntervaleWithNegativeDistanceAndStepWorksCorrectly
 
@@ -206,72 +206,75 @@ Object subclass: #Distance
 	poolDictionaries: ''
 	category: 'Distance-Solution'!
 
-!Distance methodsFor: 'as yet unclassified' stamp: 'kf 5/23/2017 20:43:31'!
-* anInteger 
-	^ self class for: value * anInteger  in: (Unit meterScale: 1)! !
-
-!Distance methodsFor: 'as yet unclassified' stamp: 'kf 5/25/2017 18:11:29'!
-+ aDistance 
-	^ self class for: value + aDistance valueMeter in: (Unit meterScale: 1)! !
-
-!Distance methodsFor: 'as yet unclassified' stamp: 'kf 5/23/2017 21:01:52'!
-- aDistance 
-	^ self class for: value - aDistance valueMeter in: (Unit meterScale: 1)! !
-
-!Distance methodsFor: 'as yet unclassified' stamp: 'kf 5/23/2017 20:43:41'!
-/ anInteger 
-	^ self class for: value / anInteger  in: (Unit meterScale: 1)! !
-
-!Distance methodsFor: 'as yet unclassified' stamp: 'kf 5/23/2017 20:55:36'!
+!Distance methodsFor: 'comparing' stamp: 'kf 5/23/2017 20:55:36'!
 < aDistance 
 	^ value < aDistance valueMeter! !
 
-!Distance methodsFor: 'as yet unclassified' stamp: 'kf 5/23/2017 20:56:12'!
+!Distance methodsFor: 'comparing' stamp: 'kf 5/23/2017 20:56:12'!
 <= aDistance 
 	^ self < aDistance or: [self = aDistance]! !
 
-!Distance methodsFor: 'as yet unclassified' stamp: 'kf 5/23/2017 20:21:01'!
+!Distance methodsFor: 'comparing' stamp: 'kf 5/29/2017 20:47:43'!
 = aDistance
-
 	^ value = aDistance valueMeter! !
 
-!Distance methodsFor: 'as yet unclassified' stamp: 'kf 5/23/2017 20:54:02'!
+!Distance methodsFor: 'comparing' stamp: 'kf 5/29/2017 20:48:15'!
 > aDistance 
-	^ value > aDistance valueMeter! !
+	^ (self < aDistance) not! !
 
-!Distance methodsFor: 'as yet unclassified' stamp: 'kf 5/23/2017 20:54:54'!
+!Distance methodsFor: 'comparing' stamp: 'kf 5/23/2017 20:54:54'!
 >= aDistance 
 	^ self > aDistance or: [self = aDistance]! !
 
-!Distance methodsFor: 'as yet unclassified' stamp: 'kf 5/23/2017 20:42:13'!
-adaptToNumber: rcvr andSend: selector 
 
-		^ self class new for: (rcvr  perform: selector with: value) in: (Unit meterScale: 1)! !
-
-!Distance methodsFor: 'as yet unclassified' stamp: 'kf 5/23/2017 20:25:28'!
-for: anInteger in: anUnit 
-	value := anInteger * anUnit scale! !
-
-!Distance methodsFor: 'as yet unclassified' stamp: 'kf 5/25/2017 18:12:04'!
-to: aDistance 
-	^ DistanceInterval from: self to: aDistance! !
-
-!Distance methodsFor: 'as yet unclassified' stamp: 'kf 5/25/2017 18:19:33'!
-to: aDistance by: aDistance2 
-	^ DistanceInterval from: self to: aDistance  by: aDistance2! !
-
-!Distance methodsFor: 'as yet unclassified' stamp: 'kf 5/25/2017 20:15:27'!
-to: aDistance by: aDistance2 do: aBlockClosure 
-	(DistanceInterval from: 	self to: aDistance by: aDistance2) do: aBlockClosure ! !
-
-!Distance methodsFor: 'as yet unclassified' stamp: 'RB 5/28/2017 03:15:32'!
-to: aDistance do: aBlockClosure 
-	(DistanceInterval from: 	self to: aDistance) do: aBlockClosure ! !
+!Distance methodsFor: 'initialization' stamp: 'kf 5/29/2017 20:47:04'!
+for: aNumber in: anUnit 
+	value := aNumber * anUnit scale! !
 
 
 !Distance methodsFor: 'accessing' stamp: 'kf 5/23/2017 20:21:23'!
 valueMeter
 	^ value! !
+
+
+!Distance methodsFor: 'converting' stamp: 'kf 5/23/2017 20:42:13'!
+adaptToNumber: rcvr andSend: selector 
+
+		^ self class new for: (rcvr  perform: selector with: value) in: (Unit meterScale: 1)! !
+
+
+!Distance methodsFor: 'intervals' stamp: 'kf 5/25/2017 18:12:04'!
+to: aDistance 
+	^ DistanceInterval from: self to: aDistance! !
+
+!Distance methodsFor: 'intervals' stamp: 'kf 5/25/2017 18:19:33'!
+to: aDistance by: aDistance2 
+	^ DistanceInterval from: self to: aDistance  by: aDistance2! !
+
+!Distance methodsFor: 'intervals' stamp: 'kf 5/29/2017 20:46:10'!
+to: aDistance by: aDistance2 do: aBlockClosure 
+	(self to: aDistance by: aDistance2) do: aBlockClosure ! !
+
+!Distance methodsFor: 'intervals' stamp: 'kf 5/29/2017 20:47:34'!
+to: aDistance do: aBlockClosure 
+	(self to: aDistance) do: aBlockClosure ! !
+
+
+!Distance methodsFor: 'arithmetic' stamp: 'kf 5/23/2017 20:43:31'!
+* anInteger 
+	^ self class for: value * anInteger  in: (Unit meterScale: 1)! !
+
+!Distance methodsFor: 'arithmetic' stamp: 'kf 5/25/2017 18:11:29'!
++ aDistance 
+	^ self class for: value + aDistance valueMeter in: (Unit meterScale: 1)! !
+
+!Distance methodsFor: 'arithmetic' stamp: 'kf 5/23/2017 21:01:52'!
+- aDistance 
+	^ self class for: value - aDistance valueMeter in: (Unit meterScale: 1)! !
+
+!Distance methodsFor: 'arithmetic' stamp: 'kf 5/23/2017 20:43:41'!
+/ anInteger 
+	^ self class for: value / anInteger  in: (Unit meterScale: 1)! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -279,7 +282,7 @@ valueMeter
 Distance class
 	instanceVariableNames: ''!
 
-!Distance class methodsFor: 'accessing' stamp: 'kf 5/23/2017 20:18:00'!
+!Distance class methodsFor: 'instance creation' stamp: 'kf 5/23/2017 20:18:00'!
 for: anInteger in: anUnit 
 	^ self new for: anInteger in: anUnit! !
 
@@ -290,11 +293,6 @@ Object subclass: #DistanceFactory
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'Distance-Solution'!
-
-!DistanceFactory methodsFor: 'accessing' stamp: 'kf 5/27/2017 16:24:07'!
-createMeter: anInteger
-	^ Distance for: anInteger  in: Unit meter.
-	! !
 
 !DistanceFactory methodsFor: 'accessing' stamp: 'kf 5/27/2017 16:23:34'!
 minusOneMeter
@@ -330,6 +328,11 @@ createCentimeter: anInteger
 	^ Distance for: anInteger in: Unit  centimeter.
 	! !
 
+!DistanceFactory methodsFor: 'private' stamp: 'kf 5/27/2017 16:24:07'!
+createMeter: anInteger
+	^ Distance for: anInteger  in: Unit meter.
+	! !
+
 
 !classDefinition: #DistanceInterval category: #'Distance-Solution'!
 Object subclass: #DistanceInterval
@@ -338,25 +341,26 @@ Object subclass: #DistanceInterval
 	poolDictionaries: ''
 	category: 'Distance-Solution'!
 
-!DistanceInterval methodsFor: 'as yet unclassified' stamp: 'kf 5/25/2017 20:04:56'!
+!DistanceInterval methodsFor: 'initialization' stamp: 'RB 5/28/2017 03:39:59'!
+from: startDistance to: finishDistance
+	interval := Interval from: startDistance valueMeter to: finishDistance valueMeter! !
+
+!DistanceInterval methodsFor: 'initialization' stamp: 'kf 5/25/2017 20:07:08'!
+from: startDistance to: finishDistance by: intervalDistance
+	interval := Interval from: startDistance valueMeter to: finishDistance valueMeter by: intervalDistance valueMeter ! !
+
+
+!DistanceInterval methodsFor: 'accessing' stamp: 'kf 5/25/2017 20:04:56'!
 at: position
 	^ Distance for: (interval at: position) in: (Unit meter)! !
 
-!DistanceInterval methodsFor: 'as yet unclassified' stamp: 'kf 5/25/2017 18:23:19'!
+!DistanceInterval methodsFor: 'accessing' stamp: 'kf 5/25/2017 18:23:19'!
 do: aBlock
 
 	1 to: interval size do: [ :i |
 		aBlock value: (self at: i) ]		! !
 
-!DistanceInterval methodsFor: 'as yet unclassified' stamp: 'RB 5/28/2017 03:39:59'!
-from: startDistance to: finishDistance
-	interval := Interval from: startDistance valueMeter to: finishDistance valueMeter! !
-
-!DistanceInterval methodsFor: 'as yet unclassified' stamp: 'kf 5/25/2017 20:07:08'!
-from: startDistance to: finishDistance by: intervalDistance
-	interval := Interval from: startDistance valueMeter to: finishDistance valueMeter by: intervalDistance valueMeter ! !
-
-!DistanceInterval methodsFor: 'as yet unclassified' stamp: 'kf 5/25/2017 18:17:16'!
+!DistanceInterval methodsFor: 'accessing' stamp: 'kf 5/25/2017 18:17:16'!
 size
 	^ interval size.! !
 
@@ -366,12 +370,11 @@ size
 DistanceInterval class
 	instanceVariableNames: ''!
 
-!DistanceInterval class methodsFor: 'initialization' stamp: 'RB 5/28/2017 03:38:05'!
+!DistanceInterval class methodsFor: 'instance creation' stamp: 'RB 5/28/2017 03:38:05'!
 from: startDistance to: finishDistance
 	^ self new from: startDistance to: finishDistance! !
 
-
-!DistanceInterval class methodsFor: 'as yet unclassified' stamp: 'RB 5/28/2017 13:07:16'!
+!DistanceInterval class methodsFor: 'instance creation' stamp: 'RB 5/28/2017 13:07:16'!
 from: startDistance to: finishDistance by: intervalDistance
 	self assert: [intervalDistance valueMeter ~~ 0] description: [self error: self zeroStepError].
 	
@@ -379,11 +382,12 @@ from: startDistance to: finishDistance by: intervalDistance
 	
 	^ self new from: startDistance to: finishDistance by: intervalDistance! !
 
-!DistanceInterval class methodsFor: 'as yet unclassified' stamp: 'RB 5/28/2017 13:02:55'!
+
+!DistanceInterval class methodsFor: 'exceptions' stamp: 'RB 5/28/2017 13:02:55'!
 stepInADifferentWayError	
 	^ 'Step and distance has to go the same way'! !
 
-!DistanceInterval class methodsFor: 'as yet unclassified' stamp: 'RB 5/28/2017 13:07:03'!
+!DistanceInterval class methodsFor: 'exceptions' stamp: 'RB 5/28/2017 13:07:03'!
 zeroStepError	
 	^ 'Step cant be a zero distance'! !
 
@@ -399,7 +403,8 @@ Object subclass: #Unit
 scale
 	^ scale! !
 
-!Unit methodsFor: 'accessing' stamp: 'kf 5/23/2017 20:35:02'!
+
+!Unit methodsFor: 'initialization' stamp: 'kf 5/23/2017 20:35:02'!
 withScale: anInteger 
 	scale := anInteger! !
 
@@ -409,22 +414,23 @@ withScale: anInteger
 Unit class
 	instanceVariableNames: ''!
 
-!Unit class methodsFor: 'ic' stamp: 'kf 5/23/2017 20:50:24'!
-centimeter 
-	^ self new withScale: 1/100! !
-
-!Unit class methodsFor: 'ic' stamp: 'kf 5/23/2017 20:50:35'!
-kilometer
-	^ self new withScale: 1000! !
-
-!Unit class methodsFor: 'ic' stamp: 'kf 5/23/2017 20:50:17'!
-meter 
-	^ self new withScale: 1! !
-
-!Unit class methodsFor: 'ic' stamp: 'kf 5/23/2017 20:34:55'!
+!Unit class methodsFor: 'instance creation' stamp: 'kf 5/23/2017 20:34:55'!
 meterScale: anInteger 
 	^ self new withScale: anInteger! !
 
-!Unit class methodsFor: 'ic' stamp: 'kf 5/23/2017 20:50:49'!
+
+!Unit class methodsFor: 'shortcuts instance creation' stamp: 'kf 5/23/2017 20:50:24'!
+centimeter 
+	^ self new withScale: 1/100! !
+
+!Unit class methodsFor: 'shortcuts instance creation' stamp: 'kf 5/23/2017 20:50:35'!
+kilometer
+	^ self new withScale: 1000! !
+
+!Unit class methodsFor: 'shortcuts instance creation' stamp: 'kf 5/23/2017 20:50:17'!
+meter 
+	^ self new withScale: 1! !
+
+!Unit class methodsFor: 'shortcuts instance creation' stamp: 'kf 5/23/2017 20:50:49'!
 milimeter
 	^ self new withScale: 1/1000! !
