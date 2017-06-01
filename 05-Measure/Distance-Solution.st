@@ -1,0 +1,564 @@
+!classDefinition: #Measure category: #'Distance-Solution'!
+Magnitude subclass: #Measure
+	instanceVariableNames: 'value unit'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Distance-Solution'!
+
+!Measure methodsFor: 'comparing' stamp: 'kf 5/23/2017 20:55:36'!
+< aDistance 
+	^ value < aDistance valueMeter! !
+
+!Measure methodsFor: 'comparing' stamp: 'RB 5/30/2017 00:50:17'!
+<= aDistance 
+	^ (self > aDistance) not! !
+
+!Measure methodsFor: 'comparing' stamp: 'kf 6/1/2017 20:47:21'!
+= aMagnitude
+
+	(aMagnitude isKindOf: self class) ifFalse:[^ false] .
+	(aMagnitude unit type = unit type) ifFalse: [^ false].
+	
+
+	^ value = aMagnitude valueMeter! !
+
+!Measure methodsFor: 'comparing' stamp: 'RB 5/30/2017 00:53:11'!
+> aDistance 
+	^ value > aDistance valueMeter! !
+
+!Measure methodsFor: 'comparing' stamp: 'RB 5/30/2017 00:51:09'!
+>= aDistance 
+	^ (self < aDistance) not! !
+
+
+!Measure methodsFor: 'initialization' stamp: 'kf 6/1/2017 19:24:15'!
+size: aNumber in: anUnit 
+	value := aNumber * anUnit scale.
+	unit := anUnit.! !
+
+
+!Measure methodsFor: 'accessing' stamp: 'kf 6/1/2017 19:37:47'!
+amount
+	^ value / unit scale.! !
+
+!Measure methodsFor: 'accessing' stamp: 'kf 6/1/2017 19:37:09'!
+printString
+	|valueInScale|
+	
+	valueInScale := value / unit scale .
+		
+	valueInScale = 1 ifTrue: [^valueInScale printString, ' ',unit name.].
+	^ valueInScale printString, ' ',unit name,'s'.! !
+
+!Measure methodsFor: 'accessing' stamp: 'kf 6/1/2017 19:38:09'!
+unit
+	^ unit! !
+
+!Measure methodsFor: 'accessing' stamp: 'kf 5/23/2017 20:21:23'!
+valueMeter
+	^ value! !
+
+
+!Measure methodsFor: 'converting' stamp: 'kf 6/1/2017 19:21:51'!
+adaptToNumber: rcvr andSend: selector 
+
+		^ self class new size: (rcvr  perform: selector with: value) in: (Unit meter)! !
+
+
+!Measure methodsFor: 'intervals' stamp: 'kf 5/25/2017 18:12:04'!
+to: aDistance 
+	^ DistanceInterval from: self to: aDistance! !
+
+!Measure methodsFor: 'intervals' stamp: 'kf 5/25/2017 18:19:33'!
+to: aDistance by: aDistance2 
+	^ DistanceInterval from: self to: aDistance  by: aDistance2! !
+
+!Measure methodsFor: 'intervals' stamp: 'kf 5/29/2017 20:46:10'!
+to: aDistance by: aDistance2 do: aBlockClosure 
+	(self to: aDistance by: aDistance2) do: aBlockClosure ! !
+
+!Measure methodsFor: 'intervals' stamp: 'kf 5/29/2017 20:47:34'!
+to: aDistance do: aBlockClosure 
+	(self to: aDistance) do: aBlockClosure ! !
+
+
+!Measure methodsFor: 'arithmetic' stamp: 'kf 6/1/2017 19:21:23'!
+* anInteger 
+	^ self class size: value * anInteger  in: (Unit meter)! !
+
+!Measure methodsFor: 'arithmetic' stamp: 'kf 6/1/2017 19:20:51'!
++ aDistance 
+	^ self class size: value + aDistance valueMeter in: (Unit meter)! !
+
+!Measure methodsFor: 'arithmetic' stamp: 'kf 6/1/2017 19:21:12'!
+- aDistance 
+	^ self class size: value - aDistance valueMeter in: (Unit meter)! !
+
+!Measure methodsFor: 'arithmetic' stamp: 'kf 6/1/2017 19:21:32'!
+/ anInteger 
+	^ self class size: value / anInteger  in: (Unit meter)! !
+
+!Measure methodsFor: 'arithmetic' stamp: 'kf 6/1/2017 20:02:26'!
+hash
+	^ value! !
+
+
+!Measure methodsFor: 'as yet unclassified' stamp: 'kf 6/1/2017 20:28:03'!
+convertTo: anUnit 
+	^ Measure size:  (value / anUnit scale) in: anUnit ! !
+
+!Measure methodsFor: 'as yet unclassified' stamp: 'kf 6/1/2017 20:27:59'!
+negated
+	^ Measure size: (self amount * -1) in: unit.! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'Measure class' category: #'Distance-Solution'!
+Measure class
+	instanceVariableNames: ''!
+
+!Measure class methodsFor: 'instance creation' stamp: 'RB 5/30/2017 00:49:18'!
+size: anInteger in: anUnit 
+	^ self new size: anInteger in: anUnit! !
+
+
+!classDefinition: #DistanceTest category: #'Distance-Solution'!
+TestCase subclass: #DistanceTest
+	instanceVariableNames: 'unMetro milQuinientosCentimetros quinientosCentimetros dosMetros otroMetro cienCentimetros cincoCentimetros tresMetros unKilometro dosKilometro tresKilometro minusMeter ceroMetros minusFiveCentimeter oneCentimeter twoHundredCentimeters oneCelsius anotherCelsius'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Distance-Solution'!
+
+!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 5/29/2017 20:46:24'!
+aatest19IntervaleMethodActsInAgreementWithHisStartAndEnd
+
+	| collection collection2 |
+	collection := OrderedCollection new.
+	collection2 := OrderedCollection new.
+	unMetro to: dosMetros  do: [:aDistance |  collection add: (aDistance + unMetro)].
+	dosMetros to: tresMetros  do: [:aDistance | collection2 add: aDistance ].
+	
+	self assert: collection = collection2! !
+
+!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 6/1/2017 20:32:17'!
+setUp
+		minusMeter  :=  Measure size: -1 in: Unit meter.
+		minusFiveCentimeter := Measure size: -5 in: Unit centimeter.
+		ceroMetros  :=  Measure size: 0 in: Unit meter.
+		unMetro :=  Measure size: 1 in: Unit meter.
+		otroMetro :=  Measure size: 1 in:  Unit meter.
+		dosMetros :=  Measure size: 2 in: Unit meter.
+		tresMetros :=  Measure size: 3 in: Unit meter.
+		cienCentimetros := Measure size: 100 in: Unit centimeter.
+		cincoCentimetros := Measure size: 5 in: Unit centimeter.
+		unKilometro := Measure size: 1 in: Unit kilometer.
+		dosKilometro := Measure size: 2 in: Unit kilometer.
+		tresKilometro := Measure size: 3 in: Unit kilometer.
+		oneCentimeter := Measure size: 1 in: Unit centimeter .
+		twoHundredCentimeters := Measure size: 200 in: Unit centimeter.
+		
+		oneCelsius := Measure size: 1 in: Unit celsius.
+		anotherCelsius := Measure size: 1 in: Unit celsius.! !
+
+!DistanceTest methodsFor: 'as yet unclassified' stamp: 'RB 5/26/2017 13:13:26'!
+test01AnInstanceIsEqualToSelf
+	self assert: unMetro = unMetro
+	! !
+
+!DistanceTest methodsFor: 'as yet unclassified' stamp: 'RB 5/26/2017 13:13:01'!
+test02TwoInstancesWithSameDistanceAreEqual
+	self assert: unMetro = otroMetro
+	! !
+
+!DistanceTest methodsFor: 'as yet unclassified' stamp: 'RB 5/26/2017 13:12:42'!
+test03DifferentDistancesAreNotEqual
+
+	self deny: unMetro = dosMetros
+	! !
+
+!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 6/1/2017 19:20:20'!
+test04SumOfTwoDistancesIsEqualToAnotherDistance
+
+	self assert: unMetro + unMetro = dosMetros
+	! !
+
+!DistanceTest methodsFor: 'as yet unclassified' stamp: 'RB 5/26/2017 13:15:53'!
+test05SubstractionOfTwoDistancesIsEqualToAnotherDistance
+
+	self assert: dosMetros - unMetro = unMetro
+	! !
+
+!DistanceTest methodsFor: 'as yet unclassified' stamp: 'RB 5/26/2017 13:16:45'!
+test06SumWithNegativeDistancePerformWell
+
+	self assert: unMetro + minusMeter = ceroMetros 
+	! !
+
+!DistanceTest methodsFor: 'as yet unclassified' stamp: 'RB 5/26/2017 13:20:24'!
+test07MultiplicationWithIntegerIsEqualToAnotherDistance
+
+	self assert: unMetro * 2 = dosMetros
+	! !
+
+!DistanceTest methodsFor: 'as yet unclassified' stamp: 'RB 5/26/2017 13:20:55'!
+test08MultiplicationIsCommutativeWithDistance
+
+	self assert:  2 * unMetro = dosMetros
+	! !
+
+!DistanceTest methodsFor: 'as yet unclassified' stamp: 'RB 5/26/2017 13:21:19'!
+test09DivisionWithIntegerIsEqualToAnotherDistance
+
+	self assert:  dosMetros / 2 = unMetro
+	! !
+
+!DistanceTest methodsFor: 'as yet unclassified' stamp: 'RB 5/26/2017 13:22:59'!
+test10ADistanceCanBeBiggerThanAnotherDistance
+
+	self assert: dosMetros > unMetro
+	! !
+
+!DistanceTest methodsFor: 'as yet unclassified' stamp: 'RB 5/26/2017 13:24:48'!
+test11ASmallDistanceCantBeBiggerThanABigDistance
+
+	self deny: unMetro > dosMetros
+	! !
+
+!DistanceTest methodsFor: 'as yet unclassified' stamp: 'RB 5/26/2017 13:23:52'!
+test12ADistanceCanBeBiggerOrEqualThanAnotherDistance
+
+	self assert: unMetro >= unMetro
+	! !
+
+!DistanceTest methodsFor: 'as yet unclassified' stamp: 'RB 5/26/2017 13:25:12'!
+test13ADistanceCanBeSmallerThanAnotherDistance
+
+	self assert:  unMetro < dosMetros
+	! !
+
+!DistanceTest methodsFor: 'as yet unclassified' stamp: 'RB 5/26/2017 13:25:33'!
+test14ADistanceCanBeSmallerOrEqualThanAnotherDistance
+
+	self assert:  unMetro <= unMetro
+	! !
+
+!DistanceTest methodsFor: 'as yet unclassified' stamp: 'RB 5/26/2017 13:26:39'!
+test15AnIntervalSizeInMeterIsEqualToTheDistanceBetweenHisDistances
+
+	self assert: (unMetro to: tresMetros) size = 3
+	! !
+
+!DistanceTest methodsFor: 'as yet unclassified' stamp: 'RB 5/26/2017 13:27:12'!
+test16AnIntervalSizeWithAnotherStepIsEqualToTheDistanceBetweenHisDistances
+
+	self assert: ( unMetro to: dosMetros by: cincoCentimetros) size = 21
+	! !
+
+!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 5/29/2017 21:50:45'!
+test17IntervaleActsInAgreementWithHisStartAndEndDistances
+
+	| collection collection2 |
+	collection := OrderedCollection new.
+	collection2 := OrderedCollection new.
+	(unMetro to: dosMetros by: cincoCentimetros) do: [:aDistance |  collection add: aDistance + unMetro].
+	(dosMetros to: tresMetros by: cincoCentimetros)  do: [:aDistance | collection2 add: aDistance ].
+	
+	self assert: collection = collection2! !
+
+!DistanceTest methodsFor: 'as yet unclassified' stamp: 'RB 5/28/2017 12:49:00'!
+test18IntervalesWithStepActsInAgreementWithTheirStartAndEnd
+
+	| collection collection2 |
+	collection := OrderedCollection new.
+	collection2 := OrderedCollection new.
+	unMetro to: dosMetros  by: cincoCentimetros do: [:aDistance |  collection add: (aDistance + unMetro)].
+	dosMetros to: tresMetros   by: cincoCentimetros do: [:aDistance | collection2 add: aDistance ].
+	
+	self assert: collection = collection2! !
+
+!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 5/29/2017 21:51:59'!
+test19IntervaleMethodActsInAgreementWithHisStartAndEnd
+
+	| collection collection2 |
+	collection := OrderedCollection new.
+	collection2 := OrderedCollection new.
+	(unMetro to: dosMetros) do: [:aDistance |  collection add: (aDistance + unMetro)].
+	(dosMetros to: tresMetros)  do: [:aDistance | collection2 add: aDistance ].
+	
+	self assert: collection = collection2! !
+
+!DistanceTest methodsFor: 'as yet unclassified' stamp: 'RB 5/28/2017 12:54:59'!
+test20IntervaleWithNegativeDistanceAndStepWorksCorrectly
+
+	| collection collection2 |
+	collection := OrderedCollection new.
+	collection2 := OrderedCollection new.
+	(unMetro to: minusMeter by: minusFiveCentimeter) do: [:aDistance |  collection add: (aDistance + unMetro)].
+	(dosMetros to: ceroMetros by: minusFiveCentimeter) do: [:aDistance | collection2 add: aDistance ].
+	
+	self assert: collection = collection2! !
+
+!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 6/1/2017 19:22:23'!
+test21DistanceAndStepMustHaveTheSameMathematicSign
+
+	| collection |
+	collection := OrderedCollection new.
+	self
+		should: [unMetro to: dosMetros by: minusFiveCentimeter do: [:aDistance |  collection add: aDistance].]
+		raise: Error
+		withExceptionDo: [ :anError |
+			self assert: anError messageText = DistanceInterval stepInADifferentWayError]! !
+
+!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 6/1/2017 19:22:35'!
+test22StepCantBeZeroMeter
+	| collection |
+	collection := OrderedCollection new.
+	self
+		should: [dosMetros to: unMetro by: ceroMetros do: [:aDistance |  collection add: aDistance].]
+		raise: Error
+		withExceptionDo: [ :anError |
+			self assert: anError messageText = DistanceInterval zeroStepError]! !
+
+!DistanceTest methodsFor: 'as yet unclassified' stamp: 'RB 5/28/2017 13:07:29'!
+test23DistanceFactoryCreateInstancesCorrectly
+
+	|distanceFactory|
+	
+	distanceFactory := DistanceFactory new.
+	
+	self assert: distanceFactory minusOneMeter = minusMeter.
+	self assert: distanceFactory oneCentimeter = oneCentimeter.
+	self assert: distanceFactory oneHundredCentimeters = cienCentimetros.
+	self assert: distanceFactory oneMeter = unMetro .	
+	self assert: distanceFactory twoHundredCentimeters = twoHundredCentimeters.
+	self assert: distanceFactory twoMeters = dosMetros .
+	self assert: distanceFactory zeroMeters = ceroMetros .
+! !
+
+!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 6/1/2017 20:35:29'!
+test24
+
+	self deny:  unMetro = oneCelsius! !
+
+!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 6/1/2017 20:35:45'!
+test25
+
+	self assert:  anotherCelsius = oneCelsius! !
+
+
+!classDefinition: #DistanceFactory category: #'Distance-Solution'!
+Object subclass: #DistanceFactory
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Distance-Solution'!
+
+!DistanceFactory methodsFor: 'accessing' stamp: 'kf 5/27/2017 16:23:34'!
+minusOneMeter
+	^ self createMeter: -1! !
+
+!DistanceFactory methodsFor: 'accessing' stamp: 'kf 5/27/2017 16:24:30'!
+oneCentimeter
+	^ self createCentimeter: 1.! !
+
+!DistanceFactory methodsFor: 'accessing' stamp: 'kf 5/27/2017 16:25:30'!
+oneHundredCentimeters
+	^ self createCentimeter: 100.! !
+
+!DistanceFactory methodsFor: 'accessing' stamp: 'kf 5/27/2017 16:25:42'!
+oneMeter
+	^ self createMeter: 1! !
+
+!DistanceFactory methodsFor: 'accessing' stamp: 'kf 5/27/2017 16:25:57'!
+twoHundredCentimeters
+	^ self createCentimeter: 200! !
+
+!DistanceFactory methodsFor: 'accessing' stamp: 'kf 5/27/2017 16:26:14'!
+twoMeters
+	^ self createMeter: 2! !
+
+!DistanceFactory methodsFor: 'accessing' stamp: 'kf 5/27/2017 16:26:29'!
+zeroMeters
+	^ self createMeter: 0.! !
+
+
+!DistanceFactory methodsFor: 'private' stamp: 'kf 6/1/2017 20:28:34'!
+createCentimeter: anInteger
+	^ Measure size: anInteger in: Unit  centimeter.
+	! !
+
+!DistanceFactory methodsFor: 'private' stamp: 'kf 6/1/2017 20:28:36'!
+createMeter: anInteger
+	^ Measure size: anInteger  in: Unit meter.
+	! !
+
+
+!classDefinition: #DistanceInterval category: #'Distance-Solution'!
+Object subclass: #DistanceInterval
+	instanceVariableNames: 'interval from to by'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Distance-Solution'!
+
+!DistanceInterval methodsFor: 'initialization' stamp: 'kf 6/1/2017 20:28:40'!
+from: startDistance to: finishDistance
+	interval := Interval from: startDistance valueMeter to: finishDistance valueMeter.
+	from := startDistance.
+	to := finishDistance.
+	by := Measure size: 1 in: startDistance unit. ! !
+
+!DistanceInterval methodsFor: 'initialization' stamp: 'kf 6/1/2017 19:54:54'!
+from: startDistance to: finishDistance by: intervalDistance
+	interval := Interval from: startDistance valueMeter to: finishDistance valueMeter by: intervalDistance valueMeter.
+	
+	from := startDistance.
+	to := finishDistance.
+	by := intervalDistance .! !
+
+
+!DistanceInterval methodsFor: 'accessing' stamp: 'kf 6/1/2017 20:28:43'!
+at: position
+	^ Measure size: (interval at: position) in: (Unit meter)! !
+
+!DistanceInterval methodsFor: 'accessing' stamp: 'kf 6/1/2017 19:55:39'!
+by
+	^ by! !
+
+!DistanceInterval methodsFor: 'accessing' stamp: 'kf 5/25/2017 18:23:19'!
+do: aBlock
+
+	1 to: interval size do: [ :i |
+		aBlock value: (self at: i) ]		! !
+
+!DistanceInterval methodsFor: 'accessing' stamp: 'kf 6/1/2017 19:55:15'!
+from
+	^ from.! !
+
+!DistanceInterval methodsFor: 'accessing' stamp: 'kf 5/25/2017 18:17:16'!
+size
+	^ interval size.! !
+
+!DistanceInterval methodsFor: 'accessing' stamp: 'kf 6/1/2017 19:55:20'!
+to
+	^ to.! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'DistanceInterval class' category: #'Distance-Solution'!
+DistanceInterval class
+	instanceVariableNames: ''!
+
+!DistanceInterval class methodsFor: 'instance creation' stamp: 'RB 5/28/2017 03:38:05'!
+from: startDistance to: finishDistance
+	^ self new from: startDistance to: finishDistance! !
+
+!DistanceInterval class methodsFor: 'instance creation' stamp: 'RB 5/28/2017 13:07:16'!
+from: startDistance to: finishDistance by: intervalDistance
+	self assert: [intervalDistance valueMeter ~~ 0] description: [self error: self zeroStepError].
+	
+	self assert: [(intervalDistance valueMeter > 0) ==((finishDistance valueMeter - startDistance valueMeter) > 0)] description: [self error: self stepInADifferentWayError].
+	
+	^ self new from: startDistance to: finishDistance by: intervalDistance! !
+
+
+!DistanceInterval class methodsFor: 'exceptions' stamp: 'RB 5/28/2017 13:02:55'!
+stepInADifferentWayError	
+	^ 'Step and distance has to go the same way'! !
+
+!DistanceInterval class methodsFor: 'exceptions' stamp: 'RB 5/28/2017 13:07:03'!
+zeroStepError	
+	^ 'Step cant be a zero distance'! !
+
+
+!classDefinition: #Unit category: #'Distance-Solution'!
+Object subclass: #Unit
+	instanceVariableNames: 'scale name type'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Distance-Solution'!
+
+!Unit methodsFor: 'accessing' stamp: 'kf 6/1/2017 19:19:18'!
+name
+	^ name! !
+
+!Unit methodsFor: 'accessing' stamp: 'kf 6/1/2017 19:30:29'!
+printString
+	^ name! !
+
+!Unit methodsFor: 'accessing' stamp: 'kf 5/23/2017 20:26:49'!
+scale
+	^ scale! !
+
+!Unit methodsFor: 'accessing' stamp: 'kf 6/1/2017 20:46:50'!
+type
+	^ type! !
+
+
+!Unit methodsFor: 'initialization' stamp: 'kf 6/1/2017 19:18:56'!
+withScale: anInteger withName: aString
+	scale := anInteger.
+	name := aString.! !
+
+!Unit methodsFor: 'initialization' stamp: 'kf 6/1/2017 20:37:31'!
+withScale: anInteger withName: aString withType: aType
+	scale := anInteger.
+	name := aString.
+	type := aType.! !
+
+
+!Unit methodsFor: 'as yet unclassified' stamp: 'kf 6/1/2017 19:39:39'!
+= anUnit
+	^ scale = anUnit scale
+	! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'Unit class' category: #'Distance-Solution'!
+Unit class
+	instanceVariableNames: ''!
+
+!Unit class methodsFor: 'instance creation' stamp: 'kf 6/1/2017 20:40:19'!
+scale: anInteger withName: aString withType: aType
+	^ self new withScale: anInteger withName: aString withType: aType! !
+
+
+!Unit class methodsFor: 'shortcuts instance creation' stamp: 'kf 6/1/2017 20:45:00'!
+celsius 
+	^ self new withScale: 1 withName: 'celsius' withType: self grade! !
+
+!Unit class methodsFor: 'shortcuts instance creation' stamp: 'kf 6/1/2017 20:45:25'!
+centimeter 
+	^ self new withScale: 1/100 withName: 'centimeter' withType: self distance! !
+
+!Unit class methodsFor: 'shortcuts instance creation' stamp: 'kf 6/1/2017 20:45:28'!
+decameter
+	^ self new withScale: 10 withName: 'decameter' withType: self distance! !
+
+!Unit class methodsFor: 'shortcuts instance creation' stamp: 'kf 6/1/2017 20:45:32'!
+decimeter
+	^ self new withScale: 1/10 withName: 'decimeter' withType: self distance! !
+
+!Unit class methodsFor: 'shortcuts instance creation' stamp: 'kf 6/1/2017 20:45:36'!
+hectometer
+	^ self new withScale: 100 withName: 'hectometer' withType: self distance! !
+
+!Unit class methodsFor: 'shortcuts instance creation' stamp: 'kf 6/1/2017 20:45:40'!
+kilometer
+	^ self new withScale: 1000 withName: 'kilometer' withType: self distance! !
+
+!Unit class methodsFor: 'shortcuts instance creation' stamp: 'kf 6/1/2017 20:44:38'!
+meter 
+	^ self new withScale: 1 withName: 'meter' withType: self distance! !
+
+!Unit class methodsFor: 'shortcuts instance creation' stamp: 'kf 6/1/2017 20:45:46'!
+milimeter
+	^ self new withScale: 1/1000 withName: 'milimeter' withType: self distance! !
+
+
+!Unit class methodsFor: 'as yet unclassified' stamp: 'kf 6/1/2017 20:44:00'!
+distance
+	^ 'distance'! !
+
+!Unit class methodsFor: 'as yet unclassified' stamp: 'kf 6/1/2017 20:45:58'!
+grade
+	^ 'grade'! !
