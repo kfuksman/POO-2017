@@ -31,15 +31,15 @@ Magnitude subclass: #Measure
 	^ (self < aDistance) not! !
 
 
-!Measure methodsFor: 'initialization' stamp: 'kf 6/1/2017 19:24:15'!
+!Measure methodsFor: 'initialization' stamp: 'RB 6/2/2017 10:46:41'!
 size: aNumber in: anUnit 
-	value := aNumber * anUnit scale.
+	value := aNumber * anUnit scale + anUnit difference.
 	unit := anUnit.! !
 
 
-!Measure methodsFor: 'accessing' stamp: 'kf 6/1/2017 19:37:47'!
+!Measure methodsFor: 'accessing' stamp: 'RB 6/2/2017 10:44:03'!
 amount
-	^ value / unit scale.! !
+	^ value / unit scale + unit difference.! !
 
 !Measure methodsFor: 'accessing' stamp: 'kf 6/1/2017 19:37:09'!
 printString
@@ -124,7 +124,7 @@ size: anInteger in: anUnit
 
 !classDefinition: #DistanceTest category: #'Distance-Solution'!
 TestCase subclass: #DistanceTest
-	instanceVariableNames: 'unMetro milQuinientosCentimetros quinientosCentimetros dosMetros otroMetro cienCentimetros cincoCentimetros tresMetros unKilometro dosKilometro tresKilometro minusMeter ceroMetros minusFiveCentimeter oneCentimeter twoHundredCentimeters oneCelsius anotherCelsius'
+	instanceVariableNames: 'unMetro milQuinientosCentimetros quinientosCentimetros dosMetros otroMetro cienCentimetros cincoCentimetros tresMetros unKilometro dosKilometro tresKilometro minusMeter ceroMetros minusFiveCentimeter oneCentimeter twoHundredCentimeters oneCelsius anotherCelsius twoCelsius oneFahrenheit treintaytresFahrenheit diezFahrenheit menosVeinteCelsius doceFahrenheit dosSetentayCuatroKelvin aDay twentyFourHours'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'Distance-Solution'!
@@ -140,7 +140,7 @@ aatest19IntervaleMethodActsInAgreementWithHisStartAndEnd
 	
 	self assert: collection = collection2! !
 
-!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 6/1/2017 20:32:17'!
+!DistanceTest methodsFor: 'as yet unclassified' stamp: 'RB 6/2/2017 11:22:21'!
 setUp
 		minusMeter  :=  Measure size: -1 in: Unit meter.
 		minusFiveCentimeter := Measure size: -5 in: Unit centimeter.
@@ -158,7 +158,14 @@ setUp
 		twoHundredCentimeters := Measure size: 200 in: Unit centimeter.
 		
 		oneCelsius := Measure size: 1 in: Unit celsius.
-		anotherCelsius := Measure size: 1 in: Unit celsius.! !
+		anotherCelsius := Measure size: 1 in: Unit celsius.
+		menosVeinteCelsius := Measure size: -20 in: Unit celsius.
+		treintaytresFahrenheit := Measure size: 33 in: Unit fahrenheit.
+		doceFahrenheit := Measure size: 12 in: Unit fahrenheit.
+		dosSetentayCuatroKelvin := Measure size: 274 in: Unit kelvin.
+		
+		aDay := Measure size: 1 in: Unit day.
+		twentyFourHours := Measure size: 24 in: Unit hour.! !
 
 !DistanceTest methodsFor: 'as yet unclassified' stamp: 'RB 5/26/2017 13:13:26'!
 test01AnInstanceIsEqualToSelf
@@ -319,12 +326,12 @@ test22StepCantBeZeroMeter
 		withExceptionDo: [ :anError |
 			self assert: anError messageText = DistanceInterval zeroStepError]! !
 
-!DistanceTest methodsFor: 'as yet unclassified' stamp: 'RB 5/28/2017 13:07:29'!
+!DistanceTest methodsFor: 'as yet unclassified' stamp: 'RB 6/2/2017 11:04:11'!
 test23DistanceFactoryCreateInstancesCorrectly
 
 	|distanceFactory|
 	
-	distanceFactory := DistanceFactory new.
+	distanceFactory := MeasureFactory new.
 	
 	self assert: distanceFactory minusOneMeter = minusMeter.
 	self assert: distanceFactory oneCentimeter = oneCentimeter.
@@ -345,52 +352,21 @@ test25
 
 	self assert:  anotherCelsius = oneCelsius! !
 
-
-!classDefinition: #DistanceFactory category: #'Distance-Solution'!
-Object subclass: #DistanceFactory
-	instanceVariableNames: ''
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'Distance-Solution'!
+!DistanceTest methodsFor: 'as yet unclassified' stamp: 'RB 6/2/2017 10:34:37'!
+test26
 
-!DistanceFactory methodsFor: 'accessing' stamp: 'kf 5/27/2017 16:23:34'!
-minusOneMeter
-	^ self createMeter: -1! !
+	self assert: treintaytresFahrenheit = oneCelsius! !
 
-!DistanceFactory methodsFor: 'accessing' stamp: 'kf 5/27/2017 16:24:30'!
-oneCentimeter
-	^ self createCentimeter: 1.! !
+!DistanceTest methodsFor: 'as yet unclassified' stamp: 'RB 6/2/2017 11:18:54'!
+test27
 
-!DistanceFactory methodsFor: 'accessing' stamp: 'kf 5/27/2017 16:25:30'!
-oneHundredCentimeters
-	^ self createCentimeter: 100.! !
+	self assert: doceFahrenheit = menosVeinteCelsius.
+	self assert: dosSetentayCuatroKelvin = oneCelsius.! !
 
-!DistanceFactory methodsFor: 'accessing' stamp: 'kf 5/27/2017 16:25:42'!
-oneMeter
-	^ self createMeter: 1! !
+!DistanceTest methodsFor: 'as yet unclassified' stamp: 'RB 6/2/2017 11:22:38'!
+test28
 
-!DistanceFactory methodsFor: 'accessing' stamp: 'kf 5/27/2017 16:25:57'!
-twoHundredCentimeters
-	^ self createCentimeter: 200! !
-
-!DistanceFactory methodsFor: 'accessing' stamp: 'kf 5/27/2017 16:26:14'!
-twoMeters
-	^ self createMeter: 2! !
-
-!DistanceFactory methodsFor: 'accessing' stamp: 'kf 5/27/2017 16:26:29'!
-zeroMeters
-	^ self createMeter: 0.! !
-
-
-!DistanceFactory methodsFor: 'private' stamp: 'kf 6/1/2017 20:28:34'!
-createCentimeter: anInteger
-	^ Measure size: anInteger in: Unit  centimeter.
-	! !
-
-!DistanceFactory methodsFor: 'private' stamp: 'kf 6/1/2017 20:28:36'!
-createMeter: anInteger
-	^ Measure size: anInteger  in: Unit meter.
-	! !
+	self assert: aDay = twentyFourHours! !
 
 
 !classDefinition: #DistanceInterval category: #'Distance-Solution'!
@@ -470,12 +446,63 @@ zeroStepError
 	^ 'Step cant be a zero distance'! !
 
 
-!classDefinition: #Unit category: #'Distance-Solution'!
-Object subclass: #Unit
-	instanceVariableNames: 'scale name type'
+!classDefinition: #MeasureFactory category: #'Distance-Solution'!
+Object subclass: #MeasureFactory
+	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'Distance-Solution'!
+
+!MeasureFactory methodsFor: 'accessing' stamp: 'kf 5/27/2017 16:23:34'!
+minusOneMeter
+	^ self createMeter: -1! !
+
+!MeasureFactory methodsFor: 'accessing' stamp: 'kf 5/27/2017 16:24:30'!
+oneCentimeter
+	^ self createCentimeter: 1.! !
+
+!MeasureFactory methodsFor: 'accessing' stamp: 'kf 5/27/2017 16:25:30'!
+oneHundredCentimeters
+	^ self createCentimeter: 100.! !
+
+!MeasureFactory methodsFor: 'accessing' stamp: 'kf 5/27/2017 16:25:42'!
+oneMeter
+	^ self createMeter: 1! !
+
+!MeasureFactory methodsFor: 'accessing' stamp: 'kf 5/27/2017 16:25:57'!
+twoHundredCentimeters
+	^ self createCentimeter: 200! !
+
+!MeasureFactory methodsFor: 'accessing' stamp: 'kf 5/27/2017 16:26:14'!
+twoMeters
+	^ self createMeter: 2! !
+
+!MeasureFactory methodsFor: 'accessing' stamp: 'kf 5/27/2017 16:26:29'!
+zeroMeters
+	^ self createMeter: 0.! !
+
+
+!MeasureFactory methodsFor: 'private' stamp: 'kf 6/1/2017 20:28:34'!
+createCentimeter: anInteger
+	^ Measure size: anInteger in: Unit  centimeter.
+	! !
+
+!MeasureFactory methodsFor: 'private' stamp: 'kf 6/1/2017 20:28:36'!
+createMeter: anInteger
+	^ Measure size: anInteger  in: Unit meter.
+	! !
+
+
+!classDefinition: #Unit category: #'Distance-Solution'!
+Object subclass: #Unit
+	instanceVariableNames: 'scale name type difference'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Distance-Solution'!
+
+!Unit methodsFor: 'accessing' stamp: 'RB 6/2/2017 10:44:20'!
+difference
+	^ difference! !
 
 !Unit methodsFor: 'accessing' stamp: 'kf 6/1/2017 19:19:18'!
 name
@@ -494,21 +521,24 @@ type
 	^ type! !
 
 
-!Unit methodsFor: 'initialization' stamp: 'kf 6/1/2017 19:18:56'!
-withScale: anInteger withName: aString
-	scale := anInteger.
-	name := aString.! !
+!Unit methodsFor: 'initialization' stamp: 'RB 6/2/2017 10:44:35'!
+withDifference: anInteger withName: aString withType: aType
+	difference := anInteger.
+	name := aString.
+	type := aType.
+	scale := 1! !
 
-!Unit methodsFor: 'initialization' stamp: 'kf 6/1/2017 20:37:31'!
+!Unit methodsFor: 'initialization' stamp: 'RB 6/2/2017 10:44:40'!
 withScale: anInteger withName: aString withType: aType
 	scale := anInteger.
 	name := aString.
-	type := aType.! !
+	type := aType.
+	difference := 0! !
 
 
-!Unit methodsFor: 'as yet unclassified' stamp: 'kf 6/1/2017 19:39:39'!
+!Unit methodsFor: 'as yet unclassified' stamp: 'RB 6/2/2017 10:30:40'!
 = anUnit
-	^ scale = anUnit scale
+	^ name = anUnit name
 	! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
@@ -517,30 +547,50 @@ withScale: anInteger withName: aString withType: aType
 Unit class
 	instanceVariableNames: ''!
 
+!Unit class methodsFor: 'instance creation' stamp: 'RB 6/2/2017 11:16:55'!
+difference: anInteger withName: aString withType: aType
+	^ self new withDifference: anInteger withName: aString withType: aType! !
+
 !Unit class methodsFor: 'instance creation' stamp: 'kf 6/1/2017 20:40:19'!
 scale: anInteger withName: aString withType: aType
 	^ self new withScale: anInteger withName: aString withType: aType! !
 
 
-!Unit class methodsFor: 'shortcuts instance creation' stamp: 'kf 6/1/2017 20:45:00'!
+!Unit class methodsFor: 'shortcuts instance creation' stamp: 'RB 6/2/2017 10:42:36'!
 celsius 
-	^ self new withScale: 1 withName: 'celsius' withType: self grade! !
+	^ self new withDifference: 0 withName: 'celsius' withType: self grade! !
 
-!Unit class methodsFor: 'shortcuts instance creation' stamp: 'kf 6/1/2017 20:45:25'!
+!Unit class methodsFor: 'shortcuts instance creation' stamp: 'RB 6/2/2017 10:42:40'!
 centimeter 
 	^ self new withScale: 1/100 withName: 'centimeter' withType: self distance! !
 
-!Unit class methodsFor: 'shortcuts instance creation' stamp: 'kf 6/1/2017 20:45:28'!
+!Unit class methodsFor: 'shortcuts instance creation' stamp: 'RB 6/2/2017 11:21:43'!
+day
+	^ self new withScale: 60*24 withName: 'day' withType: self time! !
+
+!Unit class methodsFor: 'shortcuts instance creation' stamp: 'RB 6/2/2017 10:42:45'!
 decameter
 	^ self new withScale: 10 withName: 'decameter' withType: self distance! !
 
-!Unit class methodsFor: 'shortcuts instance creation' stamp: 'kf 6/1/2017 20:45:32'!
+!Unit class methodsFor: 'shortcuts instance creation' stamp: 'RB 6/2/2017 10:42:49'!
 decimeter
 	^ self new withScale: 1/10 withName: 'decimeter' withType: self distance! !
 
-!Unit class methodsFor: 'shortcuts instance creation' stamp: 'kf 6/1/2017 20:45:36'!
+!Unit class methodsFor: 'shortcuts instance creation' stamp: 'RB 6/2/2017 10:47:26'!
+fahrenheit 
+	^ self new withDifference: -32 withName: 'fahrenheit' withType: self grade! !
+
+!Unit class methodsFor: 'shortcuts instance creation' stamp: 'RB 6/2/2017 10:42:58'!
 hectometer
 	^ self new withScale: 100 withName: 'hectometer' withType: self distance! !
+
+!Unit class methodsFor: 'shortcuts instance creation' stamp: 'RB 6/2/2017 11:21:20'!
+hour
+	^ self new withScale: 60 withName: 'hour' withType: self time! !
+
+!Unit class methodsFor: 'shortcuts instance creation' stamp: 'RB 6/2/2017 11:17:30'!
+kelvin 
+	^ self new withDifference: -273 withName: 'kelvin' withType: self grade! !
 
 !Unit class methodsFor: 'shortcuts instance creation' stamp: 'kf 6/1/2017 20:45:40'!
 kilometer
@@ -554,6 +604,18 @@ meter
 milimeter
 	^ self new withScale: 1/1000 withName: 'milimeter' withType: self distance! !
 
+!Unit class methodsFor: 'shortcuts instance creation' stamp: 'RB 6/2/2017 11:21:01'!
+minute
+	^ self new withScale: 1 withName: 'minute' withType: self time! !
+
+!Unit class methodsFor: 'shortcuts instance creation' stamp: 'RB 6/2/2017 11:21:34'!
+second
+	^ self new withScale: 1/60 withName: 'second' withType: self time! !
+
+
+!Unit class methodsFor: 'as yet unclassified' stamp: 'RB 6/2/2017 11:17:18'!
+compound
+	^ 'compound'! !
 
 !Unit class methodsFor: 'as yet unclassified' stamp: 'kf 6/1/2017 20:44:00'!
 distance
@@ -562,3 +624,7 @@ distance
 !Unit class methodsFor: 'as yet unclassified' stamp: 'kf 6/1/2017 20:45:58'!
 grade
 	^ 'grade'! !
+
+!Unit class methodsFor: 'as yet unclassified' stamp: 'RB 6/2/2017 11:17:08'!
+time
+	^ 'time'! !
