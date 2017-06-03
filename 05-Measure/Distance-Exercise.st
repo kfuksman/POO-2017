@@ -583,12 +583,12 @@ zeroMeters
 	^factory zeroMeters ! !
 
 
-!CatedraDistanceTest methodsFor: 'setup' stamp: 'HAW 5/31/2017 11:06:46'!
+!CatedraDistanceTest methodsFor: 'setup' stamp: 'kf 6/3/2017 16:27:29'!
 setUp
 
 	| factoryClass |
 	
-	factoryClass := Smalltalk classNamed: #DistanceFactory.
+	factoryClass := Smalltalk classNamed: #MeasureFactory.
 	self assert: factoryClass notNil description: 'No se entrego la clase DistanceFactory'.
 	
 	factory := factoryClass new.! !

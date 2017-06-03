@@ -1,6 +1,6 @@
 !classDefinition: #Measure category: #'Distance-Solution'!
 Magnitude subclass: #Measure
-	instanceVariableNames: 'value unit'
+	instanceVariableNames: 'value unit realValue'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'Distance-Solution'!
@@ -31,21 +31,22 @@ Magnitude subclass: #Measure
 	^ (self < aDistance) not! !
 
 
-!Measure methodsFor: 'initialization' stamp: 'RB 6/2/2017 10:46:41'!
+!Measure methodsFor: 'initialization' stamp: 'kf 6/3/2017 19:09:01'!
 size: aNumber in: anUnit 
-	value := aNumber * anUnit scale + anUnit difference.
+	value := anUnit adapt: aNumber.
+	realValue := aNumber.
 	unit := anUnit.! !
 
 
-!Measure methodsFor: 'accessing' stamp: 'RB 6/2/2017 10:44:03'!
+!Measure methodsFor: 'accessing' stamp: 'kf 6/3/2017 20:04:19'!
 amount
-	^ value / unit scale + unit difference.! !
+	^ unit deconvert: value! !
 
-!Measure methodsFor: 'accessing' stamp: 'kf 6/1/2017 19:37:09'!
+!Measure methodsFor: 'accessing' stamp: 'kf 6/3/2017 19:29:13'!
 printString
 	|valueInScale|
 	
-	valueInScale := value / unit scale .
+	valueInScale := realValue .
 		
 	valueInScale = 1 ifTrue: [^valueInScale printString, ' ',unit name.].
 	^ valueInScale printString, ' ',unit name,'s'.! !
@@ -103,9 +104,9 @@ hash
 	^ value! !
 
 
-!Measure methodsFor: 'as yet unclassified' stamp: 'kf 6/1/2017 20:28:03'!
+!Measure methodsFor: 'as yet unclassified' stamp: 'kf 6/3/2017 20:13:45'!
 convertTo: anUnit 
-	^ Measure size:  (value / anUnit scale) in: anUnit ! !
+	^ Measure size:  (anUnit deconvert: value) in: anUnit ! !
 
 !Measure methodsFor: 'as yet unclassified' stamp: 'kf 6/1/2017 20:27:59'!
 negated
@@ -495,7 +496,7 @@ createMeter: anInteger
 
 !classDefinition: #Unit category: #'Distance-Solution'!
 Object subclass: #Unit
-	instanceVariableNames: 'scale name type difference'
+	instanceVariableNames: 'name type blockConverter blockDeconverter'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'Distance-Solution'!
@@ -541,90 +542,114 @@ withScale: anInteger withName: aString withType: aType
 	^ name = anUnit name
 	! !
 
+!Unit methodsFor: 'as yet unclassified' stamp: 'kf 6/3/2017 17:47:29'!
+adapt: aMeasure 
+	^ blockConverter value: aMeasure ! !
+
+!Unit methodsFor: 'as yet unclassified' stamp: 'kf 6/3/2017 19:47:25'!
+deconvert: aMeasure 
+	^ blockDeconverter value: aMeasure ! !
+
+!Unit methodsFor: 'as yet unclassified' stamp: 'kf 6/3/2017 19:47:08'!
+withConvertion: aBlockClosure withDeconvertion: aBlockClosure2 withName: aString withType: aType 
+	blockConverter := aBlockClosure.
+	blockDeconverter := aBlockClosure2.
+	name := aString.
+	type := aType.
+	! !
+
+!Unit methodsFor: 'as yet unclassified' stamp: 'kf 6/3/2017 17:46:18'!
+withConvertion: aBlockClosure withName: aString withType: aType 
+	blockConverter := aBlockClosure.
+	name := aString.
+	type := aType.! !
+
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
 !classDefinition: 'Unit class' category: #'Distance-Solution'!
 Unit class
 	instanceVariableNames: ''!
 
-!Unit class methodsFor: 'instance creation' stamp: 'RB 6/2/2017 11:16:55'!
-difference: anInteger withName: aString withType: aType
-	^ self new withDifference: anInteger withName: aString withType: aType! !
-
-!Unit class methodsFor: 'instance creation' stamp: 'kf 6/1/2017 20:40:19'!
-scale: anInteger withName: aString withType: aType
-	^ self new withScale: anInteger withName: aString withType: aType! !
+!Unit class methodsFor: 'instance creation' stamp: 'kf 6/3/2017 19:01:33'!
+withConvertion: aBlockClosure withName: aString withType: aString3 
+	^ self new withConvertion: aBlockClosure withName: aString withType: aString3 ! !
 
 
-!Unit class methodsFor: 'shortcuts instance creation' stamp: 'RB 6/2/2017 10:42:36'!
+!Unit class methodsFor: 'shortcuts instance creation' stamp: 'kf 6/3/2017 19:48:43'!
 celsius 
-	^ self new withDifference: 0 withName: 'celsius' withType: self grade! !
+	^ self withConvertion: [:aNumber| aNumber] withDeconvertion: [:aNumber| aNumber]  withName: 'grade' withType: self grade ! !
 
-!Unit class methodsFor: 'shortcuts instance creation' stamp: 'RB 6/2/2017 10:42:40'!
+!Unit class methodsFor: 'shortcuts instance creation' stamp: 'kf 6/3/2017 19:48:55'!
 centimeter 
-	^ self new withScale: 1/100 withName: 'centimeter' withType: self distance! !
+	^ self withConvertion: [:aNumber| aNumber / 100]  withDeconvertion: [:aNumber| aNumber * 100] withName: 'centimeter' withType: self distance
+! !
 
-!Unit class methodsFor: 'shortcuts instance creation' stamp: 'RB 6/2/2017 11:21:43'!
+!Unit class methodsFor: 'shortcuts instance creation' stamp: 'kf 6/3/2017 19:49:18'!
 day
-	^ self new withScale: 60*24 withName: 'day' withType: self time! !
+		^ self withConvertion: [:aNumber| aNumber * 60 * 24 ]  withDeconvertion: [:aNumber| aNumber / (60*24)] withName: 'day' withType: self time! !
 
-!Unit class methodsFor: 'shortcuts instance creation' stamp: 'RB 6/2/2017 10:42:45'!
+!Unit class methodsFor: 'shortcuts instance creation' stamp: 'kf 6/3/2017 19:55:28'!
 decameter
-	^ self new withScale: 10 withName: 'decameter' withType: self distance! !
+	^ self withConvertion: [:aNumber| aNumber * 10] withDeconvertion: [:aNumber| aNumber  / 10] withName: 'decameter' withType: self distance! !
 
-!Unit class methodsFor: 'shortcuts instance creation' stamp: 'RB 6/2/2017 10:42:49'!
+!Unit class methodsFor: 'shortcuts instance creation' stamp: 'kf 6/3/2017 19:52:48'!
 decimeter
-	^ self new withScale: 1/10 withName: 'decimeter' withType: self distance! !
+	^ self withConvertion: [:aNumber| aNumber / 10]  withDeconvertion: [:aNumber| aNumber  * 10] withName: 'decimeter' withType: self distance! !
 
-!Unit class methodsFor: 'shortcuts instance creation' stamp: 'RB 6/2/2017 10:47:26'!
+!Unit class methodsFor: 'shortcuts instance creation' stamp: 'kf 6/3/2017 19:49:45'!
 fahrenheit 
-	^ self new withDifference: -32 withName: 'fahrenheit' withType: self grade! !
+		^ self withConvertion: [:aNumber| aNumber - 32]  withDeconvertion: [:aNumber| aNumber + 32] withName: 'fahrenheit' withType: self grade! !
 
-!Unit class methodsFor: 'shortcuts instance creation' stamp: 'RB 6/2/2017 10:42:58'!
+!Unit class methodsFor: 'shortcuts instance creation' stamp: 'kf 6/3/2017 19:56:03'!
 hectometer
-	^ self new withScale: 100 withName: 'hectometer' withType: self distance! !
+		^ self withConvertion: [:aNumber| aNumber * 100]  withDeconvertion: [:aNumber| aNumber / 100] withName: 'hectometer' withType: self distance! !
 
-!Unit class methodsFor: 'shortcuts instance creation' stamp: 'RB 6/2/2017 11:21:20'!
+!Unit class methodsFor: 'shortcuts instance creation' stamp: 'kf 6/3/2017 19:49:57'!
 hour
-	^ self new withScale: 60 withName: 'hour' withType: self time! !
+	^ self withConvertion: [:aNumber| aNumber * 60]  withDeconvertion: [:aNumber| aNumber / 60] withName: 'hour' withType: self time! !
 
-!Unit class methodsFor: 'shortcuts instance creation' stamp: 'RB 6/2/2017 11:17:30'!
-kelvin 
-	^ self new withDifference: -273 withName: 'kelvin' withType: self grade! !
+!Unit class methodsFor: 'shortcuts instance creation' stamp: 'kf 6/3/2017 19:50:07'!
+kelvin 	
+		^ self withConvertion: [:aNumber| aNumber - 273]  withDeconvertion: [:aNumber| aNumber + 273] withName: 'kelvin' withType: self grade! !
 
-!Unit class methodsFor: 'shortcuts instance creation' stamp: 'kf 6/1/2017 20:45:40'!
+!Unit class methodsFor: 'shortcuts instance creation' stamp: 'kf 6/3/2017 19:50:15'!
 kilometer
-	^ self new withScale: 1000 withName: 'kilometer' withType: self distance! !
+		^ self withConvertion: [:aNumber| aNumber * 1000]  withDeconvertion: [:aNumber| aNumber / 1000] withName: 'kilometer' withType: self distance! !
 
-!Unit class methodsFor: 'shortcuts instance creation' stamp: 'kf 6/1/2017 20:44:38'!
+!Unit class methodsFor: 'shortcuts instance creation' stamp: 'kf 6/3/2017 20:08:23'!
 meter 
-	^ self new withScale: 1 withName: 'meter' withType: self distance! !
+	^ self withConvertion: [:aNumber| aNumber / 1] withDeconvertion: [:aNumber| aNumber * 1] withName: 'meter' withType: self distance! !
 
-!Unit class methodsFor: 'shortcuts instance creation' stamp: 'kf 6/1/2017 20:45:46'!
+!Unit class methodsFor: 'shortcuts instance creation' stamp: 'kf 6/3/2017 19:50:28'!
 milimeter
-	^ self new withScale: 1/1000 withName: 'milimeter' withType: self distance! !
+		^ self withConvertion: [:aNumber| aNumber / 1000]  withDeconvertion: [:aNumber| aNumber * 1000] withName: 'milimeter' withType: self distance! !
 
-!Unit class methodsFor: 'shortcuts instance creation' stamp: 'RB 6/2/2017 11:21:01'!
+!Unit class methodsFor: 'shortcuts instance creation' stamp: 'kf 6/3/2017 19:50:35'!
 minute
-	^ self new withScale: 1 withName: 'minute' withType: self time! !
+		^ self withConvertion: [:aNumber| aNumber / 1]   withDeconvertion: [:aNumber| aNumber * 1] withName: 'minute' withType: self time! !
 
-!Unit class methodsFor: 'shortcuts instance creation' stamp: 'RB 6/2/2017 11:21:34'!
+!Unit class methodsFor: 'shortcuts instance creation' stamp: 'kf 6/3/2017 19:45:01'!
 second
-	^ self new withScale: 1/60 withName: 'second' withType: self time! !
+	^ self withConvertion: [:aNumber| aNumber / 60] withDeconvertion: [:aNumber| aNumber * 60] withName: 'second' withType: self time! !
 
 
-!Unit class methodsFor: 'as yet unclassified' stamp: 'RB 6/2/2017 11:17:18'!
+!Unit class methodsFor: 'types' stamp: 'RB 6/2/2017 11:17:18'!
 compound
 	^ 'compound'! !
 
-!Unit class methodsFor: 'as yet unclassified' stamp: 'kf 6/1/2017 20:44:00'!
+!Unit class methodsFor: 'types' stamp: 'kf 6/1/2017 20:44:00'!
 distance
 	^ 'distance'! !
 
-!Unit class methodsFor: 'as yet unclassified' stamp: 'kf 6/1/2017 20:45:58'!
+!Unit class methodsFor: 'types' stamp: 'kf 6/1/2017 20:45:58'!
 grade
 	^ 'grade'! !
 
-!Unit class methodsFor: 'as yet unclassified' stamp: 'RB 6/2/2017 11:17:08'!
+!Unit class methodsFor: 'types' stamp: 'RB 6/2/2017 11:17:08'!
 time
 	^ 'time'! !
+
+
+!Unit class methodsFor: 'as yet unclassified' stamp: 'kf 6/3/2017 19:46:13'!
+withConvertion: aBlockClosure withDeconvertion: aBlockClosure2 withName: aString withType: aString4 
+	^ self new withConvertion: aBlockClosure withDeconvertion: aBlockClosure2 withName: aString withType: aString4 ! !
