@@ -369,6 +369,11 @@ test28
 
 	self assert: aDay = twentyFourHours! !
 
+!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 6/3/2017 20:30:10'!
+test29
+
+	self assert: unMetro = (1 * Unit meter)! !
+
 
 !classDefinition: #DistanceInterval category: #'Distance-Solution'!
 Object subclass: #DistanceInterval
@@ -545,6 +550,11 @@ withScale: anInteger withName: aString withType: aType
 !Unit methodsFor: 'as yet unclassified' stamp: 'kf 6/3/2017 17:47:29'!
 adapt: aMeasure 
 	^ blockConverter value: aMeasure ! !
+
+!Unit methodsFor: 'as yet unclassified' stamp: 'kf 6/3/2017 20:31:31'!
+adaptToNumber: rcvr andSend: selector 
+
+		^ Measure size: rcvr in: self! !
 
 !Unit methodsFor: 'as yet unclassified' stamp: 'kf 6/3/2017 19:47:25'!
 deconvert: aMeasure 
