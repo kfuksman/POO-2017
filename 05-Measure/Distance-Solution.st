@@ -374,6 +374,71 @@ test29
 
 	self assert: unMetro = (1 * Unit meter)! !
 
+!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 6/4/2017 20:33:48'!
+test30
+
+	self assert: (Unit meter * Unit second ) = (Unit meter * Unit second)
+	! !
+
+!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 6/4/2017 20:42:29'!
+test31
+
+	self deny: (Unit second * Unit second ) = (Unit meter * Unit meter)
+	! !
+
+!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 6/4/2017 20:42:41'!
+test32
+
+	self deny: (Unit meter * Unit second ) = (Unit meter * Unit meter)
+	! !
+
+
+!classDefinition: #ComposeUnit category: #'Distance-Solution'!
+Object subclass: #ComposeUnit
+	instanceVariableNames: 'firstUnit secondUnit operator'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Distance-Solution'!
+
+!ComposeUnit methodsFor: 'as yet unclassified' stamp: 'kf 6/4/2017 20:43:26'!
+= aComposeUnit
+
+	^ (self firstUnit = aComposeUnit firstUnit ) and: [(self secondUnit = aComposeUnit secondUnit ) and: [self operator = aComposeUnit operator.]].
+! !
+
+!ComposeUnit methodsFor: 'as yet unclassified' stamp: 'kf 6/4/2017 20:42:22'!
+firstUnit
+	^ firstUnit ! !
+
+!ComposeUnit methodsFor: 'as yet unclassified' stamp: 'kf 6/4/2017 20:40:00'!
+operator
+
+	^ operator ! !
+
+!ComposeUnit methodsFor: 'as yet unclassified' stamp: 'kf 6/4/2017 20:43:38'!
+secondUnit
+	^ secondUnit ! !
+
+!ComposeUnit methodsFor: 'as yet unclassified' stamp: 'kf 6/4/2017 20:39:39'!
+self
+	self shouldBeImplemented! !
+
+!ComposeUnit methodsFor: 'as yet unclassified' stamp: 'kf 6/4/2017 20:36:49'!
+with: anUnit and: anUnit2 operator: anOperator 
+	firstUnit := anUnit.
+	secondUnit := anUnit2.
+	operator := anOperator.! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'ComposeUnit class' category: #'Distance-Solution'!
+ComposeUnit class
+	instanceVariableNames: ''!
+
+!ComposeUnit class methodsFor: 'class initialization' stamp: 'kf 6/4/2017 20:36:05'!
+with: anUnit and: anUnit2 operator: aSymbol 
+	^ self new with: anUnit and: anUnit2 operator: aSymbol ! !
+
 
 !classDefinition: #DistanceInterval category: #'Distance-Solution'!
 Object subclass: #DistanceInterval
@@ -541,6 +606,10 @@ withScale: anInteger withName: aString withType: aType
 	type := aType.
 	difference := 0! !
 
+
+!Unit methodsFor: 'as yet unclassified' stamp: 'kf 6/4/2017 20:37:31'!
+* anUnit 
+	^ ComposeUnit with: self and: anUnit operator: #*.! !
 
 !Unit methodsFor: 'as yet unclassified' stamp: 'RB 6/2/2017 10:30:40'!
 = anUnit
