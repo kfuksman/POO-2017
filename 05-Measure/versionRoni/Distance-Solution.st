@@ -125,7 +125,7 @@ size: anInteger in: anUnit
 
 !classDefinition: #DistanceTest category: #'Distance-Solution'!
 TestCase subclass: #DistanceTest
-	instanceVariableNames: 'unMetro milQuinientosCentimetros quinientosCentimetros dosMetros otroMetro cienCentimetros cincoCentimetros tresMetros unKilometro dosKilometro tresKilometro minusMeter ceroMetros minusFiveCentimeter oneCentimeter twoHundredCentimeters oneCelsius anotherCelsius twoCelsius oneFahrenheit treintaytresFahrenheit diezFahrenheit menosVeinteCelsius doceFahrenheit dosSetentayCuatroKelvin aDay twentyFourHours'
+	instanceVariableNames: 'unMetro milQuinientosCentimetros quinientosCentimetros dosMetros otroMetro cienCentimetros cincoCentimetros tresMetros unKilometro dosKilometro tresKilometro minusMeter ceroMetros minusFiveCentimeter oneCentimeter twoHundredCentimeters oneCelsius anotherCelsius twoCelsius oneFahrenheit treintaytresFahrenheit diezFahrenheit menosVeinteCelsius doceFahrenheit dosSetentayCuatroKelvin aDay twentyFourHours dosMetrosPorSegundo dosMetrosSobreSegundo'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'Distance-Solution'!
@@ -141,7 +141,7 @@ aatest19IntervaleMethodActsInAgreementWithHisStartAndEnd
 	
 	self assert: collection = collection2! !
 
-!DistanceTest methodsFor: 'as yet unclassified' stamp: 'RB 6/2/2017 11:22:21'!
+!DistanceTest methodsFor: 'as yet unclassified' stamp: 'RB 6/5/2017 14:16:10'!
 setUp
 		minusMeter  :=  Measure size: -1 in: Unit meter.
 		minusFiveCentimeter := Measure size: -5 in: Unit centimeter.
@@ -166,7 +166,10 @@ setUp
 		dosSetentayCuatroKelvin := Measure size: 274 in: Unit kelvin.
 		
 		aDay := Measure size: 1 in: Unit day.
-		twentyFourHours := Measure size: 24 in: Unit hour.! !
+		twentyFourHours := Measure size: 24 in: Unit hour.
+		
+		dosMetrosPorSegundo := Measure size: 2 in: (Unit meter * Unit second).
+		dosMetrosSobreSegundo := Measure size: 2 in: (Unit meter / Unit second).! !
 
 !DistanceTest methodsFor: 'as yet unclassified' stamp: 'RB 5/26/2017 13:13:26'!
 test01AnInstanceIsEqualToSelf
@@ -408,6 +411,16 @@ test35
 	self assert: (Unit second * Unit meter * Unit meter) = (Unit meter * Unit second * Unit meter).
 	! !
 
+!DistanceTest methodsFor: 'as yet unclassified' stamp: 'RB 6/5/2017 14:14:26'!
+test36
+	self assert: dosMetrosPorSegundo = dosMetrosPorSegundo.
+	! !
+
+!DistanceTest methodsFor: 'as yet unclassified' stamp: 'RB 6/5/2017 14:16:25'!
+test37
+	self deny: dosMetrosPorSegundo = dosMetrosSobreSegundo.
+	! !
+
 
 !classDefinition: #ComposeUnit category: #'Distance-Solution'!
 Object subclass: #ComposeUnit
@@ -433,6 +446,10 @@ Object subclass: #ComposeUnit
 	^ ((self firstUnit = aComposeUnit firstUnit ) and: [(self secondUnit = aComposeUnit secondUnit ) and: [self operator = aComposeUnit operator.]]) or: ((self operator = aComposeUnit operator) and: [(self operator = #*) and: [self firstUnit = aComposeUnit secondUnit] and: [self secondUnit = aComposeUnit firstUnit]]).
 ! !
 
+!ComposeUnit methodsFor: 'as yet unclassified' stamp: 'RB 6/5/2017 14:13:52'!
+adapt: aMeasure
+	^ (firstUnit adapt: aMeasure) * (secondUnit adapt: aMeasure).! !
+
 !ComposeUnit methodsFor: 'as yet unclassified' stamp: 'kf 6/4/2017 20:42:22'!
 firstUnit
 	^ firstUnit ! !
@@ -449,6 +466,10 @@ secondUnit
 !ComposeUnit methodsFor: 'as yet unclassified' stamp: 'kf 6/4/2017 20:39:39'!
 self
 	self shouldBeImplemented! !
+
+!ComposeUnit methodsFor: 'as yet unclassified' stamp: 'RB 6/5/2017 14:15:20'!
+type
+	^ (firstUnit type printString) join: (secondUnit type printString).! !
 
 !ComposeUnit methodsFor: 'as yet unclassified' stamp: 'kf 6/4/2017 20:36:49'!
 with: anUnit and: anUnit2 operator: anOperator 
@@ -613,7 +634,6 @@ printString
 !Unit methodsFor: 'accessing' stamp: 'kf 6/1/2017 20:46:50'!
 type
 	^ type! !
-
 
 
 !Unit methodsFor: 'as yet unclassified' stamp: 'kf 6/4/2017 20:37:31'!
