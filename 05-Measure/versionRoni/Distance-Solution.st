@@ -13,7 +13,7 @@ Magnitude subclass: #Measure
 <= aDistance 
 	^ (self > aDistance) not! !
 
-!Measure methodsFor: 'comparing' stamp: 'kf 6/1/2017 20:47:21'!
+!Measure methodsFor: 'comparing' stamp: 'kf 6/5/2017 20:12:41'!
 = aMagnitude
 
 	(aMagnitude isKindOf: self class) ifFalse:[^ false] .
@@ -439,11 +439,17 @@ Object subclass: #ComposeUnit
 	^ ComposeUnit with: self and: anUnit operator: #/.
 ! !
 
-!ComposeUnit methodsFor: 'as yet unclassified' stamp: 'RB 6/5/2017 12:53:11'!
+!ComposeUnit methodsFor: 'as yet unclassified' stamp: 'kf 6/5/2017 20:07:31'!
 = aComposeUnit
 	(aComposeUnit isKindOf: self class) ifFalse:[^ false] .
 	
-	^ ((self firstUnit = aComposeUnit firstUnit ) and: [(self secondUnit = aComposeUnit secondUnit ) and: [self operator = aComposeUnit operator.]]) or: ((self operator = aComposeUnit operator) and: [(self operator = #*) and: [self firstUnit = aComposeUnit secondUnit] and: [self secondUnit = aComposeUnit firstUnit]]).
+	^ ((self firstUnit = aComposeUnit firstUnit )
+	   and: [(self secondUnit = aComposeUnit secondUnit ) 
+		and: [self operator = aComposeUnit operator.]]) 
+	
+	    or: ((self operator = aComposeUnit operator)  
+			and: [self firstUnit = aComposeUnit secondUnit] 
+			and: [self secondUnit = aComposeUnit firstUnit]).
 ! !
 
 !ComposeUnit methodsFor: 'as yet unclassified' stamp: 'RB 6/5/2017 14:13:52'!
@@ -467,9 +473,9 @@ secondUnit
 self
 	self shouldBeImplemented! !
 
-!ComposeUnit methodsFor: 'as yet unclassified' stamp: 'RB 6/5/2017 14:15:20'!
+!ComposeUnit methodsFor: 'as yet unclassified' stamp: 'kf 6/5/2017 20:17:40'!
 type
-	^ (firstUnit type printString) join: (secondUnit type printString).! !
+	^ firstUnit type,operator ,secondUnit type! !
 
 !ComposeUnit methodsFor: 'as yet unclassified' stamp: 'kf 6/4/2017 20:36:49'!
 with: anUnit and: anUnit2 operator: anOperator 
