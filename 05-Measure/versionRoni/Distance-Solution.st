@@ -9,26 +9,14 @@ Magnitude subclass: #Measure
 < aDistance 
 	^ value < aDistance valueMeter! !
 
-!Measure methodsFor: 'comparing' stamp: 'RB 5/30/2017 00:50:17'!
-<= aDistance 
-	^ (self > aDistance) not! !
-
-!Measure methodsFor: 'comparing' stamp: 'kf 6/5/2017 20:12:41'!
+!Measure methodsFor: 'comparing' stamp: 'kf 6/6/2017 01:01:06'!
 = aMagnitude
 
 	(aMagnitude isKindOf: self class) ifFalse:[^ false] .
-	(aMagnitude unit type = unit type) ifFalse: [^ false].
+	(aMagnitude unit base = unit base) ifFalse: [^ false].
 	
 
 	^ value = aMagnitude valueMeter! !
-
-!Measure methodsFor: 'comparing' stamp: 'RB 5/30/2017 00:53:11'!
-> aDistance 
-	^ value > aDistance valueMeter! !
-
-!Measure methodsFor: 'comparing' stamp: 'RB 5/30/2017 00:51:09'!
->= aDistance 
-	^ (self < aDistance) not! !
 
 
 !Measure methodsFor: 'initialization' stamp: 'kf 6/3/2017 19:09:01'!
@@ -87,13 +75,15 @@ to: aDistance do: aBlockClosure
 * anInteger 
 	^ self class size: value * anInteger  in: (Unit meter)! !
 
-!Measure methodsFor: 'arithmetic' stamp: 'kf 6/5/2017 20:44:44'!
+!Measure methodsFor: 'arithmetic' stamp: 'kf 6/6/2017 20:24:41'!
 + aDistance 
-	^ self class size: value + aDistance valueMeter in: (unit + aDistance unit)! !
+	unit type = aDistance unit type ifTrue: [^ self class size: value + aDistance valueMeter in: unit base].
+	^ComposeMeasure with: self and: aDistance operation: #+ in: (unit + aDistance unit).! !
 
-!Measure methodsFor: 'arithmetic' stamp: 'kf 6/5/2017 21:03:18'!
+!Measure methodsFor: 'arithmetic' stamp: 'kf 6/6/2017 20:36:05'!
 - aDistance 
-	^ self class size: value - aDistance valueMeter in: (unit + aDistance unit)! !
+	unit type = aDistance unit type ifTrue: [^ self class size: value - aDistance valueMeter in: unit base].
+	^ComposeMeasure with: self and: aDistance operation: #- in: (unit - aDistance unit).! !
 
 !Measure methodsFor: 'arithmetic' stamp: 'kf 6/1/2017 19:21:32'!
 / anInteger 
@@ -125,7 +115,7 @@ size: anInteger in: anUnit
 
 !classDefinition: #DistanceTest category: #'Distance-Solution'!
 TestCase subclass: #DistanceTest
-	instanceVariableNames: 'unMetro milQuinientosCentimetros quinientosCentimetros dosMetros otroMetro cienCentimetros cincoCentimetros tresMetros unKilometro dosKilometro tresKilometro minusMeter ceroMetros minusFiveCentimeter oneCentimeter twoHundredCentimeters oneCelsius anotherCelsius twoCelsius oneFahrenheit treintaytresFahrenheit diezFahrenheit menosVeinteCelsius doceFahrenheit dosSetentayCuatroKelvin aDay twentyFourHours dosMetrosPorSegundo dosMetrosSobreSegundo peras manzanas'
+	instanceVariableNames: 'unMetro milQuinientosCentimetros quinientosCentimetros dosMetros otroMetro cienCentimetros cincoCentimetros tresMetros unKilometro dosKilometro tresKilometro minusMeter ceroMetros minusFiveCentimeter oneCentimeter twoHundredCentimeters oneCelsius anotherCelsius twoCelsius oneFahrenheit treintaytresFahrenheit diezFahrenheit menosVeinteCelsius doceFahrenheit dosSetentayCuatroKelvin aDay twentyFourHours dosMetrosPorSegundo dosMetrosSobreSegundo peras manzanas oneHour twentythreeHours bananas'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'Distance-Solution'!
@@ -141,7 +131,7 @@ aatest19IntervaleMethodActsInAgreementWithHisStartAndEnd
 	
 	self assert: collection = collection2! !
 
-!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 6/5/2017 20:42:48'!
+!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 6/6/2017 19:45:11'!
 setUp
 		minusMeter  :=  Measure size: -1 in: Unit meter.
 		minusFiveCentimeter := Measure size: -5 in: Unit centimeter.
@@ -166,13 +156,16 @@ setUp
 		dosSetentayCuatroKelvin := Measure size: 274 in: Unit kelvin.
 		
 		aDay := Measure size: 1 in: Unit day.
+		oneHour :=  Measure size: 1 in: Unit hour.
+		twentythreeHours := Measure size: 23 in: Unit hour.
 		twentyFourHours := Measure size: 24 in: Unit hour.
 		
 		dosMetrosPorSegundo := Measure size: 2 in: (Unit meter * Unit second).
 		dosMetrosSobreSegundo := Measure size: 2 in: (Unit meter / Unit second).
 		
 		peras := Unit withName: 'pera' withType: 'pera'. 
-		manzanas := Unit withName: 'manzana' withType: 'manzana'.! !
+		manzanas := Unit withName: 'manzana' withType: 'manzana'.
+		bananas := Unit withName: 'banana' withType: 'banana'.! !
 
 !DistanceTest methodsFor: 'as yet unclassified' stamp: 'RB 5/26/2017 13:13:26'!
 test01AnInstanceIsEqualToSelf
@@ -430,11 +423,83 @@ test38
 	self assert: ((10 * peras) + (10 * manzanas)) = ((10 * peras) + (10 * manzanas))
 ! !
 
-!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 6/5/2017 21:03:33'!
+!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 6/6/2017 19:49:58'!
 test39
 
-	self assert: ((10 * peras) - (10 * manzanas)) = ((10 * peras) - (10 * manzanas))
-! !
+	self assert: ((10 * peras) - (10 * manzanas)) = ((10 * peras) - (10 * manzanas)).! !
+
+!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 6/5/2017 23:53:18'!
+test40
+
+	self assert: aDay - twentythreeHours  = oneHour .
+	self assert: twentythreeHours - aDay   = (oneHour negated ).! !
+
+!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 6/6/2017 19:43:00'!
+test41
+
+	self assert: (aDay - twentythreeHours + (10*peras))  = (oneHour + (10*peras))! !
+
+!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 6/6/2017 20:18:09'!
+test42
+
+	self deny: ((10*peras) - (10*manzanas)) = ((10*bananas) - (10*manzanas))! !
+
+
+!classDefinition: #ComposeMeasure category: #'Distance-Solution'!
+Object subclass: #ComposeMeasure
+	instanceVariableNames: 'firstMeasure secondMeasure operator unit'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Distance-Solution'!
+
+!ComposeMeasure methodsFor: 'as yet unclassified' stamp: 'kf 6/6/2017 20:31:14'!
+= aMeasure
+	(aMeasure isKindOf: self class) ifFalse: [^false].
+	(aMeasure unit = self unit) ifFalse: [^false].
+	
+		^ ((self firstMeasure = aMeasure firstMeasure )
+	   and: [(self secondMeasure = aMeasure secondMeasure ) 
+		and: [self operator = aMeasure operator.]])
+	
+	    or: ((self operator = aMeasure operator)  
+			and: [self firstMeasure = aMeasure secondMeasure] 
+			and: [self secondMeasure = aMeasure firstMeasure]).
+
+	! !
+
+!ComposeMeasure methodsFor: 'as yet unclassified' stamp: 'kf 6/6/2017 20:28:36'!
+firstMeasure
+	^firstMeasure
+	! !
+
+!ComposeMeasure methodsFor: 'as yet unclassified' stamp: 'kf 6/6/2017 20:28:48'!
+operator
+	^operator! !
+
+!ComposeMeasure methodsFor: 'as yet unclassified' stamp: 'kf 6/6/2017 20:28:42'!
+secondMeasure
+	^secondMeasure! !
+
+!ComposeMeasure methodsFor: 'as yet unclassified' stamp: 'kf 6/6/2017 20:29:01'!
+unit
+	^unit! !
+
+!ComposeMeasure methodsFor: 'as yet unclassified' stamp: 'kf 6/6/2017 20:23:09'!
+with: aMeasure and: aMeasure2 operation: anOperator in: aComposeUnit
+	firstMeasure := aMeasure.
+	secondMeasure := aMeasure2.
+	unit := aComposeUnit.
+	operator := anOperator.! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'ComposeMeasure class' category: #'Distance-Solution'!
+ComposeMeasure class
+	instanceVariableNames: 'secondMeasure firstMeasure unit'!
+
+!ComposeMeasure class methodsFor: 'class initialization' stamp: 'kf 6/6/2017 20:22:49'!
+with: aMeasure and: aMeasure2 operation: anOperator in: aComposeUnit 
+	^self new with: aMeasure and: aMeasure2 operation: anOperator in: aComposeUnit.! !
 
 
 !classDefinition: #ComposeUnit category: #'Distance-Solution'!
@@ -449,12 +514,22 @@ Object subclass: #ComposeUnit
 	^ ComposeUnit with: self and: anUnit operator: #*.
 ! !
 
+!ComposeUnit methodsFor: 'as yet unclassified' stamp: 'kf 6/6/2017 20:33:49'!
++ anUnit
+	^ ComposeUnit with: self and: anUnit operator: #+.
+! !
+
+!ComposeUnit methodsFor: 'as yet unclassified' stamp: 'kf 6/6/2017 20:33:54'!
+- anUnit
+	^ ComposeUnit with: self and: anUnit operator: #-.
+! !
+
 !ComposeUnit methodsFor: 'as yet unclassified' stamp: 'RB 6/5/2017 12:43:22'!
 / anUnit
 	^ ComposeUnit with: self and: anUnit operator: #/.
 ! !
 
-!ComposeUnit methodsFor: 'as yet unclassified' stamp: 'kf 6/5/2017 20:07:31'!
+!ComposeUnit methodsFor: 'as yet unclassified' stamp: 'kf 6/6/2017 00:07:03'!
 = aComposeUnit
 	(aComposeUnit isKindOf: self class) ifFalse:[^ false] .
 	
@@ -467,14 +542,18 @@ Object subclass: #ComposeUnit
 			and: [self secondUnit = aComposeUnit firstUnit]).
 ! !
 
-!ComposeUnit methodsFor: 'as yet unclassified' stamp: 'RB 6/5/2017 14:13:52'!
+!ComposeUnit methodsFor: 'as yet unclassified' stamp: 'kf 6/5/2017 23:49:03'!
 adapt: aMeasure
-	^ (firstUnit adapt: aMeasure) * (secondUnit adapt: aMeasure).! !
+	^ aMeasure ! !
 
 !ComposeUnit methodsFor: 'as yet unclassified' stamp: 'kf 6/5/2017 20:37:37'!
 adaptToNumber: rcvr andSend: selector 
 
 		^ Measure size: rcvr in: self! !
+
+!ComposeUnit methodsFor: 'as yet unclassified' stamp: 'kf 6/6/2017 01:03:19'!
+base
+	^ self! !
 
 !ComposeUnit methodsFor: 'as yet unclassified' stamp: 'kf 6/4/2017 20:42:22'!
 firstUnit
@@ -493,9 +572,9 @@ secondUnit
 self
 	self shouldBeImplemented! !
 
-!ComposeUnit methodsFor: 'as yet unclassified' stamp: 'kf 6/5/2017 20:17:40'!
+!ComposeUnit methodsFor: 'as yet unclassified' stamp: 'kf 6/6/2017 19:26:23'!
 type
-	^ firstUnit type,operator ,secondUnit type! !
+	^ firstUnit type,operator, secondUnit type! !
 
 !ComposeUnit methodsFor: 'as yet unclassified' stamp: 'kf 6/4/2017 20:36:49'!
 with: anUnit and: anUnit2 operator: anOperator 
@@ -642,7 +721,7 @@ createMeter: anInteger
 
 !classDefinition: #Unit category: #'Distance-Solution'!
 Object subclass: #Unit
-	instanceVariableNames: 'name type blockConverter blockDeconverter'
+	instanceVariableNames: 'name type blockConverter blockDeconverter unitBase'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'Distance-Solution'!
@@ -668,9 +747,15 @@ type
 * anUnit 
 	^ ComposeUnit with: self and: anUnit operator: #*.! !
 
-!Unit methodsFor: 'as yet unclassified' stamp: 'kf 6/5/2017 20:45:56'!
+!Unit methodsFor: 'as yet unclassified' stamp: 'kf 6/6/2017 19:46:44'!
 + anUnit 
+	(self type = anUnit type) ifTrue:[^ self base].
 	^ ComposeUnit with: self and: anUnit operator: #+! !
+
+!Unit methodsFor: 'as yet unclassified' stamp: 'kf 6/6/2017 19:40:17'!
+- anUnit 
+	(self type = anUnit type) ifTrue:[^ self base].
+	^ ComposeUnit with: self and: anUnit operator: #-! !
 
 !Unit methodsFor: 'as yet unclassified' stamp: 'RB 6/5/2017 12:43:43'!
 / anUnit 
@@ -690,9 +775,21 @@ adaptToNumber: rcvr andSend: selector
 
 		^ Measure size: rcvr in: self! !
 
+!Unit methodsFor: 'as yet unclassified' stamp: 'kf 6/6/2017 01:01:23'!
+base
+	^ unitBase ! !
+
 !Unit methodsFor: 'as yet unclassified' stamp: 'kf 6/3/2017 19:47:25'!
 deconvert: aMeasure 
 	^ blockDeconverter value: aMeasure ! !
+
+!Unit methodsFor: 'as yet unclassified' stamp: 'kf 6/6/2017 19:28:07'!
+withConvertion: aBlockClosure withDeconvertion: aBlockClosure2 withName: aString withBase: anUnitBase 
+	blockConverter := aBlockClosure.
+	blockDeconverter := aBlockClosure2.
+	name := aString.
+	unitBase := anUnitBase.
+	type := anUnitBase type.! !
 
 !Unit methodsFor: 'as yet unclassified' stamp: 'kf 6/3/2017 19:47:08'!
 withConvertion: aBlockClosure withDeconvertion: aBlockClosure2 withName: aString withType: aType 
@@ -719,62 +816,62 @@ withConvertion: aBlockClosure withName: aString withType: aString3
 	^ self new withConvertion: aBlockClosure withName: aString withType: aString3 ! !
 
 
-!Unit class methodsFor: 'shortcuts instance creation' stamp: 'kf 6/3/2017 19:48:43'!
+!Unit class methodsFor: 'shortcuts instance creation' stamp: 'kf 6/6/2017 19:15:38'!
 celsius 
-	^ self withConvertion: [:aNumber| aNumber] withDeconvertion: [:aNumber| aNumber]  withName: 'grade' withType: self grade ! !
+	^ UnitBase celsius! !
 
-!Unit class methodsFor: 'shortcuts instance creation' stamp: 'kf 6/3/2017 19:48:55'!
+!Unit class methodsFor: 'shortcuts instance creation' stamp: 'kf 6/6/2017 00:45:34'!
 centimeter 
-	^ self withConvertion: [:aNumber| aNumber / 100]  withDeconvertion: [:aNumber| aNumber * 100] withName: 'centimeter' withType: self distance
+	^ self withConvertion: [:aNumber| aNumber / 100]  withDeconvertion: [:aNumber| aNumber * 100] withName: 'centimeter' withBase: (UnitBase meter)
 ! !
 
-!Unit class methodsFor: 'shortcuts instance creation' stamp: 'kf 6/3/2017 19:49:18'!
+!Unit class methodsFor: 'shortcuts instance creation' stamp: 'kf 6/6/2017 19:16:05'!
 day
-		^ self withConvertion: [:aNumber| aNumber * 60 * 24 ]  withDeconvertion: [:aNumber| aNumber / (60*24)] withName: 'day' withType: self time! !
+		^ self withConvertion: [:aNumber| aNumber * 60 * 24 ]  withDeconvertion: [:aNumber| aNumber / (60*24)] withName: 'day' withBase: (UnitBase minute).! !
 
-!Unit class methodsFor: 'shortcuts instance creation' stamp: 'kf 6/3/2017 19:55:28'!
+!Unit class methodsFor: 'shortcuts instance creation' stamp: 'kf 6/6/2017 19:16:19'!
 decameter
-	^ self withConvertion: [:aNumber| aNumber * 10] withDeconvertion: [:aNumber| aNumber  / 10] withName: 'decameter' withType: self distance! !
+	^ self withConvertion: [:aNumber| aNumber * 10] withDeconvertion: [:aNumber| aNumber  / 10] withName: 'decameter' withBase: (UnitBase meter)! !
 
-!Unit class methodsFor: 'shortcuts instance creation' stamp: 'kf 6/3/2017 19:52:48'!
+!Unit class methodsFor: 'shortcuts instance creation' stamp: 'kf 6/6/2017 19:16:25'!
 decimeter
-	^ self withConvertion: [:aNumber| aNumber / 10]  withDeconvertion: [:aNumber| aNumber  * 10] withName: 'decimeter' withType: self distance! !
+	^ self withConvertion: [:aNumber| aNumber / 10]  withDeconvertion: [:aNumber| aNumber  * 10] withName: 'decimeter' withBase: (UnitBase meter)! !
 
-!Unit class methodsFor: 'shortcuts instance creation' stamp: 'kf 6/3/2017 19:49:45'!
+!Unit class methodsFor: 'shortcuts instance creation' stamp: 'kf 6/6/2017 19:18:29'!
 fahrenheit 
-		^ self withConvertion: [:aNumber| aNumber - 32]  withDeconvertion: [:aNumber| aNumber + 32] withName: 'fahrenheit' withType: self grade! !
+		^ self withConvertion: [:aNumber| aNumber - 32]  withDeconvertion: [:aNumber| aNumber + 32] withName: 'fahrenheit' withBase: (UnitBase celsius).! !
 
-!Unit class methodsFor: 'shortcuts instance creation' stamp: 'kf 6/3/2017 19:56:03'!
+!Unit class methodsFor: 'shortcuts instance creation' stamp: 'kf 6/6/2017 19:16:29'!
 hectometer
-		^ self withConvertion: [:aNumber| aNumber * 100]  withDeconvertion: [:aNumber| aNumber / 100] withName: 'hectometer' withType: self distance! !
+		^ self withConvertion: [:aNumber| aNumber * 100]  withDeconvertion: [:aNumber| aNumber / 100] withName: 'hectometer' withBase: (UnitBase meter)! !
 
-!Unit class methodsFor: 'shortcuts instance creation' stamp: 'kf 6/3/2017 19:49:57'!
+!Unit class methodsFor: 'shortcuts instance creation' stamp: 'kf 6/6/2017 19:18:45'!
 hour
-	^ self withConvertion: [:aNumber| aNumber * 60]  withDeconvertion: [:aNumber| aNumber / 60] withName: 'hour' withType: self time! !
+	^ self withConvertion: [:aNumber| aNumber * 60]  withDeconvertion: [:aNumber| aNumber / 60] withName: 'hour' withBase: (UnitBase minute).! !
 
-!Unit class methodsFor: 'shortcuts instance creation' stamp: 'kf 6/3/2017 19:50:07'!
+!Unit class methodsFor: 'shortcuts instance creation' stamp: 'kf 6/6/2017 19:19:01'!
 kelvin 	
-		^ self withConvertion: [:aNumber| aNumber - 273]  withDeconvertion: [:aNumber| aNumber + 273] withName: 'kelvin' withType: self grade! !
+		^ self withConvertion: [:aNumber| aNumber - 273]  withDeconvertion: [:aNumber| aNumber + 273] withName: 'kelvin' withBase: (UnitBase celsius).! !
 
-!Unit class methodsFor: 'shortcuts instance creation' stamp: 'kf 6/3/2017 19:50:15'!
+!Unit class methodsFor: 'shortcuts instance creation' stamp: 'kf 6/6/2017 19:16:33'!
 kilometer
-		^ self withConvertion: [:aNumber| aNumber * 1000]  withDeconvertion: [:aNumber| aNumber / 1000] withName: 'kilometer' withType: self distance! !
+		^ self withConvertion: [:aNumber| aNumber * 1000]  withDeconvertion: [:aNumber| aNumber / 1000] withName: 'kilometer' withBase: (UnitBase meter)! !
 
-!Unit class methodsFor: 'shortcuts instance creation' stamp: 'kf 6/3/2017 20:08:23'!
+!Unit class methodsFor: 'shortcuts instance creation' stamp: 'kf 6/6/2017 00:52:05'!
 meter 
-	^ self withConvertion: [:aNumber| aNumber / 1] withDeconvertion: [:aNumber| aNumber * 1] withName: 'meter' withType: self distance! !
+	^ UnitBase meter! !
 
-!Unit class methodsFor: 'shortcuts instance creation' stamp: 'kf 6/3/2017 19:50:28'!
+!Unit class methodsFor: 'shortcuts instance creation' stamp: 'kf 6/6/2017 19:36:44'!
 milimeter
-		^ self withConvertion: [:aNumber| aNumber / 1000]  withDeconvertion: [:aNumber| aNumber * 1000] withName: 'milimeter' withType: self distance! !
+		^ self withConvertion: [:aNumber| aNumber / 1000]  withDeconvertion: [:aNumber| aNumber * 1000] withName: 'milimeter' withBase: (UnitBase meter).! !
 
-!Unit class methodsFor: 'shortcuts instance creation' stamp: 'kf 6/3/2017 19:50:35'!
+!Unit class methodsFor: 'shortcuts instance creation' stamp: 'kf 6/6/2017 19:19:12'!
 minute
-		^ self withConvertion: [:aNumber| aNumber / 1]   withDeconvertion: [:aNumber| aNumber * 1] withName: 'minute' withType: self time! !
+		^ UnitBase minute.! !
 
-!Unit class methodsFor: 'shortcuts instance creation' stamp: 'kf 6/3/2017 19:45:01'!
+!Unit class methodsFor: 'shortcuts instance creation' stamp: 'kf 6/6/2017 19:19:50'!
 second
-	^ self withConvertion: [:aNumber| aNumber / 60] withDeconvertion: [:aNumber| aNumber * 60] withName: 'second' withType: self time! !
+	^ self withConvertion: [:aNumber| aNumber / 60] withDeconvertion: [:aNumber| aNumber * 60] withName: 'second' withBase: (UnitBase minute).! !
 
 
 !Unit class methodsFor: 'types' stamp: 'RB 6/2/2017 11:17:18'!
@@ -794,6 +891,10 @@ time
 	^ 'time'! !
 
 
+!Unit class methodsFor: 'as yet unclassified' stamp: 'kf 6/6/2017 00:48:43'!
+withConvertion: aBlockClosure withDeconvertion: aBlockClosure2 withName: aString withBase: anUnitBase 
+	^self new withConvertion: aBlockClosure withDeconvertion: aBlockClosure2 withName: aString withBase: anUnitBase ! !
+
 !Unit class methodsFor: 'as yet unclassified' stamp: 'kf 6/3/2017 19:46:13'!
 withConvertion: aBlockClosure withDeconvertion: aBlockClosure2 withName: aString withType: aString4 
 	^ self new withConvertion: aBlockClosure withDeconvertion: aBlockClosure2 withName: aString withType: aString4 ! !
@@ -801,3 +902,86 @@ withConvertion: aBlockClosure withDeconvertion: aBlockClosure2 withName: aString
 !Unit class methodsFor: 'as yet unclassified' stamp: 'kf 6/5/2017 20:42:05'!
 withName: aString withType: aString4 
 	^ self new withConvertion: [:value | value] withDeconvertion: [:value | value] withName: aString withType: aString4 ! !
+
+
+!classDefinition: #UnitBase category: #'Distance-Solution'!
+Object subclass: #UnitBase
+	instanceVariableNames: 'name type blockConverter blockDeconverter'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Distance-Solution'!
+
+!UnitBase methodsFor: 'as yet unclassified' stamp: 'kf 6/6/2017 00:53:42'!
+* anUnit 
+	^ ComposeUnit with: self and: anUnit operator: #*.! !
+
+!UnitBase methodsFor: 'as yet unclassified' stamp: 'kf 6/6/2017 00:55:10'!
++ anUnitBase 
+	^ self! !
+
+!UnitBase methodsFor: 'as yet unclassified' stamp: 'kf 6/6/2017 00:55:23'!
+- anUnitBase 
+	^ self! !
+
+!UnitBase methodsFor: 'as yet unclassified' stamp: 'kf 6/6/2017 00:54:34'!
+/ anUnit 
+	^ ComposeUnit with: self and: anUnit operator: #/.! !
+
+!UnitBase methodsFor: 'as yet unclassified' stamp: 'kf 6/6/2017 00:57:45'!
+= anUnit
+	^ name = anUnit name! !
+
+!UnitBase methodsFor: 'as yet unclassified' stamp: 'kf 6/6/2017 00:52:41'!
+adapt: aSmallInteger 
+	^ aSmallInteger ! !
+
+!UnitBase methodsFor: 'as yet unclassified' stamp: 'kf 6/6/2017 00:56:09'!
+adaptToNumber: rcvr andSend: aSymbol 
+		^ Measure size: rcvr in: self! !
+
+!UnitBase methodsFor: 'as yet unclassified' stamp: 'kf 6/6/2017 01:01:32'!
+base
+	^ self! !
+
+!UnitBase methodsFor: 'as yet unclassified' stamp: 'kf 6/6/2017 01:02:39'!
+deconvert: aSmallInteger 
+	^ aSmallInteger ! !
+
+!UnitBase methodsFor: 'as yet unclassified' stamp: 'kf 6/6/2017 00:59:18'!
+name
+	^ name! !
+
+!UnitBase methodsFor: 'as yet unclassified' stamp: 'kf 6/6/2017 01:05:51'!
+printString
+	^ name! !
+
+!UnitBase methodsFor: 'as yet unclassified' stamp: 'kf 6/6/2017 00:54:14'!
+type
+	^ type! !
+
+!UnitBase methodsFor: 'as yet unclassified' stamp: 'kf 6/6/2017 00:45:04'!
+withName: aString withType: aType
+	name := aString.
+	type := aType.! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'UnitBase class' category: #'Distance-Solution'!
+UnitBase class
+	instanceVariableNames: 'type'!
+
+!UnitBase class methodsFor: 'as yet unclassified' stamp: 'kf 6/6/2017 19:14:14'!
+celsius
+	^ self withName: 'celsius' withType: 'grade'! !
+
+!UnitBase class methodsFor: 'as yet unclassified' stamp: 'kf 6/6/2017 00:44:17'!
+meter
+	^ self withName: 'meter' withType: 'distance'! !
+
+!UnitBase class methodsFor: 'as yet unclassified' stamp: 'kf 6/6/2017 19:15:30'!
+minute
+	^ self withName: 'minute' withType: 'time'! !
+
+!UnitBase class methodsFor: 'as yet unclassified' stamp: 'kf 6/6/2017 00:44:43'!
+withName: aString withType: aType 
+	^ self new withName: aString withType: aType! !
