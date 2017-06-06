@@ -91,9 +91,9 @@ to: aDistance do: aBlockClosure
 + aDistance 
 	^ self class size: value + aDistance valueMeter in: (unit + aDistance unit)! !
 
-!Measure methodsFor: 'arithmetic' stamp: 'kf 6/1/2017 19:21:12'!
+!Measure methodsFor: 'arithmetic' stamp: 'kf 6/5/2017 21:03:18'!
 - aDistance 
-	^ self class size: value - aDistance valueMeter in: (Unit meter)! !
+	^ self class size: value - aDistance valueMeter in: (unit + aDistance unit)! !
 
 !Measure methodsFor: 'arithmetic' stamp: 'kf 6/1/2017 19:21:32'!
 / anInteger 
@@ -430,10 +430,10 @@ test38
 	self assert: ((10 * peras) + (10 * manzanas)) = ((10 * peras) + (10 * manzanas))
 ! !
 
-!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 6/5/2017 20:46:46'!
+!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 6/5/2017 21:03:33'!
 test39
 
-	self assert: ((10 * peras) * (10 * manzanas)) = ((10 * peras) * (10 * manzanas))
+	self assert: ((10 * peras) - (10 * manzanas)) = ((10 * peras) - (10 * manzanas))
 ! !
 
 
