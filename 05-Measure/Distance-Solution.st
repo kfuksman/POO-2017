@@ -499,6 +499,12 @@ test50
 	self assert: (((10*peras) + (10*manzanas)) + (10* manzanas)) = (((20*manzanas) + (10*peras)))
 	! !
 
+!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 6/7/2017 14:15:24'!
+test51
+
+	self assert: (((10*peras) + (10*bananas)) + (10* 	manzanas )) + (10 * bananas) = (((10*peras) + (10*manzanas)) + (20* bananas ))
+	! !
+
 
 !classDefinition: #ComposeMeasure category: #'Distance-Solution'!
 Object subclass: #ComposeMeasure
@@ -512,16 +518,28 @@ Object subclass: #ComposeMeasure
 	^ ComposeMeasure with: self and: aMeasure operation: #* in: (unit * aMeasure unit).
 ! !
 
-!ComposeMeasure methodsFor: 'as yet unclassified' stamp: 'kf 6/7/2017 13:15:28'!
+!ComposeMeasure methodsFor: 'as yet unclassified' stamp: 'kf 6/7/2017 14:35:17'!
 + aMeasure
-	(unit firstUnit base = aMeasure unit base) ifTrue: [measures at: 1 put: (measures first + aMeasure). ^ self].
-	(unit secondUnit base = aMeasure unit base) ifTrue: [measures at: 2 put: ((measures at:2) + aMeasure). ^ self].
-	^ ComposeMeasure with: self and: aMeasure operation: #+ in: (unit + aMeasure unit).
+	1 to: measures size do:[:position | (( measures at: position ) unit base = aMeasure unit base) ifTrue: [
+			|measure| 
+			measure := measures at: position.
+			measures removeAt: position. 
+			measures add: (measure + aMeasure). 
+			^ self]. ].
+	measures addLast: aMeasure.
+	operators addLast: #+.
 ! !
 
-!ComposeMeasure methodsFor: 'as yet unclassified' stamp: 'RB 6/7/2017 01:17:02'!
+!ComposeMeasure methodsFor: 'as yet unclassified' stamp: 'kf 6/7/2017 14:45:31'!
 - aMeasure
-	^ ComposeMeasure with: self and: aMeasure operation: #- in: (unit - aMeasure unit).
+	1 to: measures size do:[:position | (( measures at: position ) unit base = aMeasure unit base) ifTrue: [
+			|measure| 
+			measure := measures at: position.
+			measures removeAt: position. 
+			measures add: (measure - aMeasure). 
+			^ self]. ].
+	measures addLast: aMeasure.
+	operators addLast: #-.
 ! !
 
 !ComposeMeasure methodsFor: 'as yet unclassified' stamp: 'RB 6/7/2017 01:18:29'!
@@ -529,18 +547,12 @@ Object subclass: #ComposeMeasure
 	^ ComposeMeasure with: self and: aMeasure operation: #/ in: (unit / aMeasure unit).
 ! !
 
-!ComposeMeasure methodsFor: 'as yet unclassified' stamp: 'kf 6/6/2017 20:31:14'!
+!ComposeMeasure methodsFor: 'as yet unclassified' stamp: 'kf 6/7/2017 14:44:42'!
 = aMeasure
 	(aMeasure isKindOf: self class) ifFalse: [^false].
-	(aMeasure unit = self unit) ifFalse: [^false].
+
 	
-		^ ((self firstMeasure = aMeasure firstMeasure )
-	   and: [(self secondMeasure = aMeasure secondMeasure ) 
-		and: [self operator = aMeasure operator.]])
-	
-	    or: ((self operator = aMeasure operator)  
-			and: [self firstMeasure = aMeasure secondMeasure] 
-			and: [self secondMeasure = aMeasure firstMeasure]).
+		^ measures hasEqualElements: aMeasure measures.
 
 	! !
 
@@ -548,6 +560,10 @@ Object subclass: #ComposeMeasure
 firstMeasure
 	^ measures first.
 	! !
+
+!ComposeMeasure methodsFor: 'as yet unclassified' stamp: 'kf 6/7/2017 14:37:05'!
+measures
+	^ measures! !
 
 !ComposeMeasure methodsFor: 'as yet unclassified' stamp: 'kf 6/7/2017 13:01:06'!
 operator
@@ -561,9 +577,9 @@ secondMeasure
 unit
 	^unit! !
 
-!ComposeMeasure methodsFor: 'as yet unclassified' stamp: 'kf 6/7/2017 13:00:43'!
+!ComposeMeasure methodsFor: 'as yet unclassified' stamp: 'kf 6/7/2017 14:29:10'!
 with: aMeasure and: aMeasure2 operation: anOperator in: aComposeUnit
-	measures := OrderedCollection new.
+	measures := SortedCollection sortBlock: [:x :y | x unit base name >= y unit base name ].
 	measures add: aMeasure.
 	measures add: aMeasure2.
 	operators := OrderedCollection new.
