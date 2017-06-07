@@ -481,20 +481,20 @@ test32DistanceIntervalCanBeEnumeratedWithSpecificStep
 ! !
 
 
-!CatedraDistanceTest methodsFor: 'distance units' stamp: 'kf 6/1/2017 19:28:59'!
+!CatedraDistanceTest methodsFor: 'distance units' stamp: 'kf 6/7/2017 12:47:04'!
 centimeter
 
-	^ Unit centimeter ! !
+	^ DerivedUnit centimeter ! !
 
-!CatedraDistanceTest methodsFor: 'distance units' stamp: 'kf 6/1/2017 19:28:49'!
+!CatedraDistanceTest methodsFor: 'distance units' stamp: 'kf 6/7/2017 12:47:19'!
 decameter
 	
-	^ Unit decameter! !
+	^ DerivedUnit decameter! !
 
-!CatedraDistanceTest methodsFor: 'distance units' stamp: 'kf 6/1/2017 19:28:41'!
+!CatedraDistanceTest methodsFor: 'distance units' stamp: 'kf 6/7/2017 12:47:14'!
 decimeter
 	
-	^ Unit decimeter! !
+	^ DerivedUnit decimeter! !
 
 !CatedraDistanceTest methodsFor: 'distance units' stamp: 'HAW 5/31/2017 12:37:50'!
 distanceUnits 
@@ -511,25 +511,25 @@ distanceUnits
 	
 ! !
 
-!CatedraDistanceTest methodsFor: 'distance units' stamp: 'kf 6/1/2017 19:28:24'!
+!CatedraDistanceTest methodsFor: 'distance units' stamp: 'kf 6/7/2017 12:47:28'!
 hectometer
 	
-	^ Unit hectometer! !
+	^ DerivedUnit hectometer! !
 
-!CatedraDistanceTest methodsFor: 'distance units' stamp: 'kf 6/1/2017 19:28:02'!
+!CatedraDistanceTest methodsFor: 'distance units' stamp: 'kf 6/7/2017 12:47:31'!
 kilometer
 	
-	^ Unit kilometer ! !
+	^ DerivedUnit kilometer ! !
 
-!CatedraDistanceTest methodsFor: 'distance units' stamp: 'kf 6/1/2017 19:26:48'!
+!CatedraDistanceTest methodsFor: 'distance units' stamp: 'kf 6/7/2017 12:46:40'!
 meter
 
-	^ Unit meter! !
+	^ DerivedUnit meter! !
 
-!CatedraDistanceTest methodsFor: 'distance units' stamp: 'kf 6/1/2017 19:27:52'!
+!CatedraDistanceTest methodsFor: 'distance units' stamp: 'kf 6/7/2017 12:47:36'!
 millimeter
 	
-	^ Unit milimeter ! !
+	^ DerivedUnit milimeter ! !
 
 
 !CatedraDistanceTest methodsFor: 'distance measures' stamp: 'HAW 5/31/2017 11:20:12'!
