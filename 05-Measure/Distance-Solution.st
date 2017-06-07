@@ -508,7 +508,7 @@ test51
 
 !classDefinition: #ComposeMeasure category: #'Distance-Solution'!
 Object subclass: #ComposeMeasure
-	instanceVariableNames: 'firstMeasure secondMeasure operator unit measures operators'
+	instanceVariableNames: 'unit measures operators'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'Distance-Solution'!
@@ -547,18 +547,12 @@ Object subclass: #ComposeMeasure
 	^ ComposeMeasure with: self and: aMeasure operation: #/ in: (unit / aMeasure unit).
 ! !
 
-!ComposeMeasure methodsFor: 'as yet unclassified' stamp: 'kf 6/7/2017 14:44:42'!
+!ComposeMeasure methodsFor: 'as yet unclassified' stamp: 'kf 6/7/2017 15:01:59'!
 = aMeasure
 	(aMeasure isKindOf: self class) ifFalse: [^false].
 
-	
 		^ measures hasEqualElements: aMeasure measures.
 
-	! !
-
-!ComposeMeasure methodsFor: 'as yet unclassified' stamp: 'kf 6/7/2017 12:58:07'!
-firstMeasure
-	^ measures first.
 	! !
 
 !ComposeMeasure methodsFor: 'as yet unclassified' stamp: 'kf 6/7/2017 14:37:05'!
@@ -568,10 +562,6 @@ measures
 !ComposeMeasure methodsFor: 'as yet unclassified' stamp: 'kf 6/7/2017 13:01:06'!
 operator
 	^operators first.! !
-
-!ComposeMeasure methodsFor: 'as yet unclassified' stamp: 'kf 6/7/2017 12:58:17'!
-secondMeasure
-	^ measures last.! !
 
 !ComposeMeasure methodsFor: 'as yet unclassified' stamp: 'kf 6/6/2017 20:29:01'!
 unit
