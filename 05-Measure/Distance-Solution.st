@@ -76,15 +76,15 @@ to: aDistance do: aBlockClosure
 	(aValue isKindOf: self class) ifTrue:[^self class size: value * aValue valueMeter in: (unit base * aValue unit base)].
 	^ self class size: value * aValue in: (self unit).! !
 
-!Measure methodsFor: 'arithmetic' stamp: 'RB 6/7/2017 00:17:57'!
+!Measure methodsFor: 'arithmetic' stamp: 'kf 6/7/2017 13:02:01'!
 + aDistance 
 	unit type = aDistance unit type ifTrue: [^ self class size: value + aDistance valueMeter in: unit base].
-	^ComposeMeasure with: value and: aDistance valueMeter operation: #+ in: (unit base + aDistance unit base).! !
+	^ComposeMeasure with: self and: aDistance  operation: #+ in: (unit base + aDistance unit base).! !
 
-!Measure methodsFor: 'arithmetic' stamp: 'RB 6/7/2017 00:19:14'!
+!Measure methodsFor: 'arithmetic' stamp: 'kf 6/7/2017 13:02:08'!
 - aDistance 
 	unit type = aDistance unit type ifTrue: [^ self class size: value - aDistance valueMeter in: unit base].
-	^ComposeMeasure with: value and: aDistance valueMeter operation: #- in: (unit base - aDistance unit base).! !
+	^ComposeMeasure with: self and: aDistance  operation: #- in: (unit base - aDistance unit base).! !
 
 !Measure methodsFor: 'arithmetic' stamp: 'kf 6/7/2017 12:05:57'!
 / aValue
@@ -487,10 +487,10 @@ test48
 	self assert: 1* DerivedUnit kilometer /(1 * DerivedUnit meter) = 1000
 	! !
 
-!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 6/7/2017 12:15:22'!
+!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 6/7/2017 13:12:38'!
 test49
 
-	self assert: (((10*peras) + (10*manzanas)) + (10* peras)) = (((20*peras) + (10*manzanas)))
+	self assert: (((10*peras) + (10*manzanas)) + (10* peras)) = ((20*peras) + (10*manzanas))
 	! !
 
 !DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 6/7/2017 12:24:59'!
@@ -502,7 +502,7 @@ test50
 
 !classDefinition: #ComposeMeasure category: #'Distance-Solution'!
 Object subclass: #ComposeMeasure
-	instanceVariableNames: 'firstMeasure secondMeasure operator unit'
+	instanceVariableNames: 'firstMeasure secondMeasure operator unit measures operators'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'Distance-Solution'!
@@ -512,10 +512,10 @@ Object subclass: #ComposeMeasure
 	^ ComposeMeasure with: self and: aMeasure operation: #* in: (unit * aMeasure unit).
 ! !
 
-!ComposeMeasure methodsFor: 'as yet unclassified' stamp: 'kf 6/7/2017 12:26:40'!
+!ComposeMeasure methodsFor: 'as yet unclassified' stamp: 'kf 6/7/2017 13:15:28'!
 + aMeasure
-	(unit firstUnit base = aMeasure unit base) ifTrue: [^ ComposeMeasure with: ((firstMeasure + aMeasure) amount) and:  secondMeasure operation: #+ in: unit].
-	(unit secondUnit base = aMeasure unit base) ifTrue: [^ ComposeMeasure with: firstMeasure and: ((secondMeasure+ aMeasure) amount) operation: #+ in: unit].
+	(unit firstUnit base = aMeasure unit base) ifTrue: [measures at: 1 put: (measures first + aMeasure). ^ self].
+	(unit secondUnit base = aMeasure unit base) ifTrue: [measures at: 2 put: ((measures at:2) + aMeasure). ^ self].
 	^ ComposeMeasure with: self and: aMeasure operation: #+ in: (unit + aMeasure unit).
 ! !
 
@@ -544,29 +544,31 @@ Object subclass: #ComposeMeasure
 
 	! !
 
-!ComposeMeasure methodsFor: 'as yet unclassified' stamp: 'kf 6/6/2017 20:28:36'!
+!ComposeMeasure methodsFor: 'as yet unclassified' stamp: 'kf 6/7/2017 12:58:07'!
 firstMeasure
-	^firstMeasure
+	^ measures first.
 	! !
 
-!ComposeMeasure methodsFor: 'as yet unclassified' stamp: 'kf 6/6/2017 20:28:48'!
+!ComposeMeasure methodsFor: 'as yet unclassified' stamp: 'kf 6/7/2017 13:01:06'!
 operator
-	^operator! !
+	^operators first.! !
 
-!ComposeMeasure methodsFor: 'as yet unclassified' stamp: 'kf 6/6/2017 20:28:42'!
+!ComposeMeasure methodsFor: 'as yet unclassified' stamp: 'kf 6/7/2017 12:58:17'!
 secondMeasure
-	^secondMeasure! !
+	^ measures last.! !
 
 !ComposeMeasure methodsFor: 'as yet unclassified' stamp: 'kf 6/6/2017 20:29:01'!
 unit
 	^unit! !
 
-!ComposeMeasure methodsFor: 'as yet unclassified' stamp: 'kf 6/6/2017 20:23:09'!
+!ComposeMeasure methodsFor: 'as yet unclassified' stamp: 'kf 6/7/2017 13:00:43'!
 with: aMeasure and: aMeasure2 operation: anOperator in: aComposeUnit
-	firstMeasure := aMeasure.
-	secondMeasure := aMeasure2.
-	unit := aComposeUnit.
-	operator := anOperator.! !
+	measures := OrderedCollection new.
+	measures add: aMeasure.
+	measures add: aMeasure2.
+	operators := OrderedCollection new.
+	operators add: operator .
+	unit := aComposeUnit.! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
