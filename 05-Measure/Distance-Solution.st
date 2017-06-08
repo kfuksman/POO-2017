@@ -125,6 +125,130 @@ TestCase subclass: #DistanceTest
 	poolDictionaries: ''
 	category: 'Distance-Solution'!
 
+!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 5/29/2017 20:46:24'!
+aatest19IntervaleMethodActsInAgreementWithHisStartAndEnd
+
+	| collection collection2 |
+	collection := OrderedCollection new.
+	collection2 := OrderedCollection new.
+	unMetro to: dosMetros  do: [:aDistance |  collection add: (aDistance + unMetro)].
+	dosMetros to: tresMetros  do: [:aDistance | collection2 add: aDistance ].
+	
+	self assert: collection = collection2! !
+
+!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 5/23/2017 20:22:19'!
+test01
+	self assert: unMetro = unMetro
+	! !
+
+!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 5/23/2017 20:22:24'!
+test02
+	self assert: unMetro = otroMetro
+	! !
+
+!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 5/23/2017 20:22:30'!
+test03
+
+	self deny: unMetro = dosMetros
+	! !
+
+!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 5/23/2017 20:36:33'!
+test04
+
+	self assert: unMetro + unMetro = dosMetros
+	! !
+
+!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 5/23/2017 21:01:25'!
+test04Resta
+
+	self assert: dosMetros - unMetro = unMetro
+	! !
+
+!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 5/23/2017 20:44:08'!
+test05
+
+	self assert: unMetro * 2 = dosMetros
+	! !
+
+!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 5/23/2017 20:44:24'!
+test06
+
+	self assert:  2 * unMetro = dosMetros
+	! !
+
+!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 5/23/2017 20:44:12'!
+test07
+
+	self assert:  dosMetros / 2 = unMetro
+	! !
+
+!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 5/23/2017 20:52:41'!
+test08
+
+	self assert: dosMetros > unMetro
+	! !
+
+!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 5/23/2017 20:53:25'!
+test09
+
+	self deny: unMetro > dosMetros
+	! !
+
+!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 5/23/2017 20:54:20'!
+test10
+
+	self assert: unMetro >= unMetro
+	! !
+
+!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 5/23/2017 20:55:19'!
+test11
+
+	self assert:  unMetro < dosMetros
+	! !
+
+!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 5/23/2017 20:55:45'!
+test12
+
+	self assert:  unMetro <= unMetro
+	! !
+
+!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 5/23/2017 21:10:22'!
+test13
+
+	self assert: (unMetro to: tresMetros) size = 3
+	! !
+
+!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 5/23/2017 21:11:36'!
+test14
+
+	self assert: ( unMetro to: dosMetros by: cincoCentimetros) size = 21
+	! !
+
+!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 5/23/2017 21:33:09'!
+test15
+
+	|interval collection collection2 |
+	collection := OrderedCollection new.
+	collection2 := OrderedCollection new.
+	interval :=  (unMetro to: dosMetros by: cincoCentimetros).
+	interval do: [:aDistance |  collection add: aDistance + unMetro].
+	(dosMetros to: tresMetros by: cincoCentimetros)  do: [:aDistance | collection2 add: aDistance ].
+	
+	self assert: collection = collection2! !
+
+!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 5/23/2017 21:38:47'!
+test16
+
+	|interval collection collection2 |
+	collection := OrderedCollection new.
+	collection2 := OrderedCollection new.
+	interval :=  (unKilometro to: dosKilometro by: cincoCentimetros).
+	interval do: [:aDistance |  collection add: aDistance + unKilometro].
+	(dosKilometro to: tresKilometro by: cincoCentimetros)  do: [:aDistance | collection2 add: aDistance ].
+	
+	self assert: collection = collection2! !
+
+
 !DistanceTest methodsFor: 'setUp variables' stamp: 'RB 6/8/2017 12:56:59'!
 setUp
 		minusMeter  :=  Measure size: -1 in: DerivedUnit meter.
@@ -184,10 +308,10 @@ setUp
 				! !
 
 
-!DistanceTest methodsFor: '1 - Test equality' stamp: 'RB 5/26/2017 13:13:26'!
+!DistanceTest methodsFor: '1 - Test equality' stamp: 'kf 6/8/2017 16:39:16'!
 test01AnInstanceIsEqualToSelf
-	self assert: unMetro = unMetro
-	! !
+	self assert: unMetro = unMetro.
+! !
 
 !DistanceTest methodsFor: '1 - Test equality' stamp: 'RB 5/26/2017 13:13:01'!
 test02TwoInstancesWithSameDistanceAreEqual
@@ -561,17 +685,10 @@ test54AComposeMeasureCanBeEscalarDivide
 
 	self assert: (((50*peras) + (50*manzanas)) / 5) = ((10*peras) + (10*manzanas))! !
 
+!DistanceTest methodsFor: '6 - Test compose measure' stamp: 'kf 6/8/2017 17:13:41'!
+test55AComposeMeasureTakesCareOfOperators
 
-!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 5/29/2017 20:46:24'!
-aatest19IntervaleMethodActsInAgreementWithHisStartAndEnd
-
-	| collection collection2 |
-	collection := OrderedCollection new.
-	collection2 := OrderedCollection new.
-	unMetro to: dosMetros  do: [:aDistance |  collection add: (aDistance + unMetro)].
-	dosMetros to: tresMetros  do: [:aDistance | collection2 add: aDistance ].
-	
-	self assert: collection = collection2! !
+	self deny: (((50*peras) + (50*manzanas))) = (((50*peras) - (50*manzanas)))! !
 
 
 !classDefinition: #ComposeMeasure category: #'Distance-Solution'!
@@ -631,11 +748,11 @@ Object subclass: #ComposeMeasure
 	^ ComposeMeasure with: self and: aMeasure operation: #/ in: (unit / aMeasure unit).
 ! !
 
-!ComposeMeasure methodsFor: 'as yet unclassified' stamp: 'kf 6/7/2017 15:01:59'!
+!ComposeMeasure methodsFor: 'as yet unclassified' stamp: 'kf 6/8/2017 17:10:32'!
 = aMeasure
 	(aMeasure isKindOf: self class) ifFalse: [^false].
 
-		^ measures hasEqualElements: aMeasure measures.
+		^ (measures hasEqualElements: aMeasure measures) and: [operators = aMeasure operators].
 
 	! !
 
@@ -646,6 +763,10 @@ measures
 !ComposeMeasure methodsFor: 'as yet unclassified' stamp: 'kf 6/7/2017 13:01:06'!
 operator
 	^operators first.! !
+
+!ComposeMeasure methodsFor: 'as yet unclassified' stamp: 'kf 6/8/2017 17:10:50'!
+operators
+	^ operators ! !
 
 !ComposeMeasure methodsFor: 'as yet unclassified' stamp: 'kf 6/6/2017 20:29:01'!
 unit
@@ -1064,6 +1185,41 @@ Object subclass: #Unit
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'Distance-Solution'!
+
+!Unit methodsFor: 'accessing' stamp: 'kf 5/23/2017 20:26:49'!
+scale
+	^ scale! !
+
+!Unit methodsFor: 'accessing' stamp: 'kf 5/23/2017 20:35:02'!
+withScale: anInteger 
+	scale := anInteger! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'Unit class' category: #'Distance-Solution'!
+Unit class
+	instanceVariableNames: ''!
+
+
+!Unit class methodsFor: 'ic' stamp: 'kf 5/23/2017 20:50:24'!
+centimeter 
+	^ self new withScale: 1/100! !
+
+!Unit class methodsFor: 'ic' stamp: 'kf 5/23/2017 20:50:35'!
+kilometer
+	^ self new withScale: 1000! !
+
+!Unit class methodsFor: 'ic' stamp: 'kf 5/23/2017 20:50:17'!
+meter 
+	^ self new withScale: 1! !
+
+!Unit class methodsFor: 'ic' stamp: 'kf 5/23/2017 20:34:55'!
+meterScale: anInteger 
+	^ self new withScale: anInteger! !
+
+!Unit class methodsFor: 'ic' stamp: 'kf 5/23/2017 20:50:49'!
+milimeter
+	^ self new withScale: 1/1000! !
 
 
 !classDefinition: #BaseUnit category: #'Distance-Solution'!
