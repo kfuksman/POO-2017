@@ -1,9 +1,9 @@
-!classDefinition: #Measure category: #'Distance-Solution'!
+!classDefinition: #Measure category: #'Measure-Solution'!
 Magnitude subclass: #Measure
 	instanceVariableNames: 'value unit realValue'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Distance-Solution'!
+	category: 'Measure-Solution'!
 
 !Measure methodsFor: 'comparing' stamp: 'RB 6/7/2017 15:39:44'!
 < aMeasure 
@@ -109,7 +109,7 @@ negated
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
-!classDefinition: 'Measure class' category: #'Distance-Solution'!
+!classDefinition: 'Measure class' category: #'Measure-Solution'!
 Measure class
 	instanceVariableNames: ''!
 
@@ -118,14 +118,14 @@ size: anInteger in: anUnit
 	^ self new size: anInteger in: anUnit! !
 
 
-!classDefinition: #DistanceTest category: #'Distance-Solution'!
-TestCase subclass: #DistanceTest
+!classDefinition: #MeasureTest category: #'Measure-Solution'!
+TestCase subclass: #MeasureTest
 	instanceVariableNames: 'unMetro milQuinientosCentimetros quinientosCentimetros dosMetros otroMetro cienCentimetros cincoCentimetros tresMetros unKilometro dosKilometro tresKilometro minusMeter ceroMetros minusFiveCentimeter oneCentimeter twoHundredCentimeters oneCelsius anotherCelsius twoCelsius oneFahrenheit treintaytresFahrenheit diezFahrenheit menosVeinteCelsius doceFahrenheit dosSetentayCuatroKelvin aDay twentyFourHours dosMetrosPorSegundo dosMetrosSobreSegundo peras manzanas oneHour twentythreeHours bananas unSegundo zeroSeconds zeroKelvin zeroCelsius twoSeconds twoMetersTimesSecond twoMetersPerSquaredSecond twoMetersBySecond thirtyTwoFahrenheits sixtySeconds sixtyOneSeconds sixtyMinutes oneSquaredSecond oneSquaredMeters oneSecond oneMinute oneMeterPerSecond oneHundredTwentyOneMetersPerSecond eightCubicMeters fourSquaredMeters'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Distance-Solution'!
+	category: 'Measure-Solution'!
 
-!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 5/29/2017 20:46:24'!
+!MeasureTest methodsFor: 'as yet unclassified' stamp: 'kf 5/29/2017 20:46:24'!
 aatest19IntervaleMethodActsInAgreementWithHisStartAndEnd
 
 	| collection collection2 |
@@ -137,7 +137,7 @@ aatest19IntervaleMethodActsInAgreementWithHisStartAndEnd
 	self assert: collection = collection2! !
 
 
-!DistanceTest methodsFor: 'setUp variables' stamp: 'RB 6/8/2017 12:56:59'!
+!MeasureTest methodsFor: 'setUp variables' stamp: 'RB 6/8/2017 12:56:59'!
 setUp
 		minusMeter  :=  Measure size: -1 in: DerivedUnit meter.
 		minusFiveCentimeter := Measure size: -5 in: DerivedUnit centimeter.
@@ -196,102 +196,102 @@ setUp
 				! !
 
 
-!DistanceTest methodsFor: '1 - Test equality' stamp: 'kf 6/8/2017 16:39:16'!
+!MeasureTest methodsFor: '1 - Test equality' stamp: 'kf 6/8/2017 16:39:16'!
 test01AnInstanceIsEqualToSelf
 	self assert: unMetro = unMetro.
 ! !
 
-!DistanceTest methodsFor: '1 - Test equality' stamp: 'RB 5/26/2017 13:13:01'!
+!MeasureTest methodsFor: '1 - Test equality' stamp: 'RB 5/26/2017 13:13:01'!
 test02TwoInstancesWithSameDistanceAreEqual
 	self assert: unMetro = otroMetro
 	! !
 
-!DistanceTest methodsFor: '1 - Test equality' stamp: 'RB 5/26/2017 13:12:42'!
+!MeasureTest methodsFor: '1 - Test equality' stamp: 'RB 5/26/2017 13:12:42'!
 test03DifferentDistancesAreNotEqual
 
 	self deny: unMetro = dosMetros
 	! !
 
-!DistanceTest methodsFor: '1 - Test equality' stamp: 'kf 6/1/2017 19:20:20'!
+!MeasureTest methodsFor: '1 - Test equality' stamp: 'kf 6/1/2017 19:20:20'!
 test04SumOfTwoDistancesIsEqualToAnotherDistance
 
 	self assert: unMetro + unMetro = dosMetros
 	! !
 
-!DistanceTest methodsFor: '1 - Test equality' stamp: 'RB 5/26/2017 13:15:53'!
+!MeasureTest methodsFor: '1 - Test equality' stamp: 'RB 5/26/2017 13:15:53'!
 test05SubstractionOfTwoDistancesIsEqualToAnotherDistance
 
 	self assert: dosMetros - unMetro = unMetro
 	! !
 
-!DistanceTest methodsFor: '1 - Test equality' stamp: 'RB 5/26/2017 13:16:45'!
+!MeasureTest methodsFor: '1 - Test equality' stamp: 'RB 5/26/2017 13:16:45'!
 test06SumWithNegativeDistancePerformWell
 
 	self assert: unMetro + minusMeter = ceroMetros 
 	! !
 
-!DistanceTest methodsFor: '1 - Test equality' stamp: 'RB 5/26/2017 13:20:24'!
+!MeasureTest methodsFor: '1 - Test equality' stamp: 'RB 5/26/2017 13:20:24'!
 test07MultiplicationWithIntegerIsEqualToAnotherDistance
 
 	self assert: unMetro * 2 = dosMetros
 	! !
 
-!DistanceTest methodsFor: '1 - Test equality' stamp: 'RB 5/26/2017 13:20:55'!
+!MeasureTest methodsFor: '1 - Test equality' stamp: 'RB 5/26/2017 13:20:55'!
 test08MultiplicationIsCommutativeWithDistance
 
 	self assert:  2 * unMetro = dosMetros
 	! !
 
-!DistanceTest methodsFor: '1 - Test equality' stamp: 'RB 5/26/2017 13:21:19'!
+!MeasureTest methodsFor: '1 - Test equality' stamp: 'RB 5/26/2017 13:21:19'!
 test09DivisionWithIntegerIsEqualToAnotherDistance
 
 	self assert:  dosMetros / 2 = unMetro
 	! !
 
-!DistanceTest methodsFor: '1 - Test equality' stamp: 'RB 5/26/2017 13:22:59'!
+!MeasureTest methodsFor: '1 - Test equality' stamp: 'RB 5/26/2017 13:22:59'!
 test10ADistanceCanBeBiggerThanAnotherDistance
 
 	self assert: dosMetros > unMetro
 	! !
 
-!DistanceTest methodsFor: '1 - Test equality' stamp: 'RB 5/26/2017 13:24:48'!
+!MeasureTest methodsFor: '1 - Test equality' stamp: 'RB 5/26/2017 13:24:48'!
 test11ASmallDistanceCantBeBiggerThanABigDistance
 
 	self deny: unMetro > dosMetros
 	! !
 
-!DistanceTest methodsFor: '1 - Test equality' stamp: 'RB 5/26/2017 13:23:52'!
+!MeasureTest methodsFor: '1 - Test equality' stamp: 'RB 5/26/2017 13:23:52'!
 test12ADistanceCanBeBiggerOrEqualThanAnotherDistance
 
 	self assert: unMetro >= unMetro
 	! !
 
-!DistanceTest methodsFor: '1 - Test equality' stamp: 'RB 5/26/2017 13:25:12'!
+!MeasureTest methodsFor: '1 - Test equality' stamp: 'RB 5/26/2017 13:25:12'!
 test13ADistanceCanBeSmallerThanAnotherDistance
 
 	self assert:  unMetro < dosMetros
 	! !
 
-!DistanceTest methodsFor: '1 - Test equality' stamp: 'RB 5/26/2017 13:25:33'!
+!MeasureTest methodsFor: '1 - Test equality' stamp: 'RB 5/26/2017 13:25:33'!
 test14ADistanceCanBeSmallerOrEqualThanAnotherDistance
 
 	self assert:  unMetro <= unMetro
 	! !
 
 
-!DistanceTest methodsFor: '2 - Test interval' stamp: 'RB 5/26/2017 13:26:39'!
+!MeasureTest methodsFor: '2 - Test interval' stamp: 'RB 5/26/2017 13:26:39'!
 test15AnIntervalSizeInMeterIsEqualToTheDistanceBetweenHisDistances
 
 	self assert: (unMetro to: tresMetros) size = 3
 	! !
 
-!DistanceTest methodsFor: '2 - Test interval' stamp: 'RB 5/26/2017 13:27:12'!
+!MeasureTest methodsFor: '2 - Test interval' stamp: 'RB 5/26/2017 13:27:12'!
 test16AnIntervalSizeWithAnotherStepIsEqualToTheDistanceBetweenHisDistances
 
 	self assert: ( unMetro to: dosMetros by: cincoCentimetros) size = 21
 	! !
 
-!DistanceTest methodsFor: '2 - Test interval' stamp: 'kf 5/29/2017 21:50:45'!
+!MeasureTest methodsFor: '2 - Test interval' stamp: 'kf 5/29/2017 21:50:45'!
 test17IntervaleActsInAgreementWithHisStartAndEndDistances
 
 	| collection collection2 |
@@ -302,7 +302,7 @@ test17IntervaleActsInAgreementWithHisStartAndEndDistances
 	
 	self assert: collection = collection2! !
 
-!DistanceTest methodsFor: '2 - Test interval' stamp: 'RB 5/28/2017 12:49:00'!
+!MeasureTest methodsFor: '2 - Test interval' stamp: 'RB 5/28/2017 12:49:00'!
 test18IntervalesWithStepActsInAgreementWithTheirStartAndEnd
 
 	| collection collection2 |
@@ -313,7 +313,7 @@ test18IntervalesWithStepActsInAgreementWithTheirStartAndEnd
 	
 	self assert: collection = collection2! !
 
-!DistanceTest methodsFor: '2 - Test interval' stamp: 'kf 5/29/2017 21:51:59'!
+!MeasureTest methodsFor: '2 - Test interval' stamp: 'kf 5/29/2017 21:51:59'!
 test19IntervaleMethodActsInAgreementWithHisStartAndEnd
 
 	| collection collection2 |
@@ -324,7 +324,7 @@ test19IntervaleMethodActsInAgreementWithHisStartAndEnd
 	
 	self assert: collection = collection2! !
 
-!DistanceTest methodsFor: '2 - Test interval' stamp: 'RB 5/28/2017 12:54:59'!
+!MeasureTest methodsFor: '2 - Test interval' stamp: 'RB 5/28/2017 12:54:59'!
 test20IntervaleWithNegativeDistanceAndStepWorksCorrectly
 
 	| collection collection2 |
@@ -335,7 +335,7 @@ test20IntervaleWithNegativeDistanceAndStepWorksCorrectly
 	
 	self assert: collection = collection2! !
 
-!DistanceTest methodsFor: '2 - Test interval' stamp: 'kf 6/1/2017 19:22:23'!
+!MeasureTest methodsFor: '2 - Test interval' stamp: 'kf 6/1/2017 19:22:23'!
 test21DistanceAndStepMustHaveTheSameMathematicSign
 
 	| collection |
@@ -346,7 +346,7 @@ test21DistanceAndStepMustHaveTheSameMathematicSign
 		withExceptionDo: [ :anError |
 			self assert: anError messageText = DistanceInterval stepInADifferentWayError]! !
 
-!DistanceTest methodsFor: '2 - Test interval' stamp: 'kf 6/1/2017 19:22:35'!
+!MeasureTest methodsFor: '2 - Test interval' stamp: 'kf 6/1/2017 19:22:35'!
 test22StepCantBeZeroMeter
 	| collection |
 	collection := OrderedCollection new.
@@ -357,7 +357,7 @@ test22StepCantBeZeroMeter
 			self assert: anError messageText = DistanceInterval zeroStepError]! !
 
 
-!DistanceTest methodsFor: '3 - Test factory' stamp: 'RB 6/2/2017 11:04:11'!
+!MeasureTest methodsFor: '3 - Test factory' stamp: 'RB 6/2/2017 11:04:11'!
 test23DistanceFactoryCreateInstancesCorrectly
 
 	|distanceFactory|
@@ -373,7 +373,7 @@ test23DistanceFactoryCreateInstancesCorrectly
 	self assert: distanceFactory zeroMeters = ceroMetros .
 ! !
 
-!DistanceTest methodsFor: '3 - Test factory' stamp: 'RB 6/8/2017 12:49:52'!
+!MeasureTest methodsFor: '3 - Test factory' stamp: 'RB 6/8/2017 12:49:52'!
 test52MeasureFactoryCreateInstancesCorrectly
 
 	|distanceFactory|
@@ -404,187 +404,187 @@ test52MeasureFactoryCreateInstancesCorrectly
 ! !
 
 
-!DistanceTest methodsFor: '4 - Test measure equality' stamp: 'RB 6/8/2017 12:03:54'!
+!MeasureTest methodsFor: '4 - Test measure equality' stamp: 'RB 6/8/2017 12:03:54'!
 test24TwoDifferentsMeasuresCantBeEqual
 
 	self deny:  unMetro = oneCelsius! !
 
-!DistanceTest methodsFor: '4 - Test measure equality' stamp: 'RB 6/8/2017 12:06:12'!
+!MeasureTest methodsFor: '4 - Test measure equality' stamp: 'RB 6/8/2017 12:06:12'!
 test25AGradeIsEqualToSelf
 
 	self assert:  anotherCelsius = oneCelsius! !
 
-!DistanceTest methodsFor: '4 - Test measure equality' stamp: 'RB 6/8/2017 12:04:33'!
+!MeasureTest methodsFor: '4 - Test measure equality' stamp: 'RB 6/8/2017 12:04:33'!
 test26TwoInstancesWithSameMeasureAreEqual
 
 	self assert: treintaytresFahrenheit = oneCelsius! !
 
-!DistanceTest methodsFor: '4 - Test measure equality' stamp: 'RB 6/8/2017 12:05:41'!
+!MeasureTest methodsFor: '4 - Test measure equality' stamp: 'RB 6/8/2017 12:05:41'!
 test27GradeUnitEqualityIsOk
 
 	self assert: doceFahrenheit = menosVeinteCelsius.
 	self assert: dosSetentayCuatroKelvin = oneCelsius.! !
 
-!DistanceTest methodsFor: '4 - Test measure equality' stamp: 'RB 6/8/2017 12:06:29'!
+!MeasureTest methodsFor: '4 - Test measure equality' stamp: 'RB 6/8/2017 12:06:29'!
 test28ATimeIsEqualToSelf
 
 	self assert: aDay = twentyFourHours! !
 
-!DistanceTest methodsFor: '4 - Test measure equality' stamp: 'RB 6/8/2017 12:07:03'!
+!MeasureTest methodsFor: '4 - Test measure equality' stamp: 'RB 6/8/2017 12:07:03'!
 test29AMeasureIsIntegerTimesUnit
 
 	self assert: unMetro = (1 * DerivedUnit meter)! !
 
 
-!DistanceTest methodsFor: '5 - Test compose unit' stamp: 'RB 6/8/2017 12:07:19'!
+!MeasureTest methodsFor: '5 - Test compose unit' stamp: 'RB 6/8/2017 12:07:19'!
 test30AComposeUnitIsEqualToSelf
 
 	self assert: (DerivedUnit meter * DerivedUnit second ) = (DerivedUnit meter * DerivedUnit second)
 	! !
 
-!DistanceTest methodsFor: '5 - Test compose unit' stamp: 'RB 6/8/2017 12:07:40'!
+!MeasureTest methodsFor: '5 - Test compose unit' stamp: 'RB 6/8/2017 12:07:40'!
 test31TwoDifferentsComposeUnitArentEqual
 
 	self deny: (DerivedUnit second * DerivedUnit second ) = (DerivedUnit meter * DerivedUnit meter)
 	! !
 
-!DistanceTest methodsFor: '5 - Test compose unit' stamp: 'RB 6/8/2017 12:08:59'!
+!MeasureTest methodsFor: '5 - Test compose unit' stamp: 'RB 6/8/2017 12:08:59'!
 test32AComposeUnitWithADifferentUnitIsNotEqual
 
 	self deny: (DerivedUnit meter * DerivedUnit second ) = (DerivedUnit meter * DerivedUnit meter)
 	! !
 
-!DistanceTest methodsFor: '5 - Test compose unit' stamp: 'RB 6/8/2017 12:09:15'!
+!MeasureTest methodsFor: '5 - Test compose unit' stamp: 'RB 6/8/2017 12:09:15'!
 test33AComposeUnitWithDivideOperatorIsEqualToSelf
 
 	self assert: (DerivedUnit meter / DerivedUnit second ) = (DerivedUnit meter / DerivedUnit second)
 	! !
 
-!DistanceTest methodsFor: '5 - Test compose unit' stamp: 'RB 6/8/2017 12:09:32'!
+!MeasureTest methodsFor: '5 - Test compose unit' stamp: 'RB 6/8/2017 12:09:32'!
 test34AComposeUnitWithThreeUnitsIsEqualToSelf
 	self assert: (DerivedUnit meter * DerivedUnit second * DerivedUnit second) = (DerivedUnit meter * DerivedUnit second * DerivedUnit second).
 	! !
 
-!DistanceTest methodsFor: '5 - Test compose unit' stamp: 'RB 6/8/2017 12:10:00'!
+!MeasureTest methodsFor: '5 - Test compose unit' stamp: 'RB 6/8/2017 12:10:00'!
 test35TwoComposeUnitWithDifferentOrderCanBeEqual
 	self assert: (DerivedUnit second * DerivedUnit meter * DerivedUnit meter) = (DerivedUnit meter * DerivedUnit second * DerivedUnit meter).
 	! !
 
-!DistanceTest methodsFor: '5 - Test compose unit' stamp: 'RB 6/8/2017 12:10:18'!
+!MeasureTest methodsFor: '5 - Test compose unit' stamp: 'RB 6/8/2017 12:10:18'!
 test36AMeasureWithComposeUnitIsEqualToSelf
 	self assert: dosMetrosPorSegundo = dosMetrosPorSegundo.
 	! !
 
-!DistanceTest methodsFor: '5 - Test compose unit' stamp: 'RB 6/8/2017 12:10:41'!
+!MeasureTest methodsFor: '5 - Test compose unit' stamp: 'RB 6/8/2017 12:10:41'!
 test37AMeasureWithDifferentComposeUnitCantBeEqual
 	self deny: dosMetrosPorSegundo = dosMetrosSobreSegundo.
 	! !
 
 
-!DistanceTest methodsFor: '6 - Test compose measure' stamp: 'RB 6/8/2017 12:10:57'!
+!MeasureTest methodsFor: '6 - Test compose measure' stamp: 'RB 6/8/2017 12:10:57'!
 test38AComposeMeasureIsEqualToSelf
 
 	self assert: ((10 * peras) + (10 * manzanas)) = ((10 * peras) + (10 * manzanas))
 ! !
 
-!DistanceTest methodsFor: '6 - Test compose measure' stamp: 'RB 6/8/2017 12:11:19'!
+!MeasureTest methodsFor: '6 - Test compose measure' stamp: 'RB 6/8/2017 12:11:19'!
 test39AComposeMeasureCanHaveMinusOperator
 
 	self assert: ((10 * peras) - (10 * manzanas)) = ((10 * peras) - (10 * manzanas)).! !
 
-!DistanceTest methodsFor: '6 - Test compose measure' stamp: 'RB 6/8/2017 12:13:58'!
+!MeasureTest methodsFor: '6 - Test compose measure' stamp: 'RB 6/8/2017 12:13:58'!
 test40ChangingParametersInASubtractionEqualToSameResultNegated
 
 	self assert: aDay - twentythreeHours  = oneHour .
 	self assert: twentythreeHours - aDay   = (oneHour negated ).! !
 
-!DistanceTest methodsFor: '6 - Test compose measure' stamp: 'RB 6/8/2017 12:14:30'!
+!MeasureTest methodsFor: '6 - Test compose measure' stamp: 'RB 6/8/2017 12:14:30'!
 test41TwoEqualMeasuresPlusAMeasureEqualToSameComposeMeasure
 
 	self assert: ((aDay - twentythreeHours )+ (10*peras))  = (oneHour + (10*peras))! !
 
-!DistanceTest methodsFor: '6 - Test compose measure' stamp: 'RB 6/8/2017 12:14:48'!
+!MeasureTest methodsFor: '6 - Test compose measure' stamp: 'RB 6/8/2017 12:14:48'!
 test42TwoDifferentComposeMeasureCantBeEqual
 
 	self deny: ((10*peras) - (10*manzanas)) = ((10*peras) - (10*bananas)).
 	! !
 
-!DistanceTest methodsFor: '6 - Test compose measure' stamp: 'RB 6/8/2017 12:15:23'!
+!MeasureTest methodsFor: '6 - Test compose measure' stamp: 'RB 6/8/2017 12:15:23'!
 test43MultiplicationOfDifferentMeasureCanBeEqual
 	
 	self assert: (dosMetrosPorSegundo * oneCelsius)= (dosMetros * unSegundo * oneCelsius)
 	! !
 
-!DistanceTest methodsFor: '6 - Test compose measure' stamp: 'RB 6/8/2017 12:15:58'!
+!MeasureTest methodsFor: '6 - Test compose measure' stamp: 'RB 6/8/2017 12:15:58'!
 test44ComposeMeasureWithThreeMeasureIsEqualToSelf
 
 	self assert: (((10*peras) - (10*manzanas)) + oneCelsius) = (((10*peras) - (10*manzanas)) + oneCelsius).
 	! !
 
-!DistanceTest methodsFor: '6 - Test compose measure' stamp: 'RB 6/8/2017 12:16:21'!
+!MeasureTest methodsFor: '6 - Test compose measure' stamp: 'RB 6/8/2017 12:16:21'!
 test45ComposeMeasureWithDifferentOperatorsIsEqualToSelf
 
 	self assert: (((10*peras) + (10*manzanas)) - oneCelsius) = (((10*peras) + (10*manzanas)) - oneCelsius).
 	! !
 
-!DistanceTest methodsFor: '6 - Test compose measure' stamp: 'RB 6/8/2017 12:16:49'!
+!MeasureTest methodsFor: '6 - Test compose measure' stamp: 'RB 6/8/2017 12:16:49'!
 test46ComposeMeasureWithMultiplicationOperatorIsEqualToSelf
 
 	self assert: (((10*peras) + (10*manzanas)) * oneCelsius) = (((10*peras) + (10*manzanas)) * oneCelsius).
 	! !
 
-!DistanceTest methodsFor: '6 - Test compose measure' stamp: 'RB 6/8/2017 12:17:05'!
+!MeasureTest methodsFor: '6 - Test compose measure' stamp: 'RB 6/8/2017 12:17:05'!
 test47ComposeMeasureWithDivideOperatorIsEqualToSelf
 
 	self assert: (((10*peras) + (10*manzanas)) / oneCelsius) = (((10*peras) + (10*manzanas)) / oneCelsius).
 	! !
 
-!DistanceTest methodsFor: '6 - Test compose measure' stamp: 'RB 6/8/2017 12:17:35'!
+!MeasureTest methodsFor: '6 - Test compose measure' stamp: 'RB 6/8/2017 12:17:35'!
 test48AMeasureUnitDivideBySelfIsEqualToAnInteger
 
 	self assert: 1* DerivedUnit kilometer /(1 * DerivedUnit meter) = 1000
 	! !
 
-!DistanceTest methodsFor: '6 - Test compose measure' stamp: 'RB 6/8/2017 12:18:24'!
+!MeasureTest methodsFor: '6 - Test compose measure' stamp: 'RB 6/8/2017 12:18:24'!
 test49AComposeMeasureCanHaveSameMeasureMoreThanOneTIme
 
 	self assert: (((10*peras) + (10*manzanas)) + (10* peras)) = ((20*peras) + (10*manzanas))
 	! !
 
-!DistanceTest methodsFor: '6 - Test compose measure' stamp: 'RB 6/8/2017 12:19:05'!
+!MeasureTest methodsFor: '6 - Test compose measure' stamp: 'RB 6/8/2017 12:19:05'!
 test50AComposeMeasureCanHaveSameMeasureInDifferentOrder
 
 	self assert: (((10*peras) + (10*manzanas)) + (10* manzanas)) = (((20*manzanas) + (10*peras)))
 	! !
 
-!DistanceTest methodsFor: '6 - Test compose measure' stamp: 'RB 6/8/2017 12:19:32'!
+!MeasureTest methodsFor: '6 - Test compose measure' stamp: 'RB 6/8/2017 12:19:32'!
 test51AComposeMeasureCanHaveSameMeasureWithDifferentOperators
 
 	self assert: (((10*peras) + (10*bananas)) + (10* 	manzanas )) + (10 * bananas) = (((10*peras) + (10*manzanas)) + (20* bananas ))
 	! !
 
-!DistanceTest methodsFor: '6 - Test compose measure' stamp: 'RB 6/8/2017 15:09:44'!
+!MeasureTest methodsFor: '6 - Test compose measure' stamp: 'RB 6/8/2017 15:09:44'!
 test53AComposeMeasureCanBeEscalarMultiple
 
 	self assert: (((10*peras) + (10*manzanas)) * 5) = ((50*peras) + (50*manzanas))! !
 
-!DistanceTest methodsFor: '6 - Test compose measure' stamp: 'RB 6/8/2017 15:10:16'!
+!MeasureTest methodsFor: '6 - Test compose measure' stamp: 'RB 6/8/2017 15:10:16'!
 test54AComposeMeasureCanBeEscalarDivide
 
 	self assert: (((50*peras) + (50*manzanas)) / 5) = ((10*peras) + (10*manzanas))! !
 
-!DistanceTest methodsFor: '6 - Test compose measure' stamp: 'kf 6/8/2017 17:13:41'!
+!MeasureTest methodsFor: '6 - Test compose measure' stamp: 'kf 6/8/2017 17:13:41'!
 test55AComposeMeasureTakesCareOfOperators
 
 	self deny: (((50*peras) + (50*manzanas))) = (((50*peras) - (50*manzanas)))! !
 
 
-!classDefinition: #ComposeMeasure category: #'Distance-Solution'!
+!classDefinition: #ComposeMeasure category: #'Measure-Solution'!
 Object subclass: #ComposeMeasure
 	instanceVariableNames: 'unit measures operators'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Distance-Solution'!
+	category: 'Measure-Solution'!
 
 !ComposeMeasure methodsFor: 'as yet unclassified' stamp: 'RB 6/8/2017 15:08:10'!
 * aMeasure
@@ -671,7 +671,7 @@ with: aMeasure and: aMeasure2 operation: anOperator in: aComposeUnit
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
-!classDefinition: 'ComposeMeasure class' category: #'Distance-Solution'!
+!classDefinition: 'ComposeMeasure class' category: #'Measure-Solution'!
 ComposeMeasure class
 	instanceVariableNames: 'secondMeasure firstMeasure unit'!
 
@@ -681,12 +681,12 @@ with: aMeasure and: aMeasure2 operation: anOperator in: aComposeUnit
 	^self new with: aMeasure and: aMeasure2 operation: anOperator in: aComposeUnit.! !
 
 
-!classDefinition: #ComposeUnit category: #'Distance-Solution'!
+!classDefinition: #ComposeUnit category: #'Measure-Solution'!
 Object subclass: #ComposeUnit
 	instanceVariableNames: 'firstUnit secondUnit operator firstUnitConverter secondUnitConverter'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Distance-Solution'!
+	category: 'Measure-Solution'!
 
 !ComposeUnit methodsFor: 'as yet unclassified' stamp: 'RB 6/7/2017 00:34:15'!
 * anUnit
@@ -781,7 +781,7 @@ with: anUnit and: anUnit2 operator: anOperator  withConverter: aConverter andCon
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
-!classDefinition: 'ComposeUnit class' category: #'Distance-Solution'!
+!classDefinition: 'ComposeUnit class' category: #'Measure-Solution'!
 ComposeUnit class
 	instanceVariableNames: ''!
 
@@ -791,12 +791,12 @@ with: anUnit and: anUnit2 operator: aSymbol
 	^ self new with: anUnit and: anUnit2 operator: aSymbol withConverter: anUnit converter andConverter: anUnit2 converter.! !
 
 
-!classDefinition: #DistanceInterval category: #'Distance-Solution'!
+!classDefinition: #DistanceInterval category: #'Measure-Solution'!
 Object subclass: #DistanceInterval
 	instanceVariableNames: 'interval from to by'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Distance-Solution'!
+	category: 'Measure-Solution'!
 
 !DistanceInterval methodsFor: 'initialization' stamp: 'RB 6/7/2017 15:39:15'!
 from: startDistance to: finishDistance
@@ -842,7 +842,7 @@ to
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
-!classDefinition: 'DistanceInterval class' category: #'Distance-Solution'!
+!classDefinition: 'DistanceInterval class' category: #'Measure-Solution'!
 DistanceInterval class
 	instanceVariableNames: ''!
 
@@ -868,12 +868,12 @@ zeroStepError
 	^ 'Step cant be a zero distance'! !
 
 
-!classDefinition: #MeasureFactory category: #'Distance-Solution'!
+!classDefinition: #MeasureFactory category: #'Measure-Solution'!
 Object subclass: #MeasureFactory
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Distance-Solution'!
+	category: 'Measure-Solution'!
 
 !MeasureFactory methodsFor: 'accessing' stamp: 'RB 6/7/2017 15:51:10'!
 eightCubicMeters
@@ -1067,12 +1067,12 @@ createSquaredSecond: anInteger
 	! !
 
 
-!classDefinition: #Unit category: #'Distance-Solution'!
+!classDefinition: #Unit category: #'Measure-Solution'!
 Object subclass: #Unit
 	instanceVariableNames: 'name type'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Distance-Solution'!
+	category: 'Measure-Solution'!
 
 !Unit methodsFor: 'accessing' stamp: 'RB 6/8/2017 17:40:28'!
 * anUnit
@@ -1132,7 +1132,7 @@ withConvertion: aBlockClosure withDeconvertion: aBlockClosure2 withName: aString
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
-!classDefinition: 'Unit class' category: #'Distance-Solution'!
+!classDefinition: 'Unit class' category: #'Measure-Solution'!
 Unit class
 	instanceVariableNames: ''!
 
@@ -1149,12 +1149,12 @@ withName: aString withType: aString4
 	self subclassResponsibility ! !
 
 
-!classDefinition: #BaseUnit category: #'Distance-Solution'!
+!classDefinition: #BaseUnit category: #'Measure-Solution'!
 Unit subclass: #BaseUnit
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Distance-Solution'!
+	category: 'Measure-Solution'!
 
 !BaseUnit methodsFor: 'as yet unclassified' stamp: 'RB 6/7/2017 00:52:18'!
 * anUnit 
@@ -1217,7 +1217,7 @@ withName: aString withType: aType
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
-!classDefinition: 'BaseUnit class' category: #'Distance-Solution'!
+!classDefinition: 'BaseUnit class' category: #'Measure-Solution'!
 BaseUnit class
 	instanceVariableNames: 'type'!
 
@@ -1238,12 +1238,12 @@ withName: aString withType: aType
 	^ self new withName: aString withType: aType! !
 
 
-!classDefinition: #DerivedUnit category: #'Distance-Solution'!
+!classDefinition: #DerivedUnit category: #'Measure-Solution'!
 Unit subclass: #DerivedUnit
 	instanceVariableNames: 'blockConverter blockDeconverter unitBase'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Distance-Solution'!
+	category: 'Measure-Solution'!
 
 !DerivedUnit methodsFor: 'accessing' stamp: 'kf 6/1/2017 19:19:18'!
 name
@@ -1324,10 +1324,9 @@ withConvertion: aBlockClosure withDeconvertion: aBlockClosure2 withName: aString
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
-!classDefinition: 'DerivedUnit class' category: #'Distance-Solution'!
+!classDefinition: 'DerivedUnit class' category: #'Measure-Solution'!
 DerivedUnit class
 	instanceVariableNames: ''!
-
 
 !DerivedUnit class methodsFor: 'shortcuts instance creation' stamp: 'kf 6/7/2017 12:50:10'!
 celsius 
