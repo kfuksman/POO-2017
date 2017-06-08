@@ -136,118 +136,6 @@ aatest19IntervaleMethodActsInAgreementWithHisStartAndEnd
 	
 	self assert: collection = collection2! !
 
-!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 5/23/2017 20:22:19'!
-test01
-	self assert: unMetro = unMetro
-	! !
-
-!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 5/23/2017 20:22:24'!
-test02
-	self assert: unMetro = otroMetro
-	! !
-
-!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 5/23/2017 20:22:30'!
-test03
-
-	self deny: unMetro = dosMetros
-	! !
-
-!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 5/23/2017 20:36:33'!
-test04
-
-	self assert: unMetro + unMetro = dosMetros
-	! !
-
-!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 5/23/2017 21:01:25'!
-test04Resta
-
-	self assert: dosMetros - unMetro = unMetro
-	! !
-
-!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 5/23/2017 20:44:08'!
-test05
-
-	self assert: unMetro * 2 = dosMetros
-	! !
-
-!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 5/23/2017 20:44:24'!
-test06
-
-	self assert:  2 * unMetro = dosMetros
-	! !
-
-!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 5/23/2017 20:44:12'!
-test07
-
-	self assert:  dosMetros / 2 = unMetro
-	! !
-
-!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 5/23/2017 20:52:41'!
-test08
-
-	self assert: dosMetros > unMetro
-	! !
-
-!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 5/23/2017 20:53:25'!
-test09
-
-	self deny: unMetro > dosMetros
-	! !
-
-!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 5/23/2017 20:54:20'!
-test10
-
-	self assert: unMetro >= unMetro
-	! !
-
-!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 5/23/2017 20:55:19'!
-test11
-
-	self assert:  unMetro < dosMetros
-	! !
-
-!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 5/23/2017 20:55:45'!
-test12
-
-	self assert:  unMetro <= unMetro
-	! !
-
-!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 5/23/2017 21:10:22'!
-test13
-
-	self assert: (unMetro to: tresMetros) size = 3
-	! !
-
-!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 5/23/2017 21:11:36'!
-test14
-
-	self assert: ( unMetro to: dosMetros by: cincoCentimetros) size = 21
-	! !
-
-!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 5/23/2017 21:33:09'!
-test15
-
-	|interval collection collection2 |
-	collection := OrderedCollection new.
-	collection2 := OrderedCollection new.
-	interval :=  (unMetro to: dosMetros by: cincoCentimetros).
-	interval do: [:aDistance |  collection add: aDistance + unMetro].
-	(dosMetros to: tresMetros by: cincoCentimetros)  do: [:aDistance | collection2 add: aDistance ].
-	
-	self assert: collection = collection2! !
-
-!DistanceTest methodsFor: 'as yet unclassified' stamp: 'kf 5/23/2017 21:38:47'!
-test16
-
-	|interval collection collection2 |
-	collection := OrderedCollection new.
-	collection2 := OrderedCollection new.
-	interval :=  (unKilometro to: dosKilometro by: cincoCentimetros).
-	interval do: [:aDistance |  collection add: aDistance + unKilometro].
-	(dosKilometro to: tresKilometro by: cincoCentimetros)  do: [:aDistance | collection2 add: aDistance ].
-	
-	self assert: collection = collection2! !
-
 
 !DistanceTest methodsFor: 'setUp variables' stamp: 'RB 6/8/2017 12:56:59'!
 setUp
@@ -1186,13 +1074,61 @@ Object subclass: #Unit
 	poolDictionaries: ''
 	category: 'Distance-Solution'!
 
-!Unit methodsFor: 'accessing' stamp: 'kf 5/23/2017 20:26:49'!
-scale
-	^ scale! !
+!Unit methodsFor: 'accessing' stamp: 'RB 6/8/2017 17:40:28'!
+* anUnit
+	self subclassResponsibility! !
 
-!Unit methodsFor: 'accessing' stamp: 'kf 5/23/2017 20:35:02'!
-withScale: anInteger 
-	scale := anInteger! !
+!Unit methodsFor: 'accessing' stamp: 'RB 6/8/2017 17:40:40'!
++ anUnit
+	self subclassResponsibility! !
+
+!Unit methodsFor: 'accessing' stamp: 'RB 6/8/2017 17:40:39'!
+- anUnit
+	self subclassResponsibility! !
+
+!Unit methodsFor: 'accessing' stamp: 'RB 6/8/2017 17:40:42'!
+/ anUnit
+	self subclassResponsibility! !
+
+!Unit methodsFor: 'accessing' stamp: 'RB 6/8/2017 17:41:14'!
+= anUnit
+	self subclassResponsibility! !
+
+!Unit methodsFor: 'accessing' stamp: 'RB 6/8/2017 17:41:20'!
+adapt: aMeasure
+	self subclassResponsibility! !
+
+!Unit methodsFor: 'accessing' stamp: 'RB 6/8/2017 17:41:49'!
+converter
+	self subclassResponsibility! !
+
+!Unit methodsFor: 'accessing' stamp: 'RB 6/8/2017 17:41:55'!
+deconvert: aMeasure
+	self subclassResponsibility! !
+
+!Unit methodsFor: 'accessing' stamp: 'RB 6/8/2017 17:42:15'!
+isSimpleUnit
+	self subclassResponsibility ! !
+
+!Unit methodsFor: 'accessing' stamp: 'RB 6/8/2017 17:42:33'!
+name
+	self subclassResponsibility ! !
+
+!Unit methodsFor: 'accessing' stamp: 'RB 6/8/2017 17:42:36'!
+printString
+	self subclassResponsibility ! !
+
+!Unit methodsFor: 'accessing' stamp: 'RB 6/8/2017 17:42:38'!
+type
+	self subclassResponsibility ! !
+
+!Unit methodsFor: 'accessing' stamp: 'RB 6/8/2017 17:42:54'!
+withConvertion: aBlockClosure withDeconvertion: aBlockClosure2 withName: aString withBase: anUnitBase 
+	self subclassResponsibility ! !
+
+!Unit methodsFor: 'accessing' stamp: 'RB 6/8/2017 17:44:52'!
+withConvertion: aBlockClosure withDeconvertion: aBlockClosure2 withName: aString withType: aType 
+	self subclassResponsibility ! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -1200,26 +1136,17 @@ withScale: anInteger
 Unit class
 	instanceVariableNames: ''!
 
+!Unit class methodsFor: 'as yet unclassified' stamp: 'RB 6/8/2017 17:48:39'!
+withConvertion: aBlockClosure withDeconvertion: aBlockClosure2 withName: aString withBase: anUnitBase
+	self subclassResponsibility ! !
 
-!Unit class methodsFor: 'ic' stamp: 'kf 5/23/2017 20:50:24'!
-centimeter 
-	^ self new withScale: 1/100! !
+!Unit class methodsFor: 'as yet unclassified' stamp: 'RB 6/8/2017 17:48:07'!
+withConvertion: aBlockClosure withDeconvertion: aBlockClosure2 withName: aString withType: aString4 
+	self subclassResponsibility ! !
 
-!Unit class methodsFor: 'ic' stamp: 'kf 5/23/2017 20:50:35'!
-kilometer
-	^ self new withScale: 1000! !
-
-!Unit class methodsFor: 'ic' stamp: 'kf 5/23/2017 20:50:17'!
-meter 
-	^ self new withScale: 1! !
-
-!Unit class methodsFor: 'ic' stamp: 'kf 5/23/2017 20:34:55'!
-meterScale: anInteger 
-	^ self new withScale: anInteger! !
-
-!Unit class methodsFor: 'ic' stamp: 'kf 5/23/2017 20:50:49'!
-milimeter
-	^ self new withScale: 1/1000! !
+!Unit class methodsFor: 'as yet unclassified' stamp: 'RB 6/8/2017 17:47:52'!
+withName: aString withType: aString4 
+	self subclassResponsibility ! !
 
 
 !classDefinition: #BaseUnit category: #'Distance-Solution'!
@@ -1395,21 +1322,11 @@ withConvertion: aBlockClosure withDeconvertion: aBlockClosure2 withName: aString
 	type := aType.
 	! !
 
-!DerivedUnit methodsFor: 'as yet unclassified' stamp: 'kf 6/3/2017 17:46:18'!
-withConvertion: aBlockClosure withName: aString withType: aType 
-	blockConverter := aBlockClosure.
-	name := aString.
-	type := aType.! !
-
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
 !classDefinition: 'DerivedUnit class' category: #'Distance-Solution'!
 DerivedUnit class
 	instanceVariableNames: ''!
-
-!DerivedUnit class methodsFor: 'instance creation' stamp: 'kf 6/3/2017 19:01:33'!
-withConvertion: aBlockClosure withName: aString withType: aString3 
-	^ self new withConvertion: aBlockClosure withName: aString withType: aString3 ! !
 
 
 !DerivedUnit class methodsFor: 'shortcuts instance creation' stamp: 'kf 6/7/2017 12:50:10'!
