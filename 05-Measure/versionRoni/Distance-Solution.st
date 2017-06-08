@@ -870,9 +870,9 @@ twoHundredCentimeters
 twoMeters
 	^ self createMeter: 2! !
 
-!MeasureFactory methodsFor: 'accessing' stamp: 'RB 6/7/2017 15:57:39'!
+!MeasureFactory methodsFor: 'accessing' stamp: 'RB 6/8/2017 01:17:03'!
 twoMetersBySecond
-	^self createMeterBySecond: 2 .! !
+	^self createMeterPerSecond: 2 .! !
 
 !MeasureFactory methodsFor: 'accessing' stamp: 'RB 6/7/2017 15:58:16'!
 twoMetersPerSquaredSecond
@@ -913,6 +913,11 @@ createCentimeter: anInteger
 	^ Measure size: anInteger in: DerivedUnit  centimeter.
 	! !
 
+!MeasureFactory methodsFor: 'private' stamp: 'RB 6/8/2017 01:17:48'!
+createCubicMeter: anInteger
+	^ Measure size: anInteger in: (DerivedUnit meter * DerivedUnit meter * DerivedUnit meter).
+	! !
+
 !MeasureFactory methodsFor: 'private' stamp: 'RB 6/7/2017 15:49:44'!
 createFahrenheit: anInteger
 	^ Measure size: anInteger in: DerivedUnit  fahrenheit.
@@ -933,6 +938,21 @@ createMeter: anInteger
 	^ Measure size: anInteger  in: DerivedUnit meter.
 	! !
 
+!MeasureFactory methodsFor: 'private' stamp: 'RB 6/8/2017 01:18:10'!
+createMeterPerSecond: anInteger
+	^ Measure size: anInteger in: (DerivedUnit meter / DerivedUnit second).
+	! !
+
+!MeasureFactory methodsFor: 'private' stamp: 'RB 6/8/2017 01:18:48'!
+createMeterPerSquaredSecond: anInteger
+	^ Measure size: anInteger in: (DerivedUnit meter / (DerivedUnit second * DerivedUnit second)).
+	! !
+
+!MeasureFactory methodsFor: 'private' stamp: 'RB 6/8/2017 01:18:59'!
+createMeterTimesSecond: anInteger
+	^ Measure size: anInteger in: (DerivedUnit meter* DerivedUnit second).
+	! !
+
 !MeasureFactory methodsFor: 'private' stamp: 'RB 6/7/2017 15:49:04'!
 createMinute: anInteger
 	^ Measure size: anInteger in: DerivedUnit  minute.
@@ -941,6 +961,16 @@ createMinute: anInteger
 !MeasureFactory methodsFor: 'private' stamp: 'RB 6/7/2017 15:49:10'!
 createSecond: anInteger
 	^ Measure size: anInteger in: DerivedUnit  second.
+	! !
+
+!MeasureFactory methodsFor: 'private' stamp: 'RB 6/8/2017 01:17:56'!
+createSquaredMeter: anInteger
+	^ Measure size: anInteger in: (DerivedUnit meter * DerivedUnit meter).
+	! !
+
+!MeasureFactory methodsFor: 'private' stamp: 'RB 6/8/2017 01:18:24'!
+createSquaredSecond: anInteger
+	^ Measure size: anInteger in: (DerivedUnit second * DerivedUnit second).
 	! !
 
 
