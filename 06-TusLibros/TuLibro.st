@@ -133,14 +133,27 @@ test16
 	
 	self assert: month month = today monthIndex .! !
 
-!TuLibroTests methodsFor: 'as yet unclassified' stamp: 'kf 6/14/2017 00:49:30'!
+!TuLibroTests methodsFor: 'as yet unclassified' stamp: 'RB 6/15/2017 16:56:06'!
 test17
 
-	| month today |
-	today := Date today.
-	month := MonthOfYear today: today.
-	
-	self assert: month month = today monthIndex .! !
+	aCart add: 1.
+	aCart closeCart.
+	self should: [aCart add: 2] 
+			raise: Error
+			withExceptionDo: [:anError | anError messageText = 'El carrito esta cerrado'.
+									self assert: (aCart elements)= 1.
+								]! !
+
+!TuLibroTests methodsFor: 'as yet unclassified' stamp: 'RB 6/15/2017 16:59:37'!
+test18
+
+	aCart add: 1.
+	aCart closeCart.
+	self should: [aCart add: 2 quantity: 3] 
+			raise: Error
+			withExceptionDo: [:anError | anError messageText = 'El carrito esta cerrado'.
+									self assert: (aCart elements)= 1.
+								]! !
 
 
 !classDefinition: #Card category: #TuLibro!
@@ -180,22 +193,24 @@ withNumber: cardNumber withName: cardHolder withExpirationDate: monthYear
 
 !classDefinition: #Cart category: #TuLibro!
 Object subclass: #Cart
-	instanceVariableNames: 'elements catalog'
+	instanceVariableNames: 'elements catalog closeCart'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'TuLibro'!
 
-!Cart methodsFor: 'as yet unclassified' stamp: 'kf 6/11/2017 23:21:40'!
+!Cart methodsFor: 'as yet unclassified' stamp: 'RB 6/15/2017 16:59:23'!
 add: anElement
+	self assert: (closeCart = false) description: [self error: 'El carrito esta cerrado'].
 	self add: anElement quantity: 1.
 ! !
 
-!Cart methodsFor: 'as yet unclassified' stamp: 'kf 6/13/2017 23:26:19'!
+!Cart methodsFor: 'as yet unclassified' stamp: 'RB 6/15/2017 17:01:46'!
 add: anElement quantity: aQuantity 
 	self assert: aQuantity isInteger.
 	self assert:  aQuantity  > 0.
 	
-	(catalog includes: anElement) ifFalse: [self error: 'No pertenece al catalogo'].
+	self assert: (closeCart = false) description: [self error: 'El carrito esta cerrado'].
+	self assert: (catalog includes: anElement) description: [self error: 'No pertenece al catalogo'].
 	
 	elements add: anElement withOccurrences: aQuantity.
 	! !
@@ -203,6 +218,10 @@ add: anElement quantity: aQuantity
 !Cart methodsFor: 'as yet unclassified' stamp: 'kf 6/13/2017 23:30:06'!
 catalog
 	^ catalog ! !
+
+!Cart methodsFor: 'as yet unclassified' stamp: 'RB 6/15/2017 16:54:02'!
+closeCart
+	closeCart := true.! !
 
 !Cart methodsFor: 'as yet unclassified' stamp: 'kf 6/13/2017 23:07:58'!
 contents: anElement
@@ -225,10 +244,11 @@ quantityOf: anElement
 	^ elements occurrencesOf: anElement 
 	! !
 
-!Cart methodsFor: 'as yet unclassified' stamp: 'kf 6/13/2017 22:37:53'!
+!Cart methodsFor: 'as yet unclassified' stamp: 'RB 6/15/2017 16:53:56'!
 withCatalog: anOrderedCollection 
 	catalog := anOrderedCollection.
 	elements := Bag new.
+	closeCart := false.
 	! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
