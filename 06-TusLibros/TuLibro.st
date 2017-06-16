@@ -1,11 +1,11 @@
 !classDefinition: #TuLibroTests category: #TuLibro!
 TestCase subclass: #TuLibroTests
-	instanceVariableNames: 'aCart catalogWithElements emptyCatalog cartWithEmptyCatalog cashier cartWithElements'
+	instanceVariableNames: 'aCart catalogWithElements emptyCatalog cartWithEmptyCatalog cashier cartWithElements aValidCard anValidCard anInvalidCard anInvoice'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'TuLibro'!
 
-!TuLibroTests methodsFor: 'as yet unclassified' stamp: 'kf 6/13/2017 23:29:44'!
+!TuLibroTests methodsFor: 'as yet unclassified' stamp: 'kf 6/15/2017 19:56:13'!
 setUp
 	catalogWithElements := Catalog new.
 	catalogWithElements  put: 1 withPrice: 1.
@@ -20,57 +20,61 @@ setUp
 	cartWithElements add: 2.
 	
 	cashier := Cashier new.
+	
+	aValidCard :=  Card withNumber: 1  withName: 'kevin' withExpirationDate: (Date today + 1 days).
+	
+	anInvoice := 2.
 ! !
 
-!TuLibroTests methodsFor: 'as yet unclassified' stamp: 'kf 6/13/2017 22:39:04'!
-test01
+!TuLibroTests methodsFor: 'as yet unclassified' stamp: 'kf 6/15/2017 20:11:03'!
+test01ACartIsInitializeEmpty
 	self assert: aCart isEmpty.! !
 
-!TuLibroTests methodsFor: 'as yet unclassified' stamp: 'kf 6/13/2017 22:39:11'!
-test02
+!TuLibroTests methodsFor: 'as yet unclassified' stamp: 'kf 6/15/2017 20:11:24'!
+test02ACartWithElementsIsNotEmpty
 	aCart add: 1.
 	self deny: aCart isEmpty.! !
 
-!TuLibroTests methodsFor: 'as yet unclassified' stamp: 'kf 6/13/2017 22:39:16'!
-test03
+!TuLibroTests methodsFor: 'as yet unclassified' stamp: 'kf 6/15/2017 20:11:56'!
+test03ACartKnowsWhenHasOneElement
 	aCart add: 1.
 	self assert: aCart elements = 1! !
 
-!TuLibroTests methodsFor: 'as yet unclassified' stamp: 'kf 6/13/2017 22:39:21'!
-test04
+!TuLibroTests methodsFor: 'as yet unclassified' stamp: 'kf 6/15/2017 20:12:27'!
+test04ACartKnowsWhenHasAnyElementQuantity
 	aCart add: 1.
 	aCart add: 2.
 	self assert: aCart elements = 2! !
 
-!TuLibroTests methodsFor: 'as yet unclassified' stamp: 'kf 6/13/2017 22:39:26'!
-test05
+!TuLibroTests methodsFor: 'as yet unclassified' stamp: 'kf 6/15/2017 20:13:02'!
+test05ACartWithAQuantityOfOneElementCountsGood
 	aCart add: 1 quantity: 2.
 	aCart add: 2.
 	self assert: aCart elements = 3! !
 
-!TuLibroTests methodsFor: 'as yet unclassified' stamp: 'kf 6/13/2017 22:39:32'!
-test06
+!TuLibroTests methodsFor: 'as yet unclassified' stamp: 'kf 6/15/2017 20:13:42'!
+test06ACartKnowWhenHasOneContent
 	aCart add: 1 quantity: 2.
 	self assert: (aCart contents: 1)! !
 
-!TuLibroTests methodsFor: 'as yet unclassified' stamp: 'kf 6/13/2017 22:39:36'!
-test07
+!TuLibroTests methodsFor: 'as yet unclassified' stamp: 'kf 6/15/2017 20:14:07'!
+test07ACartKnowHowManyContentsHas
 	aCart add: 1 quantity: 2.
 	self deny: (aCart contents: 2)! !
 
-!TuLibroTests methodsFor: 'as yet unclassified' stamp: 'kf 6/13/2017 22:39:41'!
-test08
+!TuLibroTests methodsFor: 'as yet unclassified' stamp: 'kf 6/15/2017 20:16:00'!
+test08ACartKnowWhenAContentGotTwoElements
 	aCart add: 1 quantity: 2.
 	self assert: (aCart quantityOf: 1 ) = 2! !
 
-!TuLibroTests methodsFor: 'as yet unclassified' stamp: 'kf 6/13/2017 22:39:46'!
-test09
+!TuLibroTests methodsFor: 'as yet unclassified' stamp: 'kf 6/15/2017 20:16:25'!
+test09ACartKnowHowManyElementsGotFromAContent
 
 	aCart add: 1 quantity: 1.
 	self assert: (aCart quantityOf: 1 ) = 1! !
 
-!TuLibroTests methodsFor: 'as yet unclassified' stamp: 'kf 6/13/2017 22:41:54'!
-test10
+!TuLibroTests methodsFor: 'as yet unclassified' stamp: 'kf 6/15/2017 20:17:10'!
+test10ACartCantAddThingsThatAreNotInTheCatalog
 
 	self should: [cartWithEmptyCatalog add: 1] 
 		raise: Error 
@@ -79,8 +83,8 @@ test10
 								self assert: cartWithEmptyCatalog isEmpty .
 							 ].! !
 
-!TuLibroTests methodsFor: 'as yet unclassified' stamp: 'kf 6/13/2017 22:57:22'!
-test11
+!TuLibroTests methodsFor: 'as yet unclassified' stamp: 'kf 6/15/2017 20:17:54'!
+test11ACashierCantHaveNoElementsToCash
 
 	self should: [cashier cost: cartWithEmptyCatalog ] 
 		raise: Error-MessageNotUnderstood 
@@ -88,72 +92,49 @@ test11
 								anError messageText = 'No me pases un cart vacio'.
 							 ].! !
 
-!TuLibroTests methodsFor: 'as yet unclassified' stamp: 'kf 6/13/2017 23:32:51'!
-test12
+!TuLibroTests methodsFor: 'as yet unclassified' stamp: 'kf 6/15/2017 20:18:21'!
+test12ACashierCanCountACartCost
 
 	self assert: (cashier cost: cartWithElements ) = 2! !
 
-!TuLibroTests methodsFor: 'as yet unclassified' stamp: 'kf 6/14/2017 00:31:36'!
-test13
+!TuLibroTests methodsFor: 'as yet unclassified' stamp: 'kf 6/15/2017 20:19:00'!
+test13AValidCardIsNotExpired
 
 	
-	self shouldnt:[ Card withNumber: 1  withName: 'kevin' withExpirationDate: (Month month:01 year: 2018).]  raise: Error  description:  'expiro'
+	self deny: (Card withNumber: 1  withName: 'kevin' withExpirationDate: (Date today + 1 days)) isExpired 
 ! !
 
-!TuLibroTests methodsFor: 'as yet unclassified' stamp: 'kf 6/14/2017 00:28:39'!
-test14
+!TuLibroTests methodsFor: 'as yet unclassified' stamp: 'kf 6/15/2017 20:20:32'!
+test14AValidCardWithAYearDifferenceIsNotExpired
 
-	|aCard |
 	
-	self should: [Card withNumber: 1  withName: 'kevin' withExpirationDate: (Month month:12 year: 2012).] 
-			raise: Error
-			withExceptionDo: [:anError | anError messageText = 'expiro'.
-									self assert: aCard = nil.
-								]
+	
+	self deny: (Card withNumber: 1  withName: 'kevin' withExpirationDate: (Date today + 380 days)) isExpired 
+
 ! !
 
-!TuLibroTests methodsFor: 'as yet unclassified' stamp: 'kf 6/14/2017 00:35:24'!
-test15
+!TuLibroTests methodsFor: 'as yet unclassified' stamp: 'kf 6/15/2017 20:19:40'!
+test15AnInvalidCardWithAYearDifferenceIsExpired
 
-	|aCard |
-	
-	self should: [Card withNumber: 1  withName: 'kevin' withExpirationDate: (Month month:1 year: 2015).] 
-			raise: Error
-			withExceptionDo: [:anError | anError messageText = 'expiro'.
-									self assert: aCard = nil.
-								]
+	self assert: (Card withNumber: 1  withName: 'kevin' withExpirationDate: (Date today - 367 days)) isExpired ! !
+
+!TuLibroTests methodsFor: 'as yet unclassified' stamp: 'kf 6/15/2017 20:21:17'!
+test16AnInvalidCardWithAMonthDifferenceIsExpired
+	 
+	self assert: (Card withNumber: 1  withName: 'kevin' withExpirationDate: (Date today - 32 days)) isExpired 
+			! !
+
+!TuLibroTests methodsFor: 'as yet unclassified' stamp: 'kf 6/15/2017 20:22:13'!
+test17ACashierCanDoCheckoutWithACartWithElements
+
+	self shouldnt: [cashier checkOut: cartWithElements withCard: anValidCard ]
+		  raise: Error - MessageNotUnderstood 
 ! !
 
-!TuLibroTests methodsFor: 'as yet unclassified' stamp: 'kf 6/14/2017 00:48:05'!
-test16
-
-	| month today |
-	today := Date today.
-	month := MonthOfYear today: today.
+!TuLibroTests methodsFor: 'as yet unclassified' stamp: 'kf 6/15/2017 20:22:44'!
+test18ACheckoutReturnAnInvoice
 	
-	self assert: month month = today monthIndex .! !
-
-!TuLibroTests methodsFor: 'as yet unclassified' stamp: 'RB 6/15/2017 16:56:06'!
-test17
-
-	aCart add: 1.
-	aCart closeCart.
-	self should: [aCart add: 2] 
-			raise: Error
-			withExceptionDo: [:anError | anError messageText = 'El carrito esta cerrado'.
-									self assert: (aCart elements)= 1.
-								]! !
-
-!TuLibroTests methodsFor: 'as yet unclassified' stamp: 'RB 6/15/2017 16:59:37'!
-test18
-
-	aCart add: 1.
-	aCart closeCart.
-	self should: [aCart add: 2 quantity: 3] 
-			raise: Error
-			withExceptionDo: [:anError | anError messageText = 'El carrito esta cerrado'.
-									self assert: (aCart elements)= 1.
-								]! !
+	self assert: (cashier checkOut: cartWithElements withCard: anValidCard ) = anInvoice! !
 
 
 !classDefinition: #Card category: #TuLibro!
@@ -163,9 +144,23 @@ Object subclass: #Card
 	poolDictionaries: ''
 	category: 'TuLibro'!
 
-!Card methodsFor: 'as yet unclassified' stamp: 'kf 6/14/2017 00:10:16'!
-isValid
-	self shouldBeImplemented! !
+!Card methodsFor: 'as yet unclassified' stamp: 'kf 6/15/2017 20:04:55'!
+isExpired
+
+|actualMonthYear|
+	
+	actualMonthYear := Month month: (Date today monthIndex ) year:  (Date today yearNumber ).
+	(expirationDate yearNumber < actualMonthYear yearNumber) ifTrue: [^true].
+	((expirationDate monthIndex < actualMonthYear monthIndex ) and: [expirationDate yearNumber = actualMonthYear yearNumber]) ifTrue: [^true].
+
+^false! !
+
+!Card methodsFor: 'as yet unclassified' stamp: 'kf 6/16/2017 14:13:12'!
+isExpiredOn: aDate
+	(expirationDate yearNumber < aDate yearNumber) ifTrue: [^true].
+	((expirationDate monthIndex < aDate monthIndex ) and: [expirationDate yearNumber = aDate yearNumber]) ifTrue: [^true].
+
+^false! !
 
 !Card methodsFor: 'as yet unclassified' stamp: 'kf 6/14/2017 00:09:35'!
 withNumber: acardNumber withName: acardHolder withExpirationDate: amonthOfYear 
@@ -179,37 +174,30 @@ withNumber: acardNumber withName: acardHolder withExpirationDate: amonthOfYear
 Card class
 	instanceVariableNames: ''!
 
-!Card class methodsFor: 'as yet unclassified' stamp: 'kf 6/14/2017 00:34:47'!
+!Card class methodsFor: 'as yet unclassified' stamp: 'kf 6/15/2017 20:03:46'!
 withNumber: cardNumber withName: cardHolder withExpirationDate: monthYear 
 	
-	|actualMonthYear|
 	
-	actualMonthYear := Month month: (Date today monthIndex ) year:  (Date today yearNumber ).
-	(monthYear yearNumber < actualMonthYear yearNumber) ifTrue: [self error: 'expiro'].
-	((monthYear monthIndex < actualMonthYear monthIndex ) and: [monthYear yearNumber = actualMonthYear yearNumber]) ifTrue: [self error: 'expiro'].
-
 	^self new withNumber: cardNumber withName: cardHolder withExpirationDate: monthYear ! !
 
 
 !classDefinition: #Cart category: #TuLibro!
 Object subclass: #Cart
-	instanceVariableNames: 'elements catalog closeCart'
+	instanceVariableNames: 'elements catalog'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'TuLibro'!
 
-!Cart methodsFor: 'as yet unclassified' stamp: 'RB 6/15/2017 16:59:23'!
+!Cart methodsFor: 'as yet unclassified' stamp: 'kf 6/15/2017 19:18:49'!
 add: anElement
-	self assert: (closeCart = false) description: [self error: 'El carrito esta cerrado'].
 	self add: anElement quantity: 1.
 ! !
 
-!Cart methodsFor: 'as yet unclassified' stamp: 'RB 6/15/2017 17:01:46'!
+!Cart methodsFor: 'as yet unclassified' stamp: 'kf 6/15/2017 19:18:31'!
 add: anElement quantity: aQuantity 
 	self assert: aQuantity isInteger.
 	self assert:  aQuantity  > 0.
 	
-	self assert: (closeCart = false) description: [self error: 'El carrito esta cerrado'].
 	self assert: (catalog includes: anElement) description: [self error: 'No pertenece al catalogo'].
 	
 	elements add: anElement withOccurrences: aQuantity.
@@ -218,10 +206,6 @@ add: anElement quantity: aQuantity
 !Cart methodsFor: 'as yet unclassified' stamp: 'kf 6/13/2017 23:30:06'!
 catalog
 	^ catalog ! !
-
-!Cart methodsFor: 'as yet unclassified' stamp: 'RB 6/15/2017 16:54:02'!
-closeCart
-	closeCart := true.! !
 
 !Cart methodsFor: 'as yet unclassified' stamp: 'kf 6/13/2017 23:07:58'!
 contents: anElement
@@ -244,11 +228,10 @@ quantityOf: anElement
 	^ elements occurrencesOf: anElement 
 	! !
 
-!Cart methodsFor: 'as yet unclassified' stamp: 'RB 6/15/2017 16:53:56'!
+!Cart methodsFor: 'as yet unclassified' stamp: 'kf 6/15/2017 19:18:12'!
 withCatalog: anOrderedCollection 
 	catalog := anOrderedCollection.
 	elements := Bag new.
-	closeCart := false.
 	! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
@@ -269,6 +252,15 @@ Object subclass: #Cashier
 	poolDictionaries: ''
 	category: 'TuLibro'!
 
+!Cashier methodsFor: 'as yet unclassified' stamp: 'kf 6/15/2017 19:54:34'!
+checkOut: aCart withCard: aCard 
+	|cost|
+	 cost := self cost: aCart.
+	
+	self debit: cost toCard: aCard.
+	
+	^ cost! !
+
 !Cashier methodsFor: 'as yet unclassified' stamp: 'kf 6/13/2017 23:32:41'!
 cost: aCart 
 	|catalog cost|
@@ -283,6 +275,9 @@ cost: aCart
 
 	^ cost.
 ! !
+
+!Cashier methodsFor: 'as yet unclassified' stamp: 'kf 6/15/2017 19:36:56'!
+debit: aSmallInteger toCard: anUndefinedObject ! !
 
 
 !classDefinition: #Catalog category: #TuLibro!
@@ -313,36 +308,13 @@ put: anElement withPrice: price
 	elements at: anElement put: price.! !
 
 
-!classDefinition: #MonthOfYear category: #TuLibro!
-Object subclass: #MonthOfYear
-	instanceVariableNames: 'month year'
+!classDefinition: #Invoice category: #TuLibro!
+Object subclass: #Invoice
+	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'TuLibro'!
 
-!MonthOfYear methodsFor: 'as yet unclassified' stamp: 'kf 6/14/2017 00:48:00'!
-month
-	^month ! !
-
-!MonthOfYear methodsFor: 'as yet unclassified' stamp: 'kf 6/14/2017 00:06:58'!
-month: aMonth year: aYear
-	month := aMonth.
-	year := aYear.! !
-
-!MonthOfYear methodsFor: 'as yet unclassified' stamp: 'kf 6/14/2017 00:45:29'!
-monthClass
-	^ Month month: month year: year ! !
-
-"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
-
-!classDefinition: 'MonthOfYear class' category: #TuLibro!
-MonthOfYear class
-	instanceVariableNames: ''!
-
-!MonthOfYear class methodsFor: 'class initialization' stamp: 'kf 6/14/2017 00:06:35'!
-month: aMonth year: aYear
-	^ self new month: aMonth year: aYear! !
-
-!MonthOfYear class methodsFor: 'class initialization' stamp: 'kf 6/14/2017 00:44:45'!
-today: today
-	^ self new month: today monthIndex year: today yearNumber ! !
+!Invoice methodsFor: 'as yet unclassified' stamp: 'kf 6/15/2017 19:38:05'!
+isInvoice
+	^ true.! !
