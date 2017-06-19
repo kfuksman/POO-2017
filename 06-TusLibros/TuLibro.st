@@ -82,6 +82,20 @@ test26
 	self assert: (cashier checkOutOnDate: Date today withMerchant: merchant ) = anInvoice.
 	self deny: aBook isEmpty ! !
 
+!TuLibroTests methodsFor: 'cashier' stamp: 'kf 6/19/2017 20:52:42'!
+test27
+
+	merchant putOutService.
+	merchant addValidCard: aValidCard withAmount: 0.
+	
+	cashier := self cashierWithCart: cartWithElements withCard: aValidCard withBook: aBook.
+	
+	self should: [cashier checkOutOnDate: (Date today) withMerchant: merchant ]  
+		 raise: Error 
+		 withExceptionDo: [:anError | self assert: anError messageText = MerchantProcesorMock outService .
+								self assert: aBook isEmpty.
+						]! !
+
 
 !TuLibroTests methodsFor: 'cart' stamp: 'kf 6/15/2017 20:11:03'!
 test01ACartIsInitializeEmpty
