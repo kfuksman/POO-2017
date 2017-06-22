@@ -34,6 +34,24 @@ test16AnInvalidCardWithAMonthDifferenceIsExpired
 	self assert: ((Card withNumber: 1  withName: 'kevin' withExpirationDate: (Date today - 32 days)) isExpiredOn: Date today).
 			! !
 
+!TuLibroTests methodsFor: 'card' stamp: 'kf 6/22/2017 19:28:24'!
+testcard01
+	 
+	self should: [Card withNumber: 123456789101  withName: '' withExpirationDate: Date today.] 
+	raise: Error
+	withExceptionDo: [:anError | self assert: (anError messageText = Card invalidName)].
+	
+! !
+
+!TuLibroTests methodsFor: 'card' stamp: 'kf 6/22/2017 19:26:18'!
+testcard02
+	 
+	self should: [Card withNumber: 1234567891  withName: 'ker' withExpirationDate: Date today.] 
+	raise: Error
+	withExceptionDo: [:anError | self assert: (anError messageText = Card invalidNumber)].
+	
+! !
+
 
 !TuLibroTests methodsFor: 'cashier' stamp: 'kf 6/18/2017 12:54:31'!
 test18ACheckoutReturnAnInvoice
@@ -211,7 +229,7 @@ testM01
 cashierWithCart: aCart withCard: aCard withBook: aBook 
 	^ Cashier withCart: aCart withCard: aCard withBook: aBook ! !
 
-!TuLibroTests methodsFor: 'setUp' stamp: 'kf 6/18/2017 12:56:20'!
+!TuLibroTests methodsFor: 'setUp' stamp: 'kf 6/22/2017 19:31:12'!
 setUp
 	catalogWithElements := Catalog new.
 	catalogWithElements  put: 1 withPrice: 1.
@@ -227,8 +245,8 @@ setUp
 	
 	cashier := Cashier new.
 	
-	aValidCard :=  Card withNumber: 1  withName: 'kevin' withExpirationDate: (Date today + 1 days).
-	anExpiredCard := Card withNumber: 2  withName: 'kevin' withExpirationDate: (Date today - 60 days).
+	aValidCard :=  Card withNumber: 123456789101  withName: 'kevin' withExpirationDate: (Date today + 1 days).
+	anExpiredCard := Card withNumber: 213456789101  withName: 'kevin' withExpirationDate: (Date today - 60 days).
 		
 	anInvoice := 2.
 	
@@ -292,10 +310,19 @@ expiredError
 invalidCard
 	^ 'Tarjeta invalida' ! !
 
-!Card class methodsFor: 'as yet unclassified' stamp: 'kf 6/15/2017 20:03:46'!
+!Card class methodsFor: 'as yet unclassified' stamp: 'kf 6/22/2017 19:22:26'!
+invalidName
+	^ 'Nombre invalido'! !
+
+!Card class methodsFor: 'as yet unclassified' stamp: 'kf 6/22/2017 19:26:36'!
+invalidNumber
+	^ 'invalid number'! !
+
+!Card class methodsFor: 'as yet unclassified' stamp: 'kf 6/22/2017 19:31:21'!
 withNumber: cardNumber withName: cardHolder withExpirationDate: monthYear 
 	
-	
+	self assert: (cardHolder isEmpty) not description: [self error: (Card invalidName) ].
+	self assert: (cardNumber decimalDigitLength  = 12) description: [self error: (Card invalidNumber )].
 	^self new withNumber: cardNumber withName: cardHolder withExpirationDate: monthYear ! !
 
 !Card class methodsFor: 'as yet unclassified' stamp: 'kf 6/18/2017 12:50:30'!
