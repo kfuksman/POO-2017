@@ -5,8 +5,8 @@ TestCase subclass: #TuLibroTests
 	poolDictionaries: ''
 	category: 'TuLibro'!
 
-!TuLibroTests methodsFor: 'rest' stamp: 'kf 6/25/2017 11:37:47'!
-testR01
+!TuLibroTests methodsFor: 'rest' stamp: 'RB 6/26/2017 16:40:40'!
+testR01RestLoginAnUserWithCartEmpty
 
 	| idCart  |
 	
@@ -15,8 +15,8 @@ testR01
 	self assert: (rest listCart: idCart ) isEmpty 
 	! !
 
-!TuLibroTests methodsFor: 'rest' stamp: 'kf 6/25/2017 11:38:12'!
-testR02
+!TuLibroTests methodsFor: 'rest' stamp: 'RB 6/26/2017 16:40:31'!
+testR02RestCantLoginAnUserWithInvalidID
 	
 	self should: [rest createCartWithClientId: 2 password: 1.] 
 			raise: Error 
@@ -31,9 +31,8 @@ testR02
 
 	! !
 
-!TuLibroTests methodsFor: 'rest' stamp: 'kf 6/25/2017 11:38:49'!
-testR03
-	
+!TuLibroTests methodsFor: 'rest' stamp: 'RB 6/26/2017 16:40:22'!
+testR03RestCantLoginAnUserWithWrongPassword
 
 	self should: [rest createCartWithClientId: 1 password: 2.] 
 			raise: Error 
@@ -48,8 +47,8 @@ testR03
 
 	! !
 
-!TuLibroTests methodsFor: 'rest' stamp: 'kf 6/25/2017 11:38:59'!
-testR04
+!TuLibroTests methodsFor: 'rest' stamp: 'RB 6/26/2017 16:45:00'!
+testR04RestCanAddBookISBNToCart
 
 	| idCart  |
 	
@@ -61,8 +60,8 @@ testR04
 	self assert: (rest listCart: idCart ) elements  = 1.
 	! !
 
-!TuLibroTests methodsFor: 'rest' stamp: 'kf 6/25/2017 11:39:06'!
-testR05
+!TuLibroTests methodsFor: 'rest' stamp: 'RB 6/26/2017 16:46:06'!
+testR05RestRaiseErrorWhenISBNIsInvalid
 
 	| idCart  |
 	
@@ -76,8 +75,8 @@ testR05
 		].
 	! !
 
-!TuLibroTests methodsFor: 'rest' stamp: 'kf 6/25/2017 11:40:45'!
-testR06
+!TuLibroTests methodsFor: 'rest' stamp: 'RB 6/26/2017 16:45:49'!
+testR06RestRaiseErrorWhenISBNIsNotInCatalog
 
 	| idCart  |
 	
@@ -177,15 +176,15 @@ testR10
 	! !
 
 
-!TuLibroTests methodsFor: 'card' stamp: 'kf 6/25/2017 09:19:15'!
-test13AValidCardIsNotExpired
+!TuLibroTests methodsFor: 'card' stamp: 'RB 6/26/2017 15:47:55'!
+testCard01AValidCardIsNotExpired
 
 	
 	self deny: ((Card withNumber: 123456789913 withName: 'kevin' withExpirationDate: (Date today + 1 days)) isExpiredOn: Date today)
 ! !
 
-!TuLibroTests methodsFor: 'card' stamp: 'kf 6/25/2017 09:19:31'!
-test14AValidCardWithAYearDifferenceIsNotExpired
+!TuLibroTests methodsFor: 'card' stamp: 'RB 6/26/2017 15:48:02'!
+testCard02AValidCardWithAYearDifferenceIsNotExpired
 
 	
 	
@@ -194,20 +193,20 @@ test14AValidCardWithAYearDifferenceIsNotExpired
 
 ! !
 
-!TuLibroTests methodsFor: 'card' stamp: 'kf 6/25/2017 09:19:36'!
-test15AnInvalidCardWithAYearDifferenceIsExpired
+!TuLibroTests methodsFor: 'card' stamp: 'RB 6/26/2017 15:48:07'!
+testCard03AnInvalidCardWithAYearDifferenceIsExpired
 
 	self assert: ((Card withNumber: 123456789913  withName: 'kevin' withExpirationDate: (Date today - 367 days))  isExpiredOn: Date today)
 ! !
 
-!TuLibroTests methodsFor: 'card' stamp: 'kf 6/25/2017 09:19:40'!
-test16AnInvalidCardWithAMonthDifferenceIsExpired
+!TuLibroTests methodsFor: 'card' stamp: 'RB 6/26/2017 15:48:16'!
+testCard04AnInvalidCardWithAMonthDifferenceIsExpired
 	 
 	self assert: ((Card withNumber: 123456789913  withName: 'kevin' withExpirationDate: (Date today - 32 days)) isExpiredOn: Date today).
 			! !
 
-!TuLibroTests methodsFor: 'card' stamp: 'kf 6/22/2017 19:28:24'!
-testcard01
+!TuLibroTests methodsFor: 'card' stamp: 'RB 6/26/2017 15:48:34'!
+testCard05AValidCardNameCantBeEmpty
 	 
 	self should: [Card withNumber: 123456789101  withName: '' withExpirationDate: Date today.] 
 	raise: Error
@@ -215,8 +214,8 @@ testcard01
 	
 ! !
 
-!TuLibroTests methodsFor: 'card' stamp: 'kf 6/22/2017 19:26:18'!
-testcard02
+!TuLibroTests methodsFor: 'card' stamp: 'RB 6/26/2017 15:48:41'!
+testCard06AValidCardLengthIsAlways12
 	 
 	self should: [Card withNumber: 1234567891  withName: 'ker' withExpirationDate: Date today.] 
 	raise: Error
@@ -225,8 +224,8 @@ testcard02
 ! !
 
 
-!TuLibroTests methodsFor: 'cashier' stamp: 'kf 6/18/2017 12:54:31'!
-test18ACheckoutReturnAnInvoice
+!TuLibroTests methodsFor: 'cashier' stamp: 'RB 6/26/2017 15:45:47'!
+testCashier01ACheckoutReturnAnInvoice
 	
 	merchant addValidCard: aValidCard.
 	
@@ -234,8 +233,8 @@ test18ACheckoutReturnAnInvoice
 	
 	self assert: (cashier checkOutOnDate: Date today withMerchant: merchant ) = anInvoice! !
 
-!TuLibroTests methodsFor: 'cashier' stamp: 'kf 6/18/2017 12:55:21'!
-test24
+!TuLibroTests methodsFor: 'cashier' stamp: 'RB 6/26/2017 15:45:56'!
+testCashier02ACashierRaiseAnErrorIfCardIsInvalid
 	
 	
 	merchant addValidCard: anExpiredCard.
@@ -248,9 +247,8 @@ test24
 								self assert: aBook isEmpty.
 						]! !
 
-!TuLibroTests methodsFor: 'cashier' stamp: 'kf 6/18/2017 12:57:44'!
-test25
-	
+!TuLibroTests methodsFor: 'cashier' stamp: 'RB 6/26/2017 15:46:05'!
+testCashier03ACashierRaiseAnErrorIfCardWithoutBalance
 	
 	merchant addValidCard: aValidCard withAmount: 0.
 	
@@ -262,8 +260,8 @@ test25
 								self assert: aBook isEmpty.
 						]! !
 
-!TuLibroTests methodsFor: 'cashier' stamp: 'kf 6/18/2017 12:58:42'!
-test26
+!TuLibroTests methodsFor: 'cashier' stamp: 'RB 6/26/2017 15:46:14'!
+testCashier04ACashierCheckoutReturnAnInvoice
 	
 	merchant addValidCard: aValidCard.
 	
@@ -272,8 +270,8 @@ test26
 	self assert: (cashier checkOutOnDate: Date today withMerchant: merchant ) = anInvoice.
 	self deny: aBook isEmpty ! !
 
-!TuLibroTests methodsFor: 'cashier' stamp: 'kf 6/19/2017 20:52:42'!
-test27
+!TuLibroTests methodsFor: 'cashier' stamp: 'RB 6/26/2017 15:46:25'!
+testCashier05ACashierRaiseAnErrorIfMPisOutOfService
 
 	merchant putOutService.
 	merchant addValidCard: aValidCard withAmount: 0.
@@ -286,8 +284,8 @@ test27
 								self assert: aBook isEmpty.
 						]! !
 
-!TuLibroTests methodsFor: 'cashier' stamp: 'kf 6/25/2017 12:16:42'!
-testCa01
+!TuLibroTests methodsFor: 'cashier' stamp: 'RB 6/26/2017 15:46:39'!
+testCashier06ACashierCheckoutReturnAnInvoceWithCartElements
 	
 	merchant addValidCard: aValidCard.
 	
@@ -295,8 +293,8 @@ testCa01
 	
 	self assert: (cashier checkOutOnDate: Date today withMerchant: merchant ) elements = anInvoice elements! !
 
-!TuLibroTests methodsFor: 'cashier' stamp: 'kf 6/25/2017 12:21:48'!
-testCa02
+!TuLibroTests methodsFor: 'cashier' stamp: 'RB 6/26/2017 15:46:50'!
+testCashier07ACashierCheckoutReturnAnInvoiceTotal
 	
 	merchant addValidCard: aValidCard.
 	
@@ -304,8 +302,8 @@ testCa02
 	
 	self assert: (cashier checkOutOnDate: Date today withMerchant: merchant ) total = anInvoice total! !
 
-!TuLibroTests methodsFor: 'cashier' stamp: 'kf 6/25/2017 12:22:34'!
-testCa03
+!TuLibroTests methodsFor: 'cashier' stamp: 'RB 6/26/2017 15:47:01'!
+testCashier08ACashierCheckoutReturnAnInvoiceWithRightTotalValue
 	
 	merchant addValidCard: aValidCard.
 	
@@ -313,8 +311,8 @@ testCa03
 	
 	self deny: (cashier checkOutOnDate: Date today withMerchant: merchant ) total = 1! !
 
-!TuLibroTests methodsFor: 'cashier' stamp: 'kf 6/25/2017 12:29:08'!
-testca04
+!TuLibroTests methodsFor: 'cashier' stamp: 'RB 6/26/2017 15:47:12'!
+testCashier09ACashierBookAfterACheckoutIsNotEmpty
 	
 	merchant addValidCard: aValidCard.
 	
@@ -324,8 +322,8 @@ testca04
 	self deny: aBook isEmpty.
 	self assert: (aBook includes: anInvoice).! !
 
-!TuLibroTests methodsFor: 'cashier' stamp: 'KF 6/25/2017 21:00:02'!
-testca05
+!TuLibroTests methodsFor: 'cashier' stamp: 'RB 6/26/2017 15:47:21'!
+testCashier10ACashierBookHasCorrectInvoices
 	
 	merchant addValidCard: aValidCard.
 	
@@ -340,8 +338,8 @@ testca05
 	self deny: aBook isEmpty.
 	self assert: (aBook includes: anInvoice).! !
 
-!TuLibroTests methodsFor: 'cashier' stamp: 'KF 6/25/2017 21:04:59'!
-testca06
+!TuLibroTests methodsFor: 'cashier' stamp: 'RB 6/26/2017 15:47:31'!
+testCashier11ACashierInvalidCheckoutIsNotRegisteredInBook
 	
 	merchant addValidCard: aValidCard withAmount: 50.
 	
@@ -416,15 +414,15 @@ test10ACartCantAddThingsThatAreNotInTheCatalog
 							 ].! !
 
 
-!TuLibroTests methodsFor: 'merchant' stamp: 'kf 6/18/2017 16:47:10'!
-test19
+!TuLibroTests methodsFor: 'merchant' stamp: 'RB 6/26/2017 15:49:24'!
+testM01AMerchantCantDebitAnExpiredCard
 	
 	self should: [merchant debit: 100 withCard: anExpiredCard .] 
 	       raise: Error - MessageNotUnderstood 
 		 withExceptionDo: [:anError| anError messageText = Card expiredError]! !
 
-!TuLibroTests methodsFor: 'merchant' stamp: 'kf 6/18/2017 11:19:20'!
-test20
+!TuLibroTests methodsFor: 'merchant' stamp: 'RB 6/26/2017 15:49:31'!
+testM02AMerchantDebitAValidCard
 	
 	merchant addValidCard: aValidCard.
 	
@@ -432,15 +430,15 @@ test20
 	       raise: Error - MessageNotUnderstood 
 		 ! !
 
-!TuLibroTests methodsFor: 'merchant' stamp: 'kf 6/18/2017 12:50:54'!
-test21
+!TuLibroTests methodsFor: 'merchant' stamp: 'RB 6/26/2017 15:49:38'!
+testM03AMerchantCantDebitACardWithoutAddHer
 	
 	self should: [merchant debit: 100 withCard: aValidCard .] 
 	       raise: Error - MessageNotUnderstood 
 		 withExceptionDo: [:anError| self assert: (anError messageText = Card invalidCard )]! !
 
-!TuLibroTests methodsFor: 'merchant' stamp: 'kf 6/18/2017 12:51:02'!
-test22
+!TuLibroTests methodsFor: 'merchant' stamp: 'RB 6/26/2017 15:49:44'!
+testM04AMerchantCantDebitAnAmountThatACardHasnt
 	
 	
 	merchant addValidCard: aValidCard withAmount: 50.
@@ -449,16 +447,8 @@ test22
 	       raise: Error - MessageNotUnderstood 
 		 withExceptionDo: [:anError| self assert: (anError messageText = Card withoutBalance )]! !
 
-!TuLibroTests methodsFor: 'merchant' stamp: 'kf 6/18/2017 12:51:09'!
-test23
-		
-		merchant addValidCard: aValidCard withAmount: 50.
-		self should: [merchant debit: 100 withCard: aValidCard .] 
-	       raise: Error - MessageNotUnderstood 
-		 withExceptionDo: [:anError| self assert: (anError messageText = Card withoutBalance )]! !
-
-!TuLibroTests methodsFor: 'merchant' stamp: 'kf 6/18/2017 13:02:42'!
-testM01
+!TuLibroTests methodsFor: 'merchant' stamp: 'RB 6/26/2017 15:50:16'!
+testM05AMerchantProccesorCantDebitIfItIsOutOfService
 
 		
 		merchant putOutService.
