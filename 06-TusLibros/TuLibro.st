@@ -1,37 +1,209 @@
 !classDefinition: #TuLibroTests category: #TuLibro!
 TestCase subclass: #TuLibroTests
-	instanceVariableNames: 'aCart catalogWithElements emptyCatalog cartWithEmptyCatalog cashier cartWithElements aValidCard anInvalidCard anInvoice anExpiredCard merchant aBook'
+	instanceVariableNames: 'aCart catalogWithElements emptyCatalog cartWithEmptyCatalog cashier cartWithElements aValidCard anInvalidCard anInvoice anExpiredCard merchant aBook rest dataLogin merchantRest'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'TuLibro'!
 
-!TuLibroTests methodsFor: 'card' stamp: 'kf 6/18/2017 11:05:08'!
+!TuLibroTests methodsFor: 'rest' stamp: 'kf 6/25/2017 11:37:47'!
+testR01
+
+	| idCart  |
+	
+	idCart := rest createCartWithClientId: 1 password: 1.
+	
+	self assert: (rest listCart: idCart ) isEmpty 
+	! !
+
+!TuLibroTests methodsFor: 'rest' stamp: 'kf 6/25/2017 11:38:12'!
+testR02
+	
+	self should: [rest createCartWithClientId: 2 password: 1.] 
+			raise: Error 
+		 withExceptionDo: [:anError |
+					anError messageText = RestMock invalidUser.
+					self toDo: 'falta chequear que no se cree el carrito sin romper encapsulamiento'.
+			].
+	
+	
+	
+	
+
+	! !
+
+!TuLibroTests methodsFor: 'rest' stamp: 'kf 6/25/2017 11:38:49'!
+testR03
+	
+
+	self should: [rest createCartWithClientId: 1 password: 2.] 
+			raise: Error 
+		 withExceptionDo: [:anError |
+					anError messageText = RestMock invalidUser.
+					self toDo: 'falta chequear que no se cree el carrito sin romper encapsulamiento'.
+			].
+	
+	
+	
+	
+
+	! !
+
+!TuLibroTests methodsFor: 'rest' stamp: 'kf 6/25/2017 11:38:59'!
+testR04
+
+	| idCart  |
+	
+	idCart := rest createCartWithClientId: 1 password: 1.
+	
+	rest addToCard: idCart isbn: 1 withQuantity: 1.
+	
+	self assert: ((rest listCart: idCart ) contents: 1).
+	self assert: (rest listCart: idCart ) elements  = 1.
+	! !
+
+!TuLibroTests methodsFor: 'rest' stamp: 'kf 6/25/2017 11:39:06'!
+testR05
+
+	| idCart  |
+	
+	idCart := rest createCartWithClientId: 1 password: 1.
+	
+	self should: [rest addToCard: idCart isbn: 0 withQuantity: 1.]  
+		raise:  Error
+	 withExceptionDo: [:anError | 
+				anError messageText  = Cart invalidISBN.
+					self assert: (rest listCart: idCart ) elements  = 0.
+		].
+	! !
+
+!TuLibroTests methodsFor: 'rest' stamp: 'kf 6/25/2017 11:40:45'!
+testR06
+
+	| idCart  |
+	
+	idCart := rest createCartWithClientId: 1 password: 1.
+	
+	self should: [rest addToCard: idCart isbn: 10 withQuantity: 1.]  
+		raise:  Error
+	 withExceptionDo: [:anError | 
+				self assert: (anError messageText  = 'No pertenece al catalogo').
+					self assert: (rest listCart: idCart ) elements  = 0.
+		].
+	! !
+
+!TuLibroTests methodsFor: 'rest' stamp: 'kf 6/25/2017 12:40:49'!
+testR07
+
+	| idCart  bag |
+	
+	idCart := rest createCartWithClientId: 1 password: 1.
+	
+	rest addToCard: idCart isbn: 1 withQuantity: 1.
+	
+	bag:= Bag new.
+	bag add:1.
+	
+	anInvoice := Invoice withElements: bag.
+
+	self assert: (rest checkout: idCart withNumberCard: 123456789301 withExpirationDate: Date today withNameHolder: 'kevin') = 1 .
+	self assert: (rest checkout: idCart withNumberCard: 123456789301 withExpirationDate: Date today withNameHolder: 'kevin') = 2	.! !
+
+!TuLibroTests methodsFor: 'rest' stamp: 'kf 6/25/2017 12:49:04'!
+testR08
+
+	| idCart  bag |
+	
+	idCart := rest createCartWithClientId: 1 password: 1.
+	
+	rest addToCard: idCart isbn: 1 withQuantity: 1.
+	
+	bag:= Bag new.
+	bag add:1.
+	
+	anInvoice := Invoice withElements: bag.
+	
+	self should: [rest checkout: idCart withNumberCard: 12345679301 withExpirationDate: Date today withNameHolder: 'kevin'] 
+				raise: Error  
+				withExceptionDo: [:anError | 
+					self assert: (rest transactions isEmpty).
+					].
+				
+	self should: [rest checkout: idCart withNumberCard: 12345679301 withExpirationDate: (Date - 60 days) today withNameHolder: 'kevin'] 
+				raise: Error  
+				withExceptionDo: [:anError | 
+					self assert: (rest transactions isEmpty).
+					].
+				
+	self should: [rest checkout: idCart withNumberCard: 12345679301 withExpirationDate: (Date today) withNameHolder: ''] 
+				raise: Error  
+				withExceptionDo: [:anError | 
+					self assert: (rest transactions isEmpty).
+					].! !
+
+!TuLibroTests methodsFor: 'rest' stamp: 'kf 6/25/2017 12:50:20'!
+testR09
+
+	| idCart  bag |
+	
+	idCart := rest createCartWithClientId: 1 password: 1.
+	
+	rest addToCard: idCart isbn: 1 withQuantity: 1000.
+	
+	bag:= Bag new.
+	bag add:1.
+	
+	anInvoice := Invoice withElements: bag.
+	
+	self should: [rest checkout: idCart withNumberCard: 123456789301 withExpirationDate: Date today withNameHolder: 'kevin'] 
+				raise: Error  
+				withExceptionDo: [:anError | 
+					self assert: (rest transactions isEmpty).
+					].
+			! !
+
+!TuLibroTests methodsFor: 'rest' stamp: 'KF 6/25/2017 21:08:22'!
+testR10
+	
+	self should: [rest listCart: 1 ] 
+			raise: Error 
+		 withExceptionDo: [:anError |
+					self assert: anError messageText = RestMock invalidCart.
+			].
+	
+	
+	
+	
+
+	! !
+
+
+!TuLibroTests methodsFor: 'card' stamp: 'kf 6/25/2017 09:19:15'!
 test13AValidCardIsNotExpired
 
 	
-	self deny: ((Card withNumber: 1  withName: 'kevin' withExpirationDate: (Date today + 1 days)) isExpiredOn: Date today)
+	self deny: ((Card withNumber: 123456789913 withName: 'kevin' withExpirationDate: (Date today + 1 days)) isExpiredOn: Date today)
 ! !
 
-!TuLibroTests methodsFor: 'card' stamp: 'kf 6/18/2017 11:05:22'!
+!TuLibroTests methodsFor: 'card' stamp: 'kf 6/25/2017 09:19:31'!
 test14AValidCardWithAYearDifferenceIsNotExpired
 
 	
 	
-	self deny: ((Card withNumber: 1  withName: 'kevin' withExpirationDate: (Date today + 380 days))  isExpiredOn: Date today)
+	self deny: ((Card withNumber: 123456789913  withName: 'kevin' withExpirationDate: (Date today + 380 days))  isExpiredOn: Date today)
  
 
 ! !
 
-!TuLibroTests methodsFor: 'card' stamp: 'kf 6/18/2017 11:05:30'!
+!TuLibroTests methodsFor: 'card' stamp: 'kf 6/25/2017 09:19:36'!
 test15AnInvalidCardWithAYearDifferenceIsExpired
 
-	self assert: ((Card withNumber: 1  withName: 'kevin' withExpirationDate: (Date today - 367 days))  isExpiredOn: Date today)
+	self assert: ((Card withNumber: 123456789913  withName: 'kevin' withExpirationDate: (Date today - 367 days))  isExpiredOn: Date today)
 ! !
 
-!TuLibroTests methodsFor: 'card' stamp: 'kf 6/18/2017 11:04:24'!
+!TuLibroTests methodsFor: 'card' stamp: 'kf 6/25/2017 09:19:40'!
 test16AnInvalidCardWithAMonthDifferenceIsExpired
 	 
-	self assert: ((Card withNumber: 1  withName: 'kevin' withExpirationDate: (Date today - 32 days)) isExpiredOn: Date today).
+	self assert: ((Card withNumber: 123456789913  withName: 'kevin' withExpirationDate: (Date today - 32 days)) isExpiredOn: Date today).
 			! !
 
 !TuLibroTests methodsFor: 'card' stamp: 'kf 6/22/2017 19:28:24'!
@@ -113,6 +285,77 @@ test27
 		 withExceptionDo: [:anError | self assert: anError messageText = MerchantProcesorMock outService .
 								self assert: aBook isEmpty.
 						]! !
+
+!TuLibroTests methodsFor: 'cashier' stamp: 'kf 6/25/2017 12:16:42'!
+testCa01
+	
+	merchant addValidCard: aValidCard.
+	
+	cashier := self cashierWithCart: cartWithElements withCard: aValidCard withBook: aBook.
+	
+	self assert: (cashier checkOutOnDate: Date today withMerchant: merchant ) elements = anInvoice elements! !
+
+!TuLibroTests methodsFor: 'cashier' stamp: 'kf 6/25/2017 12:21:48'!
+testCa02
+	
+	merchant addValidCard: aValidCard.
+	
+	cashier := self cashierWithCart: cartWithElements withCard: aValidCard withBook: aBook.
+	
+	self assert: (cashier checkOutOnDate: Date today withMerchant: merchant ) total = anInvoice total! !
+
+!TuLibroTests methodsFor: 'cashier' stamp: 'kf 6/25/2017 12:22:34'!
+testCa03
+	
+	merchant addValidCard: aValidCard.
+	
+	cashier := self cashierWithCart: cartWithElements withCard: aValidCard withBook: aBook.
+	
+	self deny: (cashier checkOutOnDate: Date today withMerchant: merchant ) total = 1! !
+
+!TuLibroTests methodsFor: 'cashier' stamp: 'kf 6/25/2017 12:29:08'!
+testca04
+	
+	merchant addValidCard: aValidCard.
+	
+	cashier := self cashierWithCart: cartWithElements withCard: aValidCard withBook: aBook.
+	
+	self assert: (cashier checkOutOnDate: Date today withMerchant: merchant ) = anInvoice.
+	self deny: aBook isEmpty.
+	self assert: (aBook includes: anInvoice).! !
+
+!TuLibroTests methodsFor: 'cashier' stamp: 'KF 6/25/2017 21:00:02'!
+testca05
+	
+	merchant addValidCard: aValidCard.
+	
+	cartWithElements := Cart withCatalog: catalogWithElements .
+	cartWithElements add: 1 quantity: 100.
+	
+	anInvoice := Invoice withElements: (cartWithElements products ) withTotal: 100.
+	
+	cashier := self cashierWithCart: cartWithElements withCard: aValidCard withBook: aBook.
+	
+	self assert: (cashier checkOutOnDate: Date today withMerchant: merchant ) = anInvoice.
+	self deny: aBook isEmpty.
+	self assert: (aBook includes: anInvoice).! !
+
+!TuLibroTests methodsFor: 'cashier' stamp: 'KF 6/25/2017 21:04:59'!
+testca06
+	
+	merchant addValidCard: aValidCard withAmount: 50.
+	
+	cartWithElements := Cart withCatalog: catalogWithElements .
+	cartWithElements add: 1 quantity: 100.
+	
+	
+	
+	self should: [cashier checkOutOnDate: Date today withMerchant: merchant ] 
+		raise: Error withExceptionDo: [:anError | 
+				self assert: aBook isEmpty.
+			]
+	
+! !
 
 
 !TuLibroTests methodsFor: 'cart' stamp: 'kf 6/15/2017 20:11:03'!
@@ -229,7 +472,7 @@ testM01
 cashierWithCart: aCart withCard: aCard withBook: aBook 
 	^ Cashier withCart: aCart withCard: aCard withBook: aBook ! !
 
-!TuLibroTests methodsFor: 'setUp' stamp: 'kf 6/22/2017 19:31:12'!
+!TuLibroTests methodsFor: 'setUp' stamp: 'kf 6/25/2017 12:24:20'!
 setUp
 	catalogWithElements := Catalog new.
 	catalogWithElements  put: 1 withPrice: 1.
@@ -248,11 +491,23 @@ setUp
 	aValidCard :=  Card withNumber: 123456789101  withName: 'kevin' withExpirationDate: (Date today + 1 days).
 	anExpiredCard := Card withNumber: 213456789101  withName: 'kevin' withExpirationDate: (Date today - 60 days).
 		
-	anInvoice := 2.
+	anInvoice := Invoice withElements: (cartWithElements products ) withTotal: 2.
 	
 	merchant :=MerchantProcesorMock withDate: Date today.
 
-	aBook := OrderedCollection new.! !
+	aBook := OrderedCollection new.
+	
+	dataLogin := Dictionary new.
+	dataLogin at: 1 put:1.
+	
+	merchantRest :=MerchantProcesorMock withDate: Date today.
+	merchantRest addValidCard:  (Card withNumber: 123456789301  withName: 'kevin' withExpirationDate: (Date today)) withAmount: 	100.
+	rest := RestMock withCatalog: catalogWithElements withDataLogin: dataLogin withTime: (Date today) withMerchant: merchantRest withBook: aBook.! !
+
+
+!TuLibroTests methodsFor: 'as yet unclassified' stamp: 'kf 6/25/2017 11:10:59'!
+toDo: aString 
+! !
 
 
 !classDefinition: #Card category: #TuLibro!
@@ -342,10 +597,10 @@ add: anElement
 	self add: anElement quantity: 1.
 ! !
 
-!Cart methodsFor: 'as yet unclassified' stamp: 'kf 6/15/2017 19:18:31'!
+!Cart methodsFor: 'as yet unclassified' stamp: 'kf 6/25/2017 11:33:41'!
 add: anElement quantity: aQuantity 
-	self assert: aQuantity isInteger.
-	self assert:  aQuantity  > 0.
+	self assert: aQuantity isInteger description: [self error: 'Invalid isbn'].
+	self assert:  aQuantity  > 0 description: [self error: 'Invalid isbn'].
 	
 	self assert: (catalog includes: anElement) description: [self error: 'No pertenece al catalogo'].
 	
@@ -372,6 +627,10 @@ initialize
 isEmpty
 	^ elements isEmpty .! !
 
+!Cart methodsFor: 'as yet unclassified' stamp: 'kf 6/25/2017 12:11:37'!
+products 
+	^ elements! !
+
 !Cart methodsFor: 'as yet unclassified' stamp: 'kf 6/13/2017 20:10:23'!
 quantityOf: anElement
 	^ elements occurrencesOf: anElement 
@@ -393,6 +652,11 @@ Cart class
 withCatalog: anOrderedCollection 
 	^ self new withCatalog: anOrderedCollection ! !
 
+
+!Cart class methodsFor: 'as yet unclassified' stamp: 'kf 6/25/2017 11:35:02'!
+invalidISBN
+	^ 'invalid isbn'! !
+
 
 !classDefinition: #Cashier category: #TuLibro!
 Object subclass: #Cashier
@@ -401,22 +665,22 @@ Object subclass: #Cashier
 	poolDictionaries: ''
 	category: 'TuLibro'!
 
-!Cashier methodsFor: 'as yet unclassified' stamp: 'kf 6/18/2017 12:59:19'!
+!Cashier methodsFor: 'as yet unclassified' stamp: 'kf 6/25/2017 12:30:35'!
 checkOutOnDate: aDate withMerchant: aMerchantProcesor
 	
-	|cost|
+	|cost invoice |
 	
 	self assert: (card isExpiredOn: aDate) not description: [self error: Card expiredError ].
 	
 	cost := self cost.
 	
-	self debit: aMerchantProcesor withAmount: cost.
-		
-	book add: cart.
+	self debit: aMerchantProcesor withAmount: cost.	
+	invoice := Invoice withElements: cart products withTotal: cost.
+	book add: invoice.
 	
-	^ cost! !
+	^ invoice! !
 
-!Cashier methodsFor: 'as yet unclassified' stamp: 'kf 6/18/2017 11:44:02'!
+!Cashier methodsFor: 'as yet unclassified' stamp: 'KF 6/25/2017 21:01:00'!
 cost
 	|catalog cost|
 	
@@ -424,7 +688,7 @@ cost
 
 	catalog := cart catalog.
 	cost := 0.
-	(catalog contents) do:[:element | 
+	(cart products) do:[:element | 
 								cost := cost + (catalog cost: element)
 							 ].
 
@@ -484,14 +748,50 @@ put: anElement withPrice: price
 
 !classDefinition: #Invoice category: #TuLibro!
 Object subclass: #Invoice
-	instanceVariableNames: ''
+	instanceVariableNames: 'elements total'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'TuLibro'!
 
+!Invoice methodsFor: 'as yet unclassified' stamp: 'kf 6/25/2017 12:17:36'!
+= anInvoice
+
+	^ elements  = anInvoice elements .! !
+
+!Invoice methodsFor: 'as yet unclassified' stamp: 'kf 6/25/2017 12:14:18'!
+elements
+	^ elements ! !
+
 !Invoice methodsFor: 'as yet unclassified' stamp: 'kf 6/15/2017 19:38:05'!
 isInvoice
 	^ true.! !
+
+!Invoice methodsFor: 'as yet unclassified' stamp: 'kf 6/25/2017 12:22:00'!
+total
+	^ total! !
+
+!Invoice methodsFor: 'as yet unclassified' stamp: 'kf 6/25/2017 12:14:04'!
+withElements: aBag 
+	elements := aBag .! !
+
+!Invoice methodsFor: 'as yet unclassified' stamp: 'kf 6/25/2017 12:23:43'!
+withElements: aBag withTotal: aTotal 
+	elements := aBag.
+	total := aTotal .! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'Invoice class' category: #TuLibro!
+Invoice class
+	instanceVariableNames: 'elements'!
+
+!Invoice class methodsFor: 'class initialization' stamp: 'kf 6/25/2017 12:13:38'!
+withElements: aBag 
+	^ self new withElements: aBag .! !
+
+!Invoice class methodsFor: 'class initialization' stamp: 'kf 6/25/2017 12:23:18'!
+withElements: aBag withTotal: aTotal
+	^ self new withElements: aBag withTotal: aTotal! !
 
 
 !classDefinition: #MerchantProcesorMock category: #TuLibro!
@@ -549,3 +849,92 @@ withDate: aDate
 !MerchantProcesorMock class methodsFor: 'as yet unclassified' stamp: 'kf 6/18/2017 13:03:33'!
 outService
 	^ 'Sin servicio'! !
+
+
+!classDefinition: #RestMock category: #TuLibro!
+Object subclass: #RestMock
+	instanceVariableNames: 'catalog carts dataLogin time book merchant transactions'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'TuLibro'!
+
+!RestMock methodsFor: 'as yet unclassified' stamp: 'kf 6/25/2017 11:30:48'!
+addToCard: cartId isbn: isbn withQuantity: aQuantity 
+	
+	| cart |
+	cart:= self listCart: cartId.
+	cart add: isbn quantity: aQuantity .
+	^ true.! !
+
+!RestMock methodsFor: 'as yet unclassified' stamp: 'kf 6/25/2017 12:39:53'!
+checkout: cartId withNumberCard: numberCard withExpirationDate: anExpirationDate withNameHolder: aNameHolder
+
+	| aCart aCashier aCard |
+	
+	aCard := Card withNumber:  numberCard withName: aNameHolder withExpirationDate: anExpirationDate .
+	
+	aCart := self listCart: cartId.
+	
+	aCashier := Cashier withCart: aCart withCard: aCard withBook: book .
+	
+	transactions add: (aCashier checkOutOnDate: time withMerchant: merchant).
+	
+	^ transactions size.
+! !
+
+!RestMock methodsFor: 'as yet unclassified' stamp: 'kf 6/25/2017 11:13:16'!
+createCartWithClientId: clientId password: password 
+
+	self assert: (dataLogin at: clientId  ifAbsent: [self error: RestMock invalidUser ]) = password description: [self error: RestMock invalidUser].
+	
+	carts addLast: (Cart withCatalog: catalog).
+	^ carts size.! !
+
+!RestMock methodsFor: 'as yet unclassified' stamp: 'KF 6/25/2017 23:49:46'!
+listCart: idCart
+	[ ^carts at: idCart .] on: Error do: [self error: RestMock invalidCart ].! !
+
+!RestMock methodsFor: 'as yet unclassified' stamp: 'kf 6/25/2017 12:42:31'!
+transactions
+	^ transactions ! !
+
+!RestMock methodsFor: 'as yet unclassified' stamp: 'kf 6/25/2017 12:40:15'!
+withCatalog: aCatalog withDataLogin: aDictionary withTime: aDate withMerchant: aMerchantProcesorMock withBook: aBook 
+	catalog := aCatalog.
+	dataLogin := aDictionary.
+	carts  := OrderedCollection new.
+	time := aDate.
+	merchant := aMerchantProcesorMock.
+	book  := aBook .
+	transactions := OrderedCollection new.! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'RestMock class' category: #TuLibro!
+RestMock class
+	instanceVariableNames: ''!
+
+!RestMock class methodsFor: 'class initialization' stamp: 'kf 6/25/2017 10:52:05'!
+withCatalog: aCatalog 
+	^ self new withCatalog: aCatalog .! !
+
+!RestMock class methodsFor: 'class initialization' stamp: 'kf 6/25/2017 11:02:03'!
+withCatalog: aCatalog withDataLogin: aDictionary 
+	^self new withCatalog: aCatalog withDataLogin: aDictionary.! !
+
+!RestMock class methodsFor: 'class initialization' stamp: 'kf 6/25/2017 11:41:42'!
+withCatalog: aCatalog withDataLogin: aDictionary withTime: aDate 
+	^ self new withCatalog: aCatalog withDataLogin: aDictionary withTime: aDate ! !
+
+
+!RestMock class methodsFor: 'as yet unclassified' stamp: 'KF 6/25/2017 21:08:06'!
+invalidCart
+	^ 'invalid cart'! !
+
+!RestMock class methodsFor: 'as yet unclassified' stamp: 'kf 6/25/2017 11:08:03'!
+invalidUser
+	^ 'Invalid user/password'! !
+
+!RestMock class methodsFor: 'as yet unclassified' stamp: 'kf 6/25/2017 11:57:49'!
+withCatalog: aCatalog withDataLogin: aDictionary withTime: aDate withMerchant: aMerchantProcesorMock withBook: anOrderedCollection 
+	^ self new withCatalog: aCatalog withDataLogin: aDictionary withTime: aDate withMerchant: aMerchantProcesorMock withBook: anOrderedCollection ! !
