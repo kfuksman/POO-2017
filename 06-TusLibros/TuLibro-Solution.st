@@ -97,8 +97,8 @@ testR06RestRaiseErrorWhenISBNIsNotInCatalog
 		].
 	! !
 
-!TuLibroTests methodsFor: 'rest' stamp: 'KF 6/26/2017 23:21:04'!
-testR07
+!TuLibroTests methodsFor: 'rest' stamp: 'RB 6/27/2017 17:32:13'!
+testR07RestReturnCheckoutWithCorrectID
 
 	| idCart  idCart2 |
 	
@@ -111,8 +111,8 @@ testR07
 	self assert: (rest checkout: idCart withNumberCard: 123456789301 withExpirationDate: Date today withNameHolder: 'kevin') = 1 .
 	self assert: (rest checkout: idCart2 withNumberCard: 123456789301 withExpirationDate: Date today withNameHolder: 'kevin') = 2	.! !
 
-!TuLibroTests methodsFor: 'rest' stamp: 'kf 6/25/2017 12:49:04'!
-testR08
+!TuLibroTests methodsFor: 'rest' stamp: 'RB 6/27/2017 17:49:15'!
+testR08RestCheckoutOfElementWithInvalidCardIsNotATransaction
 
 	| idCart  bag |
 	
@@ -143,8 +143,8 @@ testR08
 					self assert: (rest transactions isEmpty).
 					].! !
 
-!TuLibroTests methodsFor: 'rest' stamp: 'kf 6/25/2017 12:50:20'!
-testR09
+!TuLibroTests methodsFor: 'rest' stamp: 'RB 6/27/2017 17:49:35'!
+testR09RestCheckoutWithInvalidCardIsNotATransactionEver
 
 	| idCart  bag |
 	
@@ -164,8 +164,8 @@ testR09
 					].
 			! !
 
-!TuLibroTests methodsFor: 'rest' stamp: 'KF 6/26/2017 23:32:31'!
-testR10
+!TuLibroTests methodsFor: 'rest' stamp: 'RB 6/27/2017 17:36:56'!
+testR10RestOnlyKnowCartsRelatedToID
 	
 	self should: [rest listCart: 1 ] 
 			raise: Error 
@@ -179,8 +179,8 @@ testR10
 
 	! !
 
-!TuLibroTests methodsFor: 'rest' stamp: 'KF 6/26/2017 23:04:10'!
-testR11
+!TuLibroTests methodsFor: 'rest' stamp: 'RB 6/27/2017 17:39:57'!
+testR11RestCartsFromSameIdAreDifferentCarts
 
 	| idCart  idCart2 |
 	
@@ -191,8 +191,8 @@ testR11
 	self deny:  (idCart  = idCart2).
 	self deny: ((rest listCart: idCart)  = (rest listCart: idCart2 ))! !
 
-!TuLibroTests methodsFor: 'rest' stamp: 'KF 6/26/2017 23:04:32'!
-testR12
+!TuLibroTests methodsFor: 'rest' stamp: 'RB 6/27/2017 17:36:01'!
+testR12ARestCartIsEqualToSelf
 
 	| idCart  |
 	
@@ -200,8 +200,8 @@ testR12
 	
 	self assert: ((rest listCart: idCart)  = (rest listCart: idCart ))! !
 
-!TuLibroTests methodsFor: 'rest' stamp: 'KF 6/26/2017 23:32:39'!
-testR13
+!TuLibroTests methodsFor: 'rest' stamp: 'RB 6/27/2017 17:49:57'!
+testR13RestCartCanBeCheckedOutOnlyOneTime
 
 	| idCart  |
 	
@@ -217,15 +217,15 @@ testR13
 				]
 ! !
 
-!TuLibroTests methodsFor: 'rest' stamp: 'RB 6/27/2017 16:09:24'!
-testR14
+!TuLibroTests methodsFor: 'rest' stamp: 'RB 6/27/2017 17:38:14'!
+testR14RestInitializeIDWithoutPurchases
 
 	self assert: (rest listPurchasesId: 1 withPassword: 1) isEmpty .
 
 	! !
 
-!TuLibroTests methodsFor: 'rest' stamp: 'KF 6/26/2017 23:33:50'!
-testR15
+!TuLibroTests methodsFor: 'rest' stamp: 'RB 6/27/2017 17:39:44'!
+testR15RestCartsFromDifferentIdAreDifferentCarts
 
 	| idCart  idCart2 |
 	
@@ -236,8 +236,8 @@ testR15
 	self deny:  (idCart  = idCart2).
 	self deny: ((rest listCart: idCart)  = (rest listCart: idCart2 ))! !
 
-!TuLibroTests methodsFor: 'rest' stamp: 'RB 6/27/2017 16:09:28'!
-testR16
+!TuLibroTests methodsFor: 'rest' stamp: 'RB 6/27/2017 17:40:28'!
+testR16RestCheckoutFromValidCartCountLikeAPurchase
 
 	| idCart idCart2 |
 	
@@ -253,8 +253,8 @@ testR16
 
 	! !
 
-!TuLibroTests methodsFor: 'rest' stamp: 'KF 6/27/2017 00:37:24'!
-testR17
+!TuLibroTests methodsFor: 'rest' stamp: 'RB 6/27/2017 17:40:50'!
+testR17RestCartAreValidWith30minutesTransaction
 
 	| idCart |
 	
@@ -271,8 +271,8 @@ testR17
 	
 	! !
 
-!TuLibroTests methodsFor: 'rest' stamp: 'KF 6/27/2017 00:53:36'!
-testR18
+!TuLibroTests methodsFor: 'rest' stamp: 'RB 6/27/2017 17:42:36'!
+testR18RestCartWithTransactionsIsValid
 
 	| idCart |
 	
@@ -286,8 +286,8 @@ testR18
 	
 	! !
 
-!TuLibroTests methodsFor: 'rest' stamp: 'KF 6/27/2017 00:53:54'!
-testR19
+!TuLibroTests methodsFor: 'rest' stamp: 'RB 6/27/2017 17:42:15'!
+testR19RestCartInUseIsValid
 
 	| idCart |
 	
