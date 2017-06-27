@@ -15,14 +15,21 @@ testR01RestLoginAnUserWithCartEmpty
 	self assert: (rest listCart: idCart ) isEmpty 
 	! !
 
-!TuLibroTests methodsFor: 'rest' stamp: 'RB 6/26/2017 16:40:31'!
+!TuLibroTests methodsFor: 'rest' stamp: 'KF 6/26/2017 23:32:27'!
 testR02RestCantLoginAnUserWithInvalidID
 	
 	self should: [rest createCartWithClientId: 2 password: 1.] 
+			raise: Error - MessageNotUnderstood 
+		 withExceptionDo: [:anError |
+					self assert: anError messageText = Rest invalidUser.
+					self assert: rest listCarts isEmpty.
+			].
+		
+		self should: [rest listPurchasesId:   2 withPasswod: 1.] 
 			raise: Error 
 		 withExceptionDo: [:anError |
-					anError messageText = RestMock invalidUser.
-					self toDo: 'falta chequear que no se cree el carrito sin romper encapsulamiento'.
+					self assert: anError messageText = Rest invalidUser.
+					self assert: rest listCarts isEmpty.
 			].
 	
 	
@@ -31,14 +38,14 @@ testR02RestCantLoginAnUserWithInvalidID
 
 	! !
 
-!TuLibroTests methodsFor: 'rest' stamp: 'RB 6/26/2017 16:40:22'!
+!TuLibroTests methodsFor: 'rest' stamp: 'KF 6/26/2017 23:32:41'!
 testR03RestCantLoginAnUserWithWrongPassword
 
 	self should: [rest createCartWithClientId: 1 password: 2.] 
 			raise: Error 
 		 withExceptionDo: [:anError |
-					anError messageText = RestMock invalidUser.
-					self toDo: 'falta chequear que no se cree el carrito sin romper encapsulamiento'.
+					self assert: anError messageText = Rest invalidUser.
+					self assert: rest listCarts isEmpty.
 			].
 	
 	
@@ -90,22 +97,19 @@ testR06RestRaiseErrorWhenISBNIsNotInCatalog
 		].
 	! !
 
-!TuLibroTests methodsFor: 'rest' stamp: 'kf 6/25/2017 12:40:49'!
+!TuLibroTests methodsFor: 'rest' stamp: 'KF 6/26/2017 23:21:04'!
 testR07
 
-	| idCart  bag |
+	| idCart  idCart2 |
 	
 	idCart := rest createCartWithClientId: 1 password: 1.
-	
+	idCart2 := rest createCartWithClientId: 1 password: 1.	
 	rest addToCard: idCart isbn: 1 withQuantity: 1.
-	
-	bag:= Bag new.
-	bag add:1.
-	
-	anInvoice := Invoice withElements: bag.
+
+	rest addToCard: idCart2 isbn: 1 withQuantity: 1.	
 
 	self assert: (rest checkout: idCart withNumberCard: 123456789301 withExpirationDate: Date today withNameHolder: 'kevin') = 1 .
-	self assert: (rest checkout: idCart withNumberCard: 123456789301 withExpirationDate: Date today withNameHolder: 'kevin') = 2	.! !
+	self assert: (rest checkout: idCart2 withNumberCard: 123456789301 withExpirationDate: Date today withNameHolder: 'kevin') = 2	.! !
 
 !TuLibroTests methodsFor: 'rest' stamp: 'kf 6/25/2017 12:49:04'!
 testR08
@@ -160,19 +164,111 @@ testR09
 					].
 			! !
 
-!TuLibroTests methodsFor: 'rest' stamp: 'KF 6/25/2017 21:08:22'!
+!TuLibroTests methodsFor: 'rest' stamp: 'KF 6/26/2017 23:32:31'!
 testR10
 	
 	self should: [rest listCart: 1 ] 
 			raise: Error 
 		 withExceptionDo: [:anError |
-					self assert: anError messageText = RestMock invalidCart.
+					self assert: anError messageText = Rest invalidCart.
 			].
 	
 	
 	
 	
 
+	! !
+
+!TuLibroTests methodsFor: 'rest' stamp: 'KF 6/26/2017 23:04:10'!
+testR11
+
+	| idCart  idCart2 |
+	
+	idCart := rest createCartWithClientId: 1 password: 1.
+	idCart2 := rest createCartWithClientId: 1 password: 1.
+	
+	
+	self deny:  (idCart  = idCart2).
+	self deny: ((rest listCart: idCart)  = (rest listCart: idCart2 ))! !
+
+!TuLibroTests methodsFor: 'rest' stamp: 'KF 6/26/2017 23:04:32'!
+testR12
+
+	| idCart  |
+	
+	idCart := rest createCartWithClientId: 1 password: 1.	
+	
+	self assert: ((rest listCart: idCart)  = (rest listCart: idCart ))! !
+
+!TuLibroTests methodsFor: 'rest' stamp: 'KF 6/26/2017 23:32:39'!
+testR13
+
+	| idCart  |
+	
+	idCart := rest createCartWithClientId: 1 password: 1.
+	rest addToCard: idCart isbn: 1 withQuantity: 1.
+
+	self assert: (rest checkout: idCart withNumberCard: 123456789301 withExpirationDate: Date today withNameHolder: 'kevin') = 1 .
+	self should: [rest checkout: idCart withNumberCard: 123456789301 withExpirationDate: Date today withNameHolder: 'kevin'] 
+			raise: Error 
+			withExceptionDo: [:anError | 
+				self assert: (anError  messageText = Rest invalidCart).
+				self assert:( rest transactions size = 1)
+				]
+! !
+
+!TuLibroTests methodsFor: 'rest' stamp: 'KF 6/26/2017 23:28:04'!
+testR14
+
+	self assert: (rest listPurchasesId: 1 withPasswod: 1) isEmpty .
+
+	! !
+
+!TuLibroTests methodsFor: 'rest' stamp: 'KF 6/26/2017 23:33:50'!
+testR15
+
+	| idCart  idCart2 |
+	
+	idCart := rest createCartWithClientId: 1 password: 1.
+	idCart2 := rest createCartWithClientId: 2 password: 2.
+	
+	
+	self deny:  (idCart  = idCart2).
+	self deny: ((rest listCart: idCart)  = (rest listCart: idCart2 ))! !
+
+!TuLibroTests methodsFor: 'rest' stamp: 'KF 6/26/2017 23:36:15'!
+testR16
+
+	| idCart idCart2 |
+	
+	idCart := rest createCartWithClientId: 1 password: 1.
+	idCart2 := rest createCartWithClientId: 1 password: 1.	
+	rest addToCard: idCart isbn: 1 withQuantity: 1.
+	rest addToCard: idCart2 isbn: 1 withQuantity: 1.	
+
+	rest checkout: idCart withNumberCard: 123456789301 withExpirationDate: Date today withNameHolder: 'kevin' .
+	rest checkout: idCart2 withNumberCard: 123456789301 withExpirationDate: Date today withNameHolder: 'kevin'.
+
+	self assert: (rest listPurchasesId: 1 withPasswod: 1) size = 2 .
+
+	! !
+
+!TuLibroTests methodsFor: 'rest' stamp: 'KF 6/27/2017 00:37:24'!
+testR17
+
+	| idCart |
+	
+	idCart := rest createCartWithClientId: 1 password: 1.
+	
+	rest time: ((DateAndTime now) + 31 minutes ).
+	
+	self should: [rest addToCard: idCart isbn: 1 withQuantity: 1.]  
+			raise: Error 
+			 withExceptionDo: [:anError |
+				self assert: (anError messageText = Rest timeExpired).
+				self toDo: 'Falta testear que no se hayan agregado elementos sin romper encapsulamiento'
+	]
+	
 	! !
 
 
@@ -462,7 +558,7 @@ testM05AMerchantProccesorCantDebitIfItIsOutOfService
 cashierWithCart: aCart withCard: aCard withBook: aBook 
 	^ Cashier withCart: aCart withCard: aCard withBook: aBook ! !
 
-!TuLibroTests methodsFor: 'setUp' stamp: 'kf 6/25/2017 12:24:20'!
+!TuLibroTests methodsFor: 'setUp' stamp: 'KF 6/27/2017 00:44:16'!
 setUp
 	catalogWithElements := Catalog new.
 	catalogWithElements  put: 1 withPrice: 1.
@@ -489,10 +585,11 @@ setUp
 	
 	dataLogin := Dictionary new.
 	dataLogin at: 1 put:1.
+	dataLogin at: 2 put:2.
 	
 	merchantRest :=MerchantProcesorMock withDate: Date today.
 	merchantRest addValidCard:  (Card withNumber: 123456789301  withName: 'kevin' withExpirationDate: (Date today)) withAmount: 	100.
-	rest := RestMock withCatalog: catalogWithElements withDataLogin: dataLogin withTime: (Date today) withMerchant: merchantRest withBook: aBook.! !
+	rest := Rest withCatalog: catalogWithElements withDataLogin: dataLogin withTime: (DateAndTime now) withMerchant: merchantRest withBook: aBook.! !
 
 
 !TuLibroTests methodsFor: 'as yet unclassified' stamp: 'kf 6/25/2017 11:10:59'!
@@ -841,14 +938,14 @@ outService
 	^ 'Sin servicio'! !
 
 
-!classDefinition: #RestMock category: #TuLibro!
-Object subclass: #RestMock
-	instanceVariableNames: 'catalog carts dataLogin time book merchant transactions'
+!classDefinition: #Rest category: #TuLibro!
+Object subclass: #Rest
+	instanceVariableNames: 'catalog carts dataLogin time book merchant transactions cartsCheckout usersCarts actionsCarts'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'TuLibro'!
 
-!RestMock methodsFor: 'as yet unclassified' stamp: 'kf 6/25/2017 11:30:48'!
+!Rest methodsFor: 'as yet unclassified' stamp: 'kf 6/25/2017 11:30:48'!
 addToCard: cartId isbn: isbn withQuantity: aQuantity 
 	
 	| cart |
@@ -856,7 +953,7 @@ addToCard: cartId isbn: isbn withQuantity: aQuantity
 	cart add: isbn quantity: aQuantity .
 	^ true.! !
 
-!RestMock methodsFor: 'as yet unclassified' stamp: 'kf 6/25/2017 12:39:53'!
+!Rest methodsFor: 'as yet unclassified' stamp: 'KF 6/26/2017 23:24:17'!
 checkout: cartId withNumberCard: numberCard withExpirationDate: anExpirationDate withNameHolder: aNameHolder
 
 	| aCart aCashier aCard |
@@ -869,26 +966,52 @@ checkout: cartId withNumberCard: numberCard withExpirationDate: anExpirationDate
 	
 	transactions add: (aCashier checkOutOnDate: time withMerchant: merchant).
 	
+	cartsCheckout add: cartId.
+	
 	^ transactions size.
 ! !
 
-!RestMock methodsFor: 'as yet unclassified' stamp: 'kf 6/25/2017 11:13:16'!
+!Rest methodsFor: 'as yet unclassified' stamp: 'KF 6/27/2017 00:33:13'!
 createCartWithClientId: clientId password: password 
 
-	self assert: (dataLogin at: clientId  ifAbsent: [self error: RestMock invalidUser ]) = password description: [self error: RestMock invalidUser].
+	self validateUser: clientId withPassword: password.
 	
 	carts addLast: (Cart withCatalog: catalog).
+	(usersCarts at: clientId  ifAbsentPut: [OrderedCollection new .]) add: (carts size).
+	actionsCarts at: (carts size) put: DateAndTime now.
+	
 	^ carts size.! !
 
-!RestMock methodsFor: 'as yet unclassified' stamp: 'KF 6/25/2017 23:49:46'!
+!Rest methodsFor: 'as yet unclassified' stamp: 'KF 6/27/2017 00:36:02'!
 listCart: idCart
-	[ ^carts at: idCart .] on: Error do: [self error: RestMock invalidCart ].! !
 
-!RestMock methodsFor: 'as yet unclassified' stamp: 'kf 6/25/2017 12:42:31'!
+	(cartsCheckout includes: idCart  ) ifTrue: [self error: Rest invalidCart].
+	(((actionsCarts at:idCart ifAbsent: [self error: Rest invalidCart] ) + 30 minutes) < time) ifTrue: [self error: Rest timeExpired].	
+	[ ^carts at: idCart .] on: Error do: [self error: Rest invalidCart ].! !
+
+!Rest methodsFor: 'as yet unclassified' stamp: 'KF 6/26/2017 23:00:44'!
+listCarts
+	^ carts ! !
+
+!Rest methodsFor: 'as yet unclassified' stamp: 'KF 6/26/2017 23:47:26'!
+listPurchasesId: clientId withPasswod: password 
+	self validateUser: clientId withPassword: password.
+	^ usersCarts at: clientId ifAbsent: [^ OrderedCollection new.]. 
+! !
+
+!Rest methodsFor: 'as yet unclassified' stamp: 'KF 6/27/2017 00:24:20'!
+time: aDateAndTime 
+	time := aDateAndTime .! !
+
+!Rest methodsFor: 'as yet unclassified' stamp: 'kf 6/25/2017 12:42:31'!
 transactions
 	^ transactions ! !
 
-!RestMock methodsFor: 'as yet unclassified' stamp: 'kf 6/25/2017 12:40:15'!
+!Rest methodsFor: 'as yet unclassified' stamp: 'KF 6/26/2017 23:32:49'!
+validateUser: clientId withPassword: password 
+	self assert: (dataLogin at: clientId  ifAbsent: [self error: Rest invalidUser ]) = password description: [self error: Rest invalidUser].! !
+
+!Rest methodsFor: 'as yet unclassified' stamp: 'KF 6/27/2017 00:25:35'!
 withCatalog: aCatalog withDataLogin: aDictionary withTime: aDate withMerchant: aMerchantProcesorMock withBook: aBook 
 	catalog := aCatalog.
 	dataLogin := aDictionary.
@@ -896,35 +1019,42 @@ withCatalog: aCatalog withDataLogin: aDictionary withTime: aDate withMerchant: a
 	time := aDate.
 	merchant := aMerchantProcesorMock.
 	book  := aBook .
-	transactions := OrderedCollection new.! !
+	transactions := OrderedCollection new.
+	cartsCheckout := OrderedCollection new.
+	usersCarts := Dictionary new.
+	actionsCarts := Dictionary new.! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
-!classDefinition: 'RestMock class' category: #TuLibro!
-RestMock class
+!classDefinition: 'Rest class' category: #TuLibro!
+Rest class
 	instanceVariableNames: ''!
 
-!RestMock class methodsFor: 'class initialization' stamp: 'kf 6/25/2017 10:52:05'!
+!Rest class methodsFor: 'class initialization' stamp: 'kf 6/25/2017 10:52:05'!
 withCatalog: aCatalog 
 	^ self new withCatalog: aCatalog .! !
 
-!RestMock class methodsFor: 'class initialization' stamp: 'kf 6/25/2017 11:02:03'!
+!Rest class methodsFor: 'class initialization' stamp: 'kf 6/25/2017 11:02:03'!
 withCatalog: aCatalog withDataLogin: aDictionary 
 	^self new withCatalog: aCatalog withDataLogin: aDictionary.! !
 
-!RestMock class methodsFor: 'class initialization' stamp: 'kf 6/25/2017 11:41:42'!
+!Rest class methodsFor: 'class initialization' stamp: 'kf 6/25/2017 11:41:42'!
 withCatalog: aCatalog withDataLogin: aDictionary withTime: aDate 
 	^ self new withCatalog: aCatalog withDataLogin: aDictionary withTime: aDate ! !
 
 
-!RestMock class methodsFor: 'as yet unclassified' stamp: 'KF 6/25/2017 21:08:06'!
+!Rest class methodsFor: 'as yet unclassified' stamp: 'KF 6/25/2017 21:08:06'!
 invalidCart
 	^ 'invalid cart'! !
 
-!RestMock class methodsFor: 'as yet unclassified' stamp: 'kf 6/25/2017 11:08:03'!
+!Rest class methodsFor: 'as yet unclassified' stamp: 'kf 6/25/2017 11:08:03'!
 invalidUser
 	^ 'Invalid user/password'! !
 
-!RestMock class methodsFor: 'as yet unclassified' stamp: 'kf 6/25/2017 11:57:49'!
+!Rest class methodsFor: 'as yet unclassified' stamp: 'KF 6/27/2017 00:23:02'!
+timeExpired
+	^ 'time expired'! !
+
+!Rest class methodsFor: 'as yet unclassified' stamp: 'kf 6/25/2017 11:57:49'!
 withCatalog: aCatalog withDataLogin: aDictionary withTime: aDate withMerchant: aMerchantProcesorMock withBook: anOrderedCollection 
 	^ self new withCatalog: aCatalog withDataLogin: aDictionary withTime: aDate withMerchant: aMerchantProcesorMock withBook: anOrderedCollection ! !
