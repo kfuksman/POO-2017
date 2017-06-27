@@ -271,6 +271,36 @@ testR17
 	
 	! !
 
+!TuLibroTests methodsFor: 'rest' stamp: 'KF 6/27/2017 00:53:36'!
+testR18
+
+	| idCart |
+	
+	idCart := rest createCartWithClientId: 1 password: 1.
+	
+	rest time: ((DateAndTime now) + 15 minutes ).
+	rest addToCard: idCart isbn: 1 withQuantity: 1.
+	rest time: (rest time + 16 minutes ).	
+	self shouldnt: [rest addToCard: idCart isbn: 1 withQuantity: 1.]  raise: Error
+			
+	
+	! !
+
+!TuLibroTests methodsFor: 'rest' stamp: 'KF 6/27/2017 00:53:54'!
+testR19
+
+	| idCart |
+	
+	idCart := rest createCartWithClientId: 1 password: 1.
+	
+	rest time: ((DateAndTime now) + 15 minutes ).
+	rest listCart: idCart .
+	rest time: (rest time + 16 minutes ).	
+	self shouldnt: [rest addToCard: idCart isbn: 1 withQuantity: 1.]  raise: Error
+			
+	
+	! !
+
 
 !TuLibroTests methodsFor: 'card' stamp: 'RB 6/26/2017 15:47:55'!
 testCard01AValidCardIsNotExpired
@@ -592,7 +622,7 @@ setUp
 	rest := Rest withCatalog: catalogWithElements withDataLogin: dataLogin withTime: (DateAndTime now) withMerchant: merchantRest withBook: aBook.! !
 
 
-!TuLibroTests methodsFor: 'as yet unclassified' stamp: 'kf 6/25/2017 11:10:59'!
+!TuLibroTests methodsFor: 'toDo' stamp: 'kf 6/25/2017 11:10:59'!
 toDo: aString 
 ! !
 
@@ -945,7 +975,7 @@ Object subclass: #Rest
 	poolDictionaries: ''
 	category: 'TuLibro'!
 
-!Rest methodsFor: 'as yet unclassified' stamp: 'kf 6/25/2017 11:30:48'!
+!Rest methodsFor: 'as yet unclassified' stamp: 'KF 6/27/2017 00:54:24'!
 addToCard: cartId isbn: isbn withQuantity: aQuantity 
 	
 	| cart |
@@ -971,22 +1001,23 @@ checkout: cartId withNumberCard: numberCard withExpirationDate: anExpirationDate
 	^ transactions size.
 ! !
 
-!Rest methodsFor: 'as yet unclassified' stamp: 'KF 6/27/2017 00:33:13'!
+!Rest methodsFor: 'as yet unclassified' stamp: 'KF 6/27/2017 00:51:59'!
 createCartWithClientId: clientId password: password 
 
 	self validateUser: clientId withPassword: password.
 	
 	carts addLast: (Cart withCatalog: catalog).
 	(usersCarts at: clientId  ifAbsentPut: [OrderedCollection new .]) add: (carts size).
-	actionsCarts at: (carts size) put: DateAndTime now.
+	self updateTimeCart: (carts size).
 	
 	^ carts size.! !
 
-!Rest methodsFor: 'as yet unclassified' stamp: 'KF 6/27/2017 00:36:02'!
+!Rest methodsFor: 'as yet unclassified' stamp: 'KF 6/27/2017 00:55:02'!
 listCart: idCart
 
 	(cartsCheckout includes: idCart  ) ifTrue: [self error: Rest invalidCart].
-	(((actionsCarts at:idCart ifAbsent: [self error: Rest invalidCart] ) + 30 minutes) < time) ifTrue: [self error: Rest timeExpired].	
+	(((actionsCarts at:idCart ifAbsent: [self error: Rest invalidCart] ) + 30 minutes) < time) ifTrue: [self error: Rest timeExpired].
+	self updateTimeCart: idCart .	
 	[ ^carts at: idCart .] on: Error do: [self error: Rest invalidCart ].! !
 
 !Rest methodsFor: 'as yet unclassified' stamp: 'KF 6/26/2017 23:00:44'!
@@ -999,6 +1030,10 @@ listPurchasesId: clientId withPasswod: password
 	^ usersCarts at: clientId ifAbsent: [^ OrderedCollection new.]. 
 ! !
 
+!Rest methodsFor: 'as yet unclassified' stamp: 'KF 6/27/2017 00:50:53'!
+time
+	^time! !
+
 !Rest methodsFor: 'as yet unclassified' stamp: 'KF 6/27/2017 00:24:20'!
 time: aDateAndTime 
 	time := aDateAndTime .! !
@@ -1006,6 +1041,10 @@ time: aDateAndTime
 !Rest methodsFor: 'as yet unclassified' stamp: 'kf 6/25/2017 12:42:31'!
 transactions
 	^ transactions ! !
+
+!Rest methodsFor: 'as yet unclassified' stamp: 'KF 6/27/2017 00:52:31'!
+updateTimeCart: idCart 
+	actionsCarts at: idCart put: time! !
 
 !Rest methodsFor: 'as yet unclassified' stamp: 'KF 6/26/2017 23:32:49'!
 validateUser: clientId withPassword: password 
