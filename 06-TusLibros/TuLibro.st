@@ -15,7 +15,7 @@ testR01RestLoginAnUserWithCartEmpty
 	self assert: (rest listCart: idCart ) isEmpty 
 	! !
 
-!TuLibroTests methodsFor: 'rest' stamp: 'KF 6/26/2017 23:32:27'!
+!TuLibroTests methodsFor: 'rest' stamp: 'RB 6/27/2017 16:09:18'!
 testR02RestCantLoginAnUserWithInvalidID
 	
 	self should: [rest createCartWithClientId: 2 password: 1.] 
@@ -25,7 +25,7 @@ testR02RestCantLoginAnUserWithInvalidID
 					self assert: rest listCarts isEmpty.
 			].
 		
-		self should: [rest listPurchasesId:   2 withPasswod: 1.] 
+		self should: [rest listPurchasesId:   2 withPassword: 1.] 
 			raise: Error 
 		 withExceptionDo: [:anError |
 					self assert: anError messageText = Rest invalidUser.
@@ -217,10 +217,10 @@ testR13
 				]
 ! !
 
-!TuLibroTests methodsFor: 'rest' stamp: 'KF 6/26/2017 23:28:04'!
+!TuLibroTests methodsFor: 'rest' stamp: 'RB 6/27/2017 16:09:24'!
 testR14
 
-	self assert: (rest listPurchasesId: 1 withPasswod: 1) isEmpty .
+	self assert: (rest listPurchasesId: 1 withPassword: 1) isEmpty .
 
 	! !
 
@@ -236,7 +236,7 @@ testR15
 	self deny:  (idCart  = idCart2).
 	self deny: ((rest listCart: idCart)  = (rest listCart: idCart2 ))! !
 
-!TuLibroTests methodsFor: 'rest' stamp: 'KF 6/26/2017 23:36:15'!
+!TuLibroTests methodsFor: 'rest' stamp: 'RB 6/27/2017 16:09:28'!
 testR16
 
 	| idCart idCart2 |
@@ -249,7 +249,7 @@ testR16
 	rest checkout: idCart withNumberCard: 123456789301 withExpirationDate: Date today withNameHolder: 'kevin' .
 	rest checkout: idCart2 withNumberCard: 123456789301 withExpirationDate: Date today withNameHolder: 'kevin'.
 
-	self assert: (rest listPurchasesId: 1 withPasswod: 1) size = 2 .
+	self assert: (rest listPurchasesId: 1 withPassword: 1) size = 2 .
 
 	! !
 
@@ -634,17 +634,11 @@ Object subclass: #Card
 	poolDictionaries: ''
 	category: 'TuLibro'!
 
-!Card methodsFor: 'as yet unclassified' stamp: 'kf 6/18/2017 11:07:57'!
-= aCard
-
-	(aCard isKindOf: self class) ifFalse: [^false].
-	^ cardNumber = aCard cardNumber! !
-
-!Card methodsFor: 'as yet unclassified' stamp: 'kf 6/18/2017 11:19:47'!
+!Card methodsFor: 'accessing' stamp: 'kf 6/18/2017 11:19:47'!
 cardNumber
 	^ cardNumber ! !
 
-!Card methodsFor: 'as yet unclassified' stamp: 'kf 6/15/2017 20:04:55'!
+!Card methodsFor: 'accessing' stamp: 'kf 6/15/2017 20:04:55'!
 isExpired
 
 |actualMonthYear|
@@ -655,18 +649,26 @@ isExpired
 
 ^false! !
 
-!Card methodsFor: 'as yet unclassified' stamp: 'kf 6/18/2017 11:04:49'!
+!Card methodsFor: 'accessing' stamp: 'kf 6/18/2017 11:04:49'!
 isExpiredOn: aDate
 	
 	(expirationDate yearNumber < aDate yearNumber) ifTrue: [^true].
 	((expirationDate monthIndex < aDate monthIndex ) and: [expirationDate yearNumber = aDate yearNumber]) ifTrue: [^true].
 	^false! !
 
-!Card methodsFor: 'as yet unclassified' stamp: 'kf 6/14/2017 00:09:35'!
+
+!Card methodsFor: 'initialization' stamp: 'kf 6/14/2017 00:09:35'!
 withNumber: acardNumber withName: acardHolder withExpirationDate: amonthOfYear 
 	cardNumber := acardNumber.
 	cardHolder := acardHolder.
 	expirationDate := amonthOfYear .! !
+
+
+!Card methodsFor: 'comparing' stamp: 'kf 6/18/2017 11:07:57'!
+= aCard
+
+	(aCard isKindOf: self class) ifFalse: [^false].
+	^ cardNumber = aCard cardNumber! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -674,30 +676,32 @@ withNumber: acardNumber withName: acardHolder withExpirationDate: amonthOfYear
 Card class
 	instanceVariableNames: ''!
 
-!Card class methodsFor: 'as yet unclassified' stamp: 'kf 6/18/2017 11:50:06'!
-expiredError
-	^ 'La tarjeta expiro'! !
-
-!Card class methodsFor: 'as yet unclassified' stamp: 'kf 6/18/2017 12:49:53'!
-invalidCard
-	^ 'Tarjeta invalida' ! !
-
-!Card class methodsFor: 'as yet unclassified' stamp: 'kf 6/22/2017 19:22:26'!
-invalidName
-	^ 'Nombre invalido'! !
-
-!Card class methodsFor: 'as yet unclassified' stamp: 'kf 6/22/2017 19:26:36'!
-invalidNumber
-	^ 'invalid number'! !
-
-!Card class methodsFor: 'as yet unclassified' stamp: 'kf 6/22/2017 19:31:21'!
+!Card class methodsFor: 'instance creation' stamp: 'kf 6/22/2017 19:31:21'!
 withNumber: cardNumber withName: cardHolder withExpirationDate: monthYear 
 	
 	self assert: (cardHolder isEmpty) not description: [self error: (Card invalidName) ].
 	self assert: (cardNumber decimalDigitLength  = 12) description: [self error: (Card invalidNumber )].
 	^self new withNumber: cardNumber withName: cardHolder withExpirationDate: monthYear ! !
 
-!Card class methodsFor: 'as yet unclassified' stamp: 'kf 6/18/2017 12:50:30'!
+
+!Card class methodsFor: 'exceptions'!
+expiredError
+	self break.
+	^ 'La tarjeta expiro'.! !
+
+!Card class methodsFor: 'exceptions' stamp: 'kf 6/18/2017 12:49:53'!
+invalidCard
+	^ 'Tarjeta invalida' ! !
+
+!Card class methodsFor: 'exceptions' stamp: 'kf 6/22/2017 19:22:26'!
+invalidName
+	^ 'Nombre invalido'! !
+
+!Card class methodsFor: 'exceptions' stamp: 'kf 6/22/2017 19:26:36'!
+invalidNumber
+	^ 'invalid number'! !
+
+!Card class methodsFor: 'exceptions' stamp: 'kf 6/18/2017 12:50:30'!
 withoutBalance
 	^ 'Sin Saldo'! !
 
@@ -709,12 +713,23 @@ Object subclass: #Cart
 	poolDictionaries: ''
 	category: 'TuLibro'!
 
-!Cart methodsFor: 'as yet unclassified' stamp: 'kf 6/15/2017 19:18:49'!
+!Cart methodsFor: 'initialization' stamp: 'kf 6/13/2017 20:04:38'!
+initialize
+	elements := Bag new.! !
+
+!Cart methodsFor: 'initialization' stamp: 'kf 6/15/2017 19:18:12'!
+withCatalog: anOrderedCollection 
+	catalog := anOrderedCollection.
+	elements := Bag new.
+	! !
+
+
+!Cart methodsFor: 'adding' stamp: 'kf 6/15/2017 19:18:49'!
 add: anElement
 	self add: anElement quantity: 1.
 ! !
 
-!Cart methodsFor: 'as yet unclassified' stamp: 'kf 6/25/2017 11:33:41'!
+!Cart methodsFor: 'adding' stamp: 'kf 6/25/2017 11:33:41'!
 add: anElement quantity: aQuantity 
 	self assert: aQuantity isInteger description: [self error: 'Invalid isbn'].
 	self assert:  aQuantity  > 0 description: [self error: 'Invalid isbn'].
@@ -724,39 +739,30 @@ add: anElement quantity: aQuantity
 	elements add: anElement withOccurrences: aQuantity.
 	! !
 
-!Cart methodsFor: 'as yet unclassified' stamp: 'kf 6/13/2017 23:30:06'!
+
+!Cart methodsFor: 'accessing' stamp: 'kf 6/13/2017 23:30:06'!
 catalog
 	^ catalog ! !
 
-!Cart methodsFor: 'as yet unclassified' stamp: 'kf 6/13/2017 23:07:58'!
+!Cart methodsFor: 'accessing' stamp: 'kf 6/13/2017 23:07:58'!
 contents: anElement
 		^ elements includes: anElement .! !
 
-!Cart methodsFor: 'as yet unclassified' stamp: 'kf 6/13/2017 20:09:40'!
+!Cart methodsFor: 'accessing' stamp: 'kf 6/13/2017 20:09:40'!
 elements
 	^ elements size ! !
 
-!Cart methodsFor: 'as yet unclassified' stamp: 'kf 6/13/2017 20:04:38'!
-initialize
-	elements := Bag new.! !
-
-!Cart methodsFor: 'as yet unclassified' stamp: 'kf 6/11/2017 19:59:44'!
+!Cart methodsFor: 'accessing' stamp: 'kf 6/11/2017 19:59:44'!
 isEmpty
 	^ elements isEmpty .! !
 
-!Cart methodsFor: 'as yet unclassified' stamp: 'kf 6/25/2017 12:11:37'!
+!Cart methodsFor: 'accessing' stamp: 'kf 6/25/2017 12:11:37'!
 products 
 	^ elements! !
 
-!Cart methodsFor: 'as yet unclassified' stamp: 'kf 6/13/2017 20:10:23'!
+!Cart methodsFor: 'accessing' stamp: 'kf 6/13/2017 20:10:23'!
 quantityOf: anElement
 	^ elements occurrencesOf: anElement 
-	! !
-
-!Cart methodsFor: 'as yet unclassified' stamp: 'kf 6/15/2017 19:18:12'!
-withCatalog: anOrderedCollection 
-	catalog := anOrderedCollection.
-	elements := Bag new.
 	! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
@@ -770,7 +776,7 @@ withCatalog: anOrderedCollection
 	^ self new withCatalog: anOrderedCollection ! !
 
 
-!Cart class methodsFor: 'as yet unclassified' stamp: 'kf 6/25/2017 11:35:02'!
+!Cart class methodsFor: 'exceptions' stamp: 'kf 6/25/2017 11:35:02'!
 invalidISBN
 	^ 'invalid isbn'! !
 
@@ -782,7 +788,7 @@ Object subclass: #Cashier
 	poolDictionaries: ''
 	category: 'TuLibro'!
 
-!Cashier methodsFor: 'as yet unclassified' stamp: 'kf 6/25/2017 12:30:35'!
+!Cashier methodsFor: 'checkout' stamp: 'kf 6/25/2017 12:30:35'!
 checkOutOnDate: aDate withMerchant: aMerchantProcesor
 	
 	|cost invoice |
@@ -797,7 +803,14 @@ checkOutOnDate: aDate withMerchant: aMerchantProcesor
 	
 	^ invoice! !
 
-!Cashier methodsFor: 'as yet unclassified' stamp: 'KF 6/25/2017 21:01:00'!
+!Cashier methodsFor: 'checkout' stamp: 'kf 6/18/2017 12:48:12'!
+debit: aMerchantProcesor withAmount: amountToDebit
+
+	 aMerchantProcesor debit: amountToDebit withCard: card 
+! !
+
+
+!Cashier methodsFor: 'accessing' stamp: 'KF 6/25/2017 21:01:00'!
 cost
 	|catalog cost|
 	
@@ -812,13 +825,8 @@ cost
 	^ cost.
 ! !
 
-!Cashier methodsFor: 'as yet unclassified' stamp: 'kf 6/18/2017 12:48:12'!
-debit: aMerchantProcesor withAmount: amountToDebit
 
-	 aMerchantProcesor debit: amountToDebit withCard: card 
-! !
-
-!Cashier methodsFor: 'as yet unclassified' stamp: 'kf 6/18/2017 11:46:55'!
+!Cashier methodsFor: 'initialization' stamp: 'kf 6/18/2017 11:46:55'!
 withCart: aCart withCard: aCard withBook: aBook 
 	cart := aCart.
 	card := aCard.
@@ -842,23 +850,25 @@ Object subclass: #Catalog
 	poolDictionaries: ''
 	category: 'TuLibro'!
 
-!Catalog methodsFor: 'as yet unclassified' stamp: 'kf 6/13/2017 23:30:42'!
+!Catalog methodsFor: 'accessing' stamp: 'kf 6/13/2017 23:30:42'!
 contents
 	^ elements contents ! !
 
-!Catalog methodsFor: 'as yet unclassified' stamp: 'kf 6/13/2017 23:31:56'!
+!Catalog methodsFor: 'accessing' stamp: 'kf 6/13/2017 23:31:56'!
 cost: anElement
 	^ elements at: anElement ! !
 
-!Catalog methodsFor: 'as yet unclassified' stamp: 'kf 6/13/2017 23:26:51'!
+!Catalog methodsFor: 'accessing' stamp: 'kf 6/13/2017 23:26:51'!
 includes: anElement 
 	^ elements includesKey: anElement ! !
 
-!Catalog methodsFor: 'as yet unclassified' stamp: 'kf 6/13/2017 23:25:33'!
+
+!Catalog methodsFor: 'initialization' stamp: 'kf 6/13/2017 23:25:33'!
 initialize
 	elements := Dictionary new.! !
 
-!Catalog methodsFor: 'as yet unclassified' stamp: 'kf 6/13/2017 23:25:04'!
+
+!Catalog methodsFor: 'adding' stamp: 'kf 6/13/2017 23:25:04'!
 put: anElement withPrice: price 
 	elements at: anElement put: price.! !
 
@@ -870,31 +880,33 @@ Object subclass: #Invoice
 	poolDictionaries: ''
 	category: 'TuLibro'!
 
-!Invoice methodsFor: 'as yet unclassified' stamp: 'kf 6/25/2017 12:17:36'!
+!Invoice methodsFor: 'accessing' stamp: 'kf 6/25/2017 12:14:18'!
+elements
+	^ elements ! !
+
+!Invoice methodsFor: 'accessing' stamp: 'kf 6/25/2017 12:22:00'!
+total
+	^ total! !
+
+
+!Invoice methodsFor: 'initialization' stamp: 'kf 6/25/2017 12:14:04'!
+withElements: aBag 
+	elements := aBag .! !
+
+!Invoice methodsFor: 'initialization' stamp: 'kf 6/25/2017 12:23:43'!
+withElements: aBag withTotal: aTotal 
+	elements := aBag.
+	total := aTotal .! !
+
+
+!Invoice methodsFor: 'comparing' stamp: 'kf 6/25/2017 12:17:36'!
 = anInvoice
 
 	^ elements  = anInvoice elements .! !
 
-!Invoice methodsFor: 'as yet unclassified' stamp: 'kf 6/25/2017 12:14:18'!
-elements
-	^ elements ! !
-
-!Invoice methodsFor: 'as yet unclassified' stamp: 'kf 6/15/2017 19:38:05'!
+!Invoice methodsFor: 'comparing' stamp: 'kf 6/15/2017 19:38:05'!
 isInvoice
 	^ true.! !
-
-!Invoice methodsFor: 'as yet unclassified' stamp: 'kf 6/25/2017 12:22:00'!
-total
-	^ total! !
-
-!Invoice methodsFor: 'as yet unclassified' stamp: 'kf 6/25/2017 12:14:04'!
-withElements: aBag 
-	elements := aBag .! !
-
-!Invoice methodsFor: 'as yet unclassified' stamp: 'kf 6/25/2017 12:23:43'!
-withElements: aBag withTotal: aTotal 
-	elements := aBag.
-	total := aTotal .! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -918,17 +930,18 @@ Object subclass: #MerchantProcesorMock
 	poolDictionaries: ''
 	category: 'TuLibro'!
 
-!MerchantProcesorMock methodsFor: 'as yet unclassified' stamp: 'kf 6/18/2017 16:48:37'!
+!MerchantProcesorMock methodsFor: 'add' stamp: 'kf 6/18/2017 16:48:37'!
 addValidCard: aCard
 	card := aCard.
 	amount := 1000000000000.! !
 
-!MerchantProcesorMock methodsFor: 'as yet unclassified' stamp: 'kf 6/18/2017 16:48:34'!
+!MerchantProcesorMock methodsFor: 'add' stamp: 'kf 6/18/2017 16:48:34'!
 addValidCard: aCard withAmount: anAmount 
 	card := aCard .
 	amount := anAmount.! !
 
-!MerchantProcesorMock methodsFor: 'as yet unclassified' stamp: 'kf 6/18/2017 13:05:47'!
+
+!MerchantProcesorMock methodsFor: 'debit' stamp: 'kf 6/18/2017 13:05:47'!
 debit: amountToDebit withCard: aCard 
 
 	self assert: (outService not) description: [self error: MerchantProcesorMock 	outService ].
@@ -943,14 +956,16 @@ debit: amountToDebit withCard: aCard
 	^ true.
 ! !
 
-!MerchantProcesorMock methodsFor: 'as yet unclassified' stamp: 'kf 6/18/2017 13:04:15'!
-putOutService
-	outService := true.! !
 
-!MerchantProcesorMock methodsFor: 'as yet unclassified' stamp: 'kf 6/18/2017 16:48:44'!
+!MerchantProcesorMock methodsFor: 'initialization' stamp: 'kf 6/18/2017 16:48:44'!
 withDate: aDate 
 	today := aDate.
 	outService  := false.! !
+
+
+!MerchantProcesorMock methodsFor: 'serviceStatus' stamp: 'kf 6/18/2017 13:04:15'!
+putOutService
+	outService := true.! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -963,7 +978,7 @@ withDate: aDate
 	^ self new withDate: aDate.! !
 
 
-!MerchantProcesorMock class methodsFor: 'as yet unclassified' stamp: 'kf 6/18/2017 13:03:33'!
+!MerchantProcesorMock class methodsFor: 'exceptions' stamp: 'kf 6/18/2017 13:03:33'!
 outService
 	^ 'Sin servicio'! !
 
@@ -975,7 +990,7 @@ Object subclass: #Rest
 	poolDictionaries: ''
 	category: 'TuLibro'!
 
-!Rest methodsFor: 'as yet unclassified' stamp: 'KF 6/27/2017 00:54:24'!
+!Rest methodsFor: 'configuration' stamp: 'KF 6/27/2017 00:54:24'!
 addToCard: cartId isbn: isbn withQuantity: aQuantity 
 	
 	| cart |
@@ -983,7 +998,31 @@ addToCard: cartId isbn: isbn withQuantity: aQuantity
 	cart add: isbn quantity: aQuantity .
 	^ true.! !
 
-!Rest methodsFor: 'as yet unclassified' stamp: 'KF 6/26/2017 23:24:17'!
+!Rest methodsFor: 'configuration' stamp: 'KF 6/27/2017 00:51:59'!
+createCartWithClientId: clientId password: password 
+
+	self validateUser: clientId withPassword: password.
+	
+	carts addLast: (Cart withCatalog: catalog).
+	(usersCarts at: clientId  ifAbsentPut: [OrderedCollection new .]) add: (carts size).
+	self updateTimeCart: (carts size).
+	
+	^ carts size.! !
+
+!Rest methodsFor: 'configuration' stamp: 'KF 6/27/2017 00:24:20'!
+time: aDateAndTime 
+	time := aDateAndTime .! !
+
+!Rest methodsFor: 'configuration' stamp: 'KF 6/27/2017 00:52:31'!
+updateTimeCart: idCart 
+	actionsCarts at: idCart put: time! !
+
+!Rest methodsFor: 'configuration' stamp: 'KF 6/26/2017 23:32:49'!
+validateUser: clientId withPassword: password 
+	self assert: (dataLogin at: clientId  ifAbsent: [self error: Rest invalidUser ]) = password description: [self error: Rest invalidUser].! !
+
+
+!Rest methodsFor: 'checkout' stamp: 'KF 6/26/2017 23:24:17'!
 checkout: cartId withNumberCard: numberCard withExpirationDate: anExpirationDate withNameHolder: aNameHolder
 
 	| aCart aCashier aCard |
@@ -1001,18 +1040,8 @@ checkout: cartId withNumberCard: numberCard withExpirationDate: anExpirationDate
 	^ transactions size.
 ! !
 
-!Rest methodsFor: 'as yet unclassified' stamp: 'KF 6/27/2017 00:51:59'!
-createCartWithClientId: clientId password: password 
 
-	self validateUser: clientId withPassword: password.
-	
-	carts addLast: (Cart withCatalog: catalog).
-	(usersCarts at: clientId  ifAbsentPut: [OrderedCollection new .]) add: (carts size).
-	self updateTimeCart: (carts size).
-	
-	^ carts size.! !
-
-!Rest methodsFor: 'as yet unclassified' stamp: 'KF 6/27/2017 00:55:02'!
+!Rest methodsFor: 'accessing' stamp: 'KF 6/27/2017 00:55:02'!
 listCart: idCart
 
 	(cartsCheckout includes: idCart  ) ifTrue: [self error: Rest invalidCart].
@@ -1020,37 +1049,26 @@ listCart: idCart
 	self updateTimeCart: idCart .	
 	[ ^carts at: idCart .] on: Error do: [self error: Rest invalidCart ].! !
 
-!Rest methodsFor: 'as yet unclassified' stamp: 'KF 6/26/2017 23:00:44'!
+!Rest methodsFor: 'accessing' stamp: 'KF 6/26/2017 23:00:44'!
 listCarts
 	^ carts ! !
 
-!Rest methodsFor: 'as yet unclassified' stamp: 'KF 6/26/2017 23:47:26'!
-listPurchasesId: clientId withPasswod: password 
+!Rest methodsFor: 'accessing' stamp: 'RB 6/27/2017 16:09:09'!
+listPurchasesId: clientId withPassword: password 
 	self validateUser: clientId withPassword: password.
 	^ usersCarts at: clientId ifAbsent: [^ OrderedCollection new.]. 
 ! !
 
-!Rest methodsFor: 'as yet unclassified' stamp: 'KF 6/27/2017 00:50:53'!
+!Rest methodsFor: 'accessing' stamp: 'KF 6/27/2017 00:50:53'!
 time
 	^time! !
 
-!Rest methodsFor: 'as yet unclassified' stamp: 'KF 6/27/2017 00:24:20'!
-time: aDateAndTime 
-	time := aDateAndTime .! !
-
-!Rest methodsFor: 'as yet unclassified' stamp: 'kf 6/25/2017 12:42:31'!
+!Rest methodsFor: 'accessing' stamp: 'kf 6/25/2017 12:42:31'!
 transactions
 	^ transactions ! !
 
-!Rest methodsFor: 'as yet unclassified' stamp: 'KF 6/27/2017 00:52:31'!
-updateTimeCart: idCart 
-	actionsCarts at: idCart put: time! !
 
-!Rest methodsFor: 'as yet unclassified' stamp: 'KF 6/26/2017 23:32:49'!
-validateUser: clientId withPassword: password 
-	self assert: (dataLogin at: clientId  ifAbsent: [self error: Rest invalidUser ]) = password description: [self error: Rest invalidUser].! !
-
-!Rest methodsFor: 'as yet unclassified' stamp: 'KF 6/27/2017 00:25:35'!
+!Rest methodsFor: 'initialization' stamp: 'KF 6/27/2017 00:25:35'!
 withCatalog: aCatalog withDataLogin: aDictionary withTime: aDate withMerchant: aMerchantProcesorMock withBook: aBook 
 	catalog := aCatalog.
 	dataLogin := aDictionary.
@@ -1081,19 +1099,19 @@ withCatalog: aCatalog withDataLogin: aDictionary
 withCatalog: aCatalog withDataLogin: aDictionary withTime: aDate 
 	^ self new withCatalog: aCatalog withDataLogin: aDictionary withTime: aDate ! !
 
+!Rest class methodsFor: 'class initialization' stamp: 'kf 6/25/2017 11:57:49'!
+withCatalog: aCatalog withDataLogin: aDictionary withTime: aDate withMerchant: aMerchantProcesorMock withBook: anOrderedCollection 
+	^ self new withCatalog: aCatalog withDataLogin: aDictionary withTime: aDate withMerchant: aMerchantProcesorMock withBook: anOrderedCollection ! !
 
-!Rest class methodsFor: 'as yet unclassified' stamp: 'KF 6/25/2017 21:08:06'!
+
+!Rest class methodsFor: 'exceptions' stamp: 'KF 6/25/2017 21:08:06'!
 invalidCart
 	^ 'invalid cart'! !
 
-!Rest class methodsFor: 'as yet unclassified' stamp: 'kf 6/25/2017 11:08:03'!
+!Rest class methodsFor: 'exceptions' stamp: 'kf 6/25/2017 11:08:03'!
 invalidUser
 	^ 'Invalid user/password'! !
 
-!Rest class methodsFor: 'as yet unclassified' stamp: 'KF 6/27/2017 00:23:02'!
+!Rest class methodsFor: 'exceptions' stamp: 'KF 6/27/2017 00:23:02'!
 timeExpired
 	^ 'time expired'! !
-
-!Rest class methodsFor: 'as yet unclassified' stamp: 'kf 6/25/2017 11:57:49'!
-withCatalog: aCatalog withDataLogin: aDictionary withTime: aDate withMerchant: aMerchantProcesorMock withBook: anOrderedCollection 
-	^ self new withCatalog: aCatalog withDataLogin: aDictionary withTime: aDate withMerchant: aMerchantProcesorMock withBook: anOrderedCollection ! !
