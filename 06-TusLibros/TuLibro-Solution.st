@@ -1,9 +1,9 @@
-!classDefinition: #TuLibroTests category: #TuLibro!
+!classDefinition: #TuLibroTests category: #'TuLibro-Solution'!
 TestCase subclass: #TuLibroTests
 	instanceVariableNames: 'aCart catalogWithElements emptyCatalog cartWithEmptyCatalog cashier cartWithElements aValidCard anInvalidCard anInvoice anExpiredCard merchant aBook rest dataLogin merchantRest'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'TuLibro'!
+	category: 'TuLibro-Solution'!
 
 !TuLibroTests methodsFor: 'rest' stamp: 'RB 6/26/2017 16:40:40'!
 testR01RestLoginAnUserWithCartEmpty
@@ -627,12 +627,12 @@ toDo: aString
 ! !
 
 
-!classDefinition: #Card category: #TuLibro!
+!classDefinition: #Card category: #'TuLibro-Solution'!
 Object subclass: #Card
 	instanceVariableNames: 'cardNumber cardHolder expirationDate'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'TuLibro'!
+	category: 'TuLibro-Solution'!
 
 !Card methodsFor: 'accessing' stamp: 'kf 6/18/2017 11:19:47'!
 cardNumber
@@ -672,7 +672,7 @@ withNumber: acardNumber withName: acardHolder withExpirationDate: amonthOfYear
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
-!classDefinition: 'Card class' category: #TuLibro!
+!classDefinition: 'Card class' category: #'TuLibro-Solution'!
 Card class
 	instanceVariableNames: ''!
 
@@ -684,9 +684,8 @@ withNumber: cardNumber withName: cardHolder withExpirationDate: monthYear
 	^self new withNumber: cardNumber withName: cardHolder withExpirationDate: monthYear ! !
 
 
-!Card class methodsFor: 'exceptions'!
+!Card class methodsFor: 'exceptions' stamp: 'RB 6/27/2017 17:26:19'!
 expiredError
-	self break.
 	^ 'La tarjeta expiro'.! !
 
 !Card class methodsFor: 'exceptions' stamp: 'kf 6/18/2017 12:49:53'!
@@ -706,12 +705,12 @@ withoutBalance
 	^ 'Sin Saldo'! !
 
 
-!classDefinition: #Cart category: #TuLibro!
+!classDefinition: #Cart category: #'TuLibro-Solution'!
 Object subclass: #Cart
 	instanceVariableNames: 'elements catalog'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'TuLibro'!
+	category: 'TuLibro-Solution'!
 
 !Cart methodsFor: 'initialization' stamp: 'kf 6/13/2017 20:04:38'!
 initialize
@@ -767,7 +766,7 @@ quantityOf: anElement
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
-!classDefinition: 'Cart class' category: #TuLibro!
+!classDefinition: 'Cart class' category: #'TuLibro-Solution'!
 Cart class
 	instanceVariableNames: ''!
 
@@ -781,12 +780,12 @@ invalidISBN
 	^ 'invalid isbn'! !
 
 
-!classDefinition: #Cashier category: #TuLibro!
+!classDefinition: #Cashier category: #'TuLibro-Solution'!
 Object subclass: #Cashier
 	instanceVariableNames: 'cart card book'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'TuLibro'!
+	category: 'TuLibro-Solution'!
 
 !Cashier methodsFor: 'checkout' stamp: 'kf 6/25/2017 12:30:35'!
 checkOutOnDate: aDate withMerchant: aMerchantProcesor
@@ -834,7 +833,7 @@ withCart: aCart withCard: aCard withBook: aBook
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
-!classDefinition: 'Cashier class' category: #TuLibro!
+!classDefinition: 'Cashier class' category: #'TuLibro-Solution'!
 Cashier class
 	instanceVariableNames: ''!
 
@@ -843,12 +842,12 @@ withCart: aCart withCard: aCard withBook: anUndefinedObject
 	^ self new withCart: aCart withCard: aCard withBook: anUndefinedObject ! !
 
 
-!classDefinition: #Catalog category: #TuLibro!
+!classDefinition: #Catalog category: #'TuLibro-Solution'!
 Object subclass: #Catalog
 	instanceVariableNames: 'elements'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'TuLibro'!
+	category: 'TuLibro-Solution'!
 
 !Catalog methodsFor: 'accessing' stamp: 'kf 6/13/2017 23:30:42'!
 contents
@@ -873,12 +872,12 @@ put: anElement withPrice: price
 	elements at: anElement put: price.! !
 
 
-!classDefinition: #Invoice category: #TuLibro!
+!classDefinition: #Invoice category: #'TuLibro-Solution'!
 Object subclass: #Invoice
 	instanceVariableNames: 'elements total'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'TuLibro'!
+	category: 'TuLibro-Solution'!
 
 !Invoice methodsFor: 'accessing' stamp: 'kf 6/25/2017 12:14:18'!
 elements
@@ -910,7 +909,7 @@ isInvoice
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
-!classDefinition: 'Invoice class' category: #TuLibro!
+!classDefinition: 'Invoice class' category: #'TuLibro-Solution'!
 Invoice class
 	instanceVariableNames: 'elements'!
 
@@ -923,12 +922,12 @@ withElements: aBag withTotal: aTotal
 	^ self new withElements: aBag withTotal: aTotal! !
 
 
-!classDefinition: #MerchantProcesorMock category: #TuLibro!
+!classDefinition: #MerchantProcesorMock category: #'TuLibro-Solution'!
 Object subclass: #MerchantProcesorMock
 	instanceVariableNames: 'card today amount outService'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'TuLibro'!
+	category: 'TuLibro-Solution'!
 
 !MerchantProcesorMock methodsFor: 'add' stamp: 'kf 6/18/2017 16:48:37'!
 addValidCard: aCard
@@ -969,7 +968,7 @@ putOutService
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
-!classDefinition: 'MerchantProcesorMock class' category: #TuLibro!
+!classDefinition: 'MerchantProcesorMock class' category: #'TuLibro-Solution'!
 MerchantProcesorMock class
 	instanceVariableNames: ''!
 
@@ -983,12 +982,12 @@ outService
 	^ 'Sin servicio'! !
 
 
-!classDefinition: #Rest category: #TuLibro!
+!classDefinition: #Rest category: #'TuLibro-Solution'!
 Object subclass: #Rest
 	instanceVariableNames: 'catalog carts dataLogin time book merchant transactions cartsCheckout usersCarts actionsCarts'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'TuLibro'!
+	category: 'TuLibro-Solution'!
 
 !Rest methodsFor: 'configuration' stamp: 'KF 6/27/2017 00:54:24'!
 addToCard: cartId isbn: isbn withQuantity: aQuantity 
@@ -1083,7 +1082,7 @@ withCatalog: aCatalog withDataLogin: aDictionary withTime: aDate withMerchant: a
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
-!classDefinition: 'Rest class' category: #TuLibro!
+!classDefinition: 'Rest class' category: #'TuLibro-Solution'!
 Rest class
 	instanceVariableNames: ''!
 
